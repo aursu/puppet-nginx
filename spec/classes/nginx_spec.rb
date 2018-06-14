@@ -594,24 +594,6 @@ describe 'nginx' do
                 match: '  keepalive_requests  345;'
               },
               {
-                title: 'should set client_body_timeout',
-                attr: 'client_body_timeout',
-                value: '888',
-                match: '  client_body_timeout 888;'
-              },
-              {
-                title: 'should set send_timeout',
-                attr: 'send_timeout',
-                value: '963',
-                match: '  send_timeout        963;'
-              },
-              {
-                title: 'should set lingering_timeout',
-                attr: 'lingering_timeout',
-                value: '385',
-                match: '  lingering_timeout   385;'
-              },
-              {
                 title: 'should set tcp_nodelay',
                 attr: 'http_tcp_nodelay',
                 value: 'on',

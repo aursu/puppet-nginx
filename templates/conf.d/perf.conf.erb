@@ -1,0 +1,62 @@
+<% if @types_hash_max_size -%>
+types_hash_max_size <%= @types_hash_max_size %>;
+<% end -%>
+<% if @types_hash_bucket_size -%>
+types_hash_bucket_size <%= @types_hash_bucket_size %>;
+<% end -%>
+<% if @names_hash_bucket_size -%>
+server_names_hash_bucket_size <%= @names_hash_bucket_size %>;
+<% end -%>
+<% if @names_hash_max_size -%>
+server_names_hash_max_size <%= @names_hash_max_size %>;
+<% end -%>
+<% if @keepalive_timeout -%>
+keepalive_timeout   <%= @keepalive_timeout %>; # timeout during which a keep-alive client connection
+                       # will stay open on the server side
+<% end -%>
+<% if @keepalive_requests -%>
+keepalive_requests  <%= @keepalive_requests %>; # maximum number of requests that can be served through
+                       # one keep-alive connection
+<% end -%>
+<% if @client_header_timeout -%>
+client_header_timeout <%= @client_header_timeout %>; # If a client does not transmit the entire
+                         # header within this time, the 408 (Request Time-out)
+                         # error is returned to the client.
+<% end -%>
+<% if @client_body_timeout -%>
+client_body_timeout <%= @client_body_timeout %>; # if client does not transmit anything within this
+                       # time the 408 (Request Time-out) error is returned
+                       # to the client.
+<% end -%>
+<% if @send_timeout -%>
+send_timeout        <%= @send_timeout %>; # the timeout is set only between two successive write
+                       # operations, not for the transmission of the whole response
+<% end -%>
+<% if @lingering_timeout -%>
+lingering_timeout   <%= @lingering_timeout %>;
+<% end -%>
+<% if @client_max_body_size -%>
+client_max_body_size <%= @client_max_body_size %>; # maximum allowed size of the client request body,
+                         # specified in the "Content-Length" request header
+                         # field. If the size in a request exceeds the
+                         # configured value, the 413 (Request Entity Too Large)
+                         # error is returned to the client
+<% end -%>
+<% if @client_body_buffer_size -%>
+client_body_buffer_size <%= @client_body_buffer_size %>; # buffer size for reading client request body. In
+                             # case the request body is larger than the buffer,
+                             # the whole body or only its part is written to a
+                             # temporary file
+<% end -%>
+<% if @open_file_cache -%>
+# cache that can store open file descriptors, their sizes and modification
+# times, information on existence of directories, file lookup errors
+open_file_cache          <% @open_file_cache.each do |option, value| %> <%= option %>=<%= value %><% end %>;
+open_file_cache_valid    <%= @open_file_cache_valid %>;
+open_file_cache_min_uses <%= @open_file_cache_min_uses %>;
+<% end -%>
+<% if @limit_req_zone -%>
+    <%- @limit_req_zone.each do |name, zone| -%>
+limit_req_zone      <%= zone['key'] %> <%= "zone=#{name}:#{zone['size']}" %> <%= "rate=#{zone['rate']}" %>;
+    <%- end -%>
+<% end -%>

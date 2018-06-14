@@ -121,6 +121,8 @@ class nginx::config {
 
   # Non-configurable settings
   $conf_template                  = 'nginx/conf.d/nginx.conf.erb'
+  # performance settings
+  $perf_conf_template             = 'nginx/conf.d/perf.conf.erb'
   $proxy_conf_template            = undef
 
   File {
@@ -235,6 +237,11 @@ class nginx::config {
   file { "${conf_dir}/nginx.conf":
     ensure  => file,
     content => template($conf_template),
+  }
+
+  file { "${conf_dir}/conf.d/00-perf.conf":
+    ensure  => file,
+    content => template($perf_conf_template),
   }
 
   file { "${temp_dir}/nginx.d":

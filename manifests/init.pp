@@ -62,13 +62,14 @@ class nginx (
   ### START Nginx Configuration ###                                    # default:
   Optional[Boolean] $accept_mutex                            = undef,  # 'on' (nginx < 1.11.3)
                                                                        # 'off' (nginx >= 1.11.3)
-  Optional[String]  $accept_mutex_delay                      = undef,  # '500ms'
-  $client_body_buffer_size                                   = '128k',
-  String $client_max_body_size                               = '10m',
-  $client_body_timeout                                       = '60s',
-  $send_timeout                                              = '60s',
-  $lingering_timeout                                         = '5s',
-  Optional[Enum['on', 'off']] $etag                          = undef,
+  Optional[Nginx::Time] $accept_mutex_delay                  = undef,  # 500ms
+  Optional[Nginx::Size] $client_body_buffer_size             = undef,  # 8k|16k
+  Optional[Nginx::Size] $client_max_body_size                = undef,  # 1m
+  Optional[Nginx::Time] $client_body_timeout                 = undef,  # 60s
+  Optional[Nginx::Time] $send_timeout                        = undef,  # 60s
+  Optional[Nginx::Time] $lingering_timeout                   = undef,  # 5s
+  Optional[Boolean] $etag                                    = undef,  # 'on'
+
   Optional[String] $events_use                               = undef,
   String $fastcgi_cache_inactive                             = '20m',
   Optional[String] $fastcgi_cache_key                        = undef,

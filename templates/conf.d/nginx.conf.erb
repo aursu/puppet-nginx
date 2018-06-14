@@ -112,13 +112,10 @@ http {
 
   keepalive_timeout   <%= @keepalive_timeout %>;
   keepalive_requests  <%= @keepalive_requests %>;
-  client_body_timeout <%= @client_body_timeout %>;
-  send_timeout        <%= @send_timeout %>;
-  lingering_timeout   <%= @lingering_timeout %>;
   tcp_nodelay         <%= @http_tcp_nodelay %>;
 
-<% if @etag -%>
-  etag <%= @etag %>;
+<% unless @etag.nil? -%>
+    etag            <%= bool2config(@etag) %>;
 
 <% end -%>
 <% if @gzip == 'on' -%>
@@ -143,12 +140,6 @@ http {
 
 <% if @client_body_temp_path -%>
   client_body_temp_path   <%= @client_body_temp_path %>;
-<% end -%>
-<% if @client_max_body_size -%>
-  client_max_body_size    <%= @client_max_body_size %>;
-<% end -%>
-<% if @client_body_buffer_size -%>
-  client_body_buffer_size <%= @client_body_buffer_size %>;
 <% end -%>
 <% if @proxy_redirect -%>
   proxy_redirect          <%= @proxy_redirect %>;
