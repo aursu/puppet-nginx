@@ -26,13 +26,13 @@
 # }
 class nginx (
   ### START Nginx Configuration ###
-  Optional[String] $client_body_temp_path                    = undef,  # 'client_body_temp'
+  Optional[String] $client_body_temp_path                    = undef, # 'client_body_temp'
   Boolean $confd_only                                        = false,
   Boolean $confd_purge                                       = false,
   $conf_dir                                                  = $nginx::params::conf_dir,
-  Optional[Enum['on', 'off']] $daemon                        = undef,
-  $daemon_user                                               = $nginx::params::daemon_user,
-  $daemon_group                                              = undef,
+  Optional[Boolean] $daemon                                  = undef, # 'on'
+  String $daemon_user                                        = $nginx::params::daemon_user,
+  Optional[String] $daemon_group                             = undef,
   Array[String] $dynamic_modules                             = [],
   $global_owner                                              = $nginx::params::global_owner,
   $global_group                                              = $nginx::params::global_group,

@@ -1,3 +1,15 @@
+<%-
+def bool2config(b)
+    case b
+    when true
+        'on'
+    when false, nil
+        'off'
+    else
+        b.to_s
+    end
+end
+-%>
 # MANAGED BY PUPPET
 <% @dynamic_modules.each do |mod_item| -%>
   <%- if mod_item =~ /^\/.*/ -%>
@@ -6,8 +18,8 @@ load_module "<%= mod_item -%>";
 load_module "modules/<%= mod_item -%>.so";
   <%- end -%>
 <%- end -%>
-<% if @daemon -%>
-daemon <%= @daemon %>;
+<% unless @daemon.nil? -%>
+daemon <%= bool2config(@daemon) %>;
 <% end -%>
 <% if @super_user -%>
 user <%= @daemon_user %><% if @daemon_group -%> <%= @daemon_group %><% end -%>;
