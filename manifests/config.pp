@@ -54,11 +54,7 @@ class nginx::config {
   $lingering_timeout              = $nginx::lingering_timeout
   $etag                           = $nginx::etag
   $events_use                     = $nginx::events_use
-  $fastcgi_cache_inactive         = $nginx::fastcgi_cache_inactive
   $fastcgi_cache_key              = $nginx::fastcgi_cache_key
-  $fastcgi_cache_keys_zone        = $nginx::fastcgi_cache_keys_zone
-  $fastcgi_cache_levels           = $nginx::fastcgi_cache_levels
-  $fastcgi_cache_max_size         = $nginx::fastcgi_cache_max_size
   $fastcgi_cache_path             = $nginx::fastcgi_cache_path
   $fastcgi_cache_use_stale        = $nginx::fastcgi_cache_use_stale
   $gzip                           = $nginx::gzip
@@ -123,7 +119,7 @@ class nginx::config {
   $conf_template                  = 'nginx/conf.d/nginx.conf.erb'
   # performance settings
   $perf_conf_template             = 'nginx/conf.d/perf.conf.erb'
-  $proxy_conf_template            = undef
+  $proxy_conf_template            = 'nginx/conf.d/proxy.conf.erb'
 
   File {
     owner => $global_owner,
@@ -242,6 +238,11 @@ class nginx::config {
   file { "${conf_dir}/conf.d/00-perf.conf":
     ensure  => file,
     content => template($perf_conf_template),
+  }
+
+  file { "${conf_dir}/conf.d/00-proxy.conf":
+    ensure  => file,
+    content => template($proxy_conf_template),
   }
 
   file { "${temp_dir}/nginx.d":

@@ -70,14 +70,12 @@ class nginx (
   Optional[Nginx::Time] $lingering_timeout                   = undef,  # 5s
   Optional[Boolean] $etag                                    = undef,  # 'on'
 
-  Optional[String] $events_use                               = undef,
-  String $fastcgi_cache_inactive                             = '20m',
-  Optional[String] $fastcgi_cache_key                        = undef,
-  String $fastcgi_cache_keys_zone                            = 'd3:100m',
-  String $fastcgi_cache_levels                               = '1',
-  String $fastcgi_cache_max_size                             = '500m',
-  Optional[String] $fastcgi_cache_path                       = undef,
-  Optional[String] $fastcgi_cache_use_stale                  = undef,
+  Optional[Nginx::ConnectionProcessing] $events_use          = undef,  # 'epoll'
+  Optional[String] $fastcgi_cache_key                        = undef,  # undef
+  Optional[Hash[String, Nginx::CachePath, 1]]
+                    $fastcgi_cache_path                      = undef,  # undef
+  Optional[Variant[Nginx::CacheUseStale, Array[Nginx::CacheUseStale]]]
+                    $fastcgi_cache_use_stale                 = undef,  # 'off'
   $gzip                                                      = 'on',
   $gzip_buffers                                              = undef,
   $gzip_comp_level                                           = 1,
