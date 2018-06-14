@@ -45,7 +45,7 @@ class nginx (
   Variant[String, Array[String]] $nginx_error_log            = "${log_dir}/${::nginx::params::nginx_error_log_file}",
   Nginx::ErrorLogSeverity $nginx_error_log_severity          = 'error',
   $pid                                                       = $nginx::params::pid,
-  $proxy_temp_path                                           = $nginx::params::proxy_temp_path,
+  Optional[String] $proxy_temp_path                          = undef, # 'proxy_temp'
   $root_group                                                = $nginx::params::root_group,
   $run_dir                                                   = $nginx::params::run_dir,
   $sites_available_owner                                     = $nginx::params::sites_available_owner,

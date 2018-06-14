@@ -187,9 +187,11 @@ class nginx::config {
   }
 
 
-  file {$proxy_temp_path:
-    ensure => directory,
-    owner  => $daemon_user,
+  if $proxy_temp_path {
+    file {$proxy_temp_path:
+      ensure => directory,
+      owner  => $daemon_user,
+    }
   }
 
   unless $confd_only {
