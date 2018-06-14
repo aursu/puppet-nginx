@@ -56,11 +56,13 @@ class nginx (
   Boolean $server_purge                                      = false,
 
   # Primary Templates
-  $conf_template                                             = 'nginx/conf.d/nginx.conf.erb',
+  String $conf_template                                      = 'nginx/conf.d/nginx.conf.erb',
 
   ### START Nginx Configuration ###
-  $accept_mutex                                              = 'on',
-  $accept_mutex_delay                                        = '500ms',
+  ### START Nginx Configuration ###                                    # default:
+  Optional[Boolean] $accept_mutex                            = undef,  # 'on' (nginx < 1.11.3)
+                                                                       # 'off' (nginx >= 1.11.3)
+  Optional[String]  $accept_mutex_delay                      = undef,  # '500ms'
   $client_body_buffer_size                                   = '128k',
   String $client_max_body_size                               = '10m',
   $client_body_timeout                                       = '60s',
