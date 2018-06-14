@@ -26,7 +26,7 @@
 # }
 class nginx (
   ### START Nginx Configuration ###
-  $client_body_temp_path                                     = $nginx::params::client_body_temp_path,
+  Optional[String] $client_body_temp_path                    = undef,  # 'client_body_temp'
   Boolean $confd_only                                        = false,
   Boolean $confd_purge                                       = false,
   $conf_dir                                                  = $nginx::params::conf_dir,
