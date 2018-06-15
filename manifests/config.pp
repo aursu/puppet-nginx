@@ -52,7 +52,6 @@ class nginx::config {
   $client_body_timeout            = $nginx::client_body_timeout
   $send_timeout                   = $nginx::send_timeout
   $lingering_timeout              = $nginx::lingering_timeout
-  $etag                           = $nginx::etag
   $events_use                     = $nginx::events_use
   $fastcgi_cache_key              = $nginx::fastcgi_cache_key
   $fastcgi_cache_path             = $nginx::fastcgi_cache_path
@@ -91,7 +90,6 @@ class nginx::config {
   $proxy_cache_loader_files       = $nginx::proxy_cache_loader_files
   $proxy_cache_loader_sleep       = $nginx::proxy_cache_loader_sleep
   $proxy_cache_loader_threshold   = $nginx::proxy_cache_loader_threshold
-  $proxy_use_temp_path            = $nginx::proxy_use_temp_path
   $proxy_connect_timeout          = $nginx::proxy_connect_timeout
   $proxy_headers_hash_bucket_size = $nginx::proxy_headers_hash_bucket_size
   $proxy_http_version             = $nginx::proxy_http_version
@@ -123,6 +121,7 @@ class nginx::config {
   $default_type                   = $nginx::default_type
   $charset_types                  = $nginx::charset_types
   $charset                        = $nginx::charset
+  $etag                           = $nginx::etag
   $index                          = $nginx::index
   $msie_padding                   = $nginx::msie_padding
   $port_in_redirect               = $nginx::port_in_redirect
@@ -147,8 +146,10 @@ class nginx::config {
     ensure => directory,
   }
 
-  file { "${conf_dir}/conf.stream.d":
-    ensure => directory,
+  if $stream {
+    file { "${conf_dir}/conf.stream.d":
+      ensure => directory,
+    }
   }
 
   file { "${conf_dir}/conf.d":
@@ -164,21 +165,25 @@ class nginx::config {
         recurse => true,
         notify  => Class['nginx::service'],
       }
-      File["${conf_dir}/conf.stream.d"] {
-        purge   => true,
-        recurse => true,
-        notify  => Class['nginx::service'],
+      if $stream {
+        File["${conf_dir}/conf.stream.d"] {
+          purge   => true,
+          recurse => true,
+          notify  => Class['nginx::service'],
+        }
       }
     }
   }
 
-  file { "${conf_dir}/conf.mail.d":
-    ensure => directory,
-  }
-  if $confd_purge == true {
-    File["${conf_dir}/conf.mail.d"] {
-      purge   => true,
-      recurse => true,
+  if $mail {
+    file { "${conf_dir}/conf.mail.d":
+      ensure => directory,
+    }
+    if $confd_purge == true {
+      File["${conf_dir}/conf.mail.d"] {
+        purge   => true,
+        recurse => true,
+      }
     }
   }
 
@@ -228,20 +233,22 @@ class nginx::config {
         recurse => true,
       }
     }
-    # No real reason not to make these even if $stream is not enabled.
-    file { "${conf_dir}/streams-enabled":
-      ensure => directory,
-      owner  => $sites_available_owner,
-      group  => $sites_available_group,
-      mode   => $sites_available_mode,
-    }
-    file { "${conf_dir}/streams-available":
-      ensure => directory,
-    }
-    if $server_purge {
-      File["${conf_dir}/streams-enabled"] {
-        purge   => true,
-        recurse => true,
+
+    if $stream {
+      file { "${conf_dir}/streams-enabled":
+        ensure => directory,
+        owner  => $sites_available_owner,
+        group  => $sites_available_group,
+        mode   => $sites_available_mode,
+      }
+      file { "${conf_dir}/streams-available":
+        ensure => directory,
+      }
+      if $server_purge {
+        File["${conf_dir}/streams-enabled"] {
+          purge   => true,
+          recurse => true,
+        }
       }
     }
   }
