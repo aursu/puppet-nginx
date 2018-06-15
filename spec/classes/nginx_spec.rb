@@ -582,18 +582,6 @@ describe 'nginx' do
                 match: '  server_names_hash_max_size 10;'
               },
               {
-                title: 'should set keepalive_timeout',
-                attr: 'keepalive_timeout',
-                value: '123',
-                match: '  keepalive_timeout   123;'
-              },
-              {
-                title: 'should set keepalive_requests',
-                attr: 'keepalive_requests',
-                value: '345',
-                match: '  keepalive_requests  345;'
-              },
-              {
                 title: 'should set tcp_nodelay',
                 attr: 'http_tcp_nodelay',
                 value: 'on',

@@ -98,12 +98,13 @@ http {
   access_log  <%= @http_access_log %><% if @http_format_log %> <%= @http_format_log%><% end %>;
 <% end -%>
 
-<% if @sendfile == 'on' -%>
-  sendfile    on;
-  <%- if @http_tcp_nopush == 'on' -%>
-  tcp_nopush on;
-  <%- end -%>
-<% end -%>
+<%  if @sendfile -%>
+    sendfile        on;
+    <%- if @http_tcp_nopush -%>
+    tcp_nopush      on;
+    <%- end -%>
+<%  end -%>
+
   server_tokens <%= @server_tokens %>;
 
   types_hash_max_size <%= @types_hash_max_size %>;
@@ -112,10 +113,9 @@ http {
   server_names_hash_bucket_size <%= @names_hash_bucket_size %>;
   server_names_hash_max_size <%= @names_hash_max_size %>;
 
-  keepalive_timeout   <%= @keepalive_timeout %>;
-  keepalive_requests  <%= @keepalive_requests %>;
-  tcp_nodelay         <%= @http_tcp_nodelay %>;
-
+<% unless @http_tcp_nodelay.nil? -%>
+  tcp_nodelay     <%= bool2config(@http_tcp_nodelay) %>;
+<% end -%>
 <% unless @etag.nil? -%>
     etag            <%= bool2config(@etag) %>;
 

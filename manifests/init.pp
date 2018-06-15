@@ -94,11 +94,12 @@ class nginx (
                     $http_cfg_append                         = undef,
   Optional[Variant[Array[String], String]] $http_raw_prepend = undef,
   Optional[Variant[Array[String], String]] $http_raw_append  = undef,
-  $http_tcp_nodelay                                          = 'on',
-  $http_tcp_nopush                                           = 'off',
-  $keepalive_timeout                                         = '65s',
-  $keepalive_requests                                        = '100',
-  $log_format                                                = {},
+  Optional[Boolean] $http_tcp_nodelay                        = undef,  # 'on'
+  Optional[Boolean] $http_tcp_nopush                         = undef,  # 'off'
+  Optional[Nginx::Time] $keepalive_timeout                   = undef,  # 75
+  Optional[Integer] $keepalive_requests                      = undef,  # 100
+  Hash[String, String]
+                    $log_format                              = {},
   Boolean $mail                                              = false,
   Boolean $stream                                            = false,
   String $multi_accept                                       = 'off',
