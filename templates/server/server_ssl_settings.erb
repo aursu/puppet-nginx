@@ -1,4 +1,16 @@
-  ssl on;
+<%-
+def bool2config(b)
+    case b
+    when true
+        'on'
+    when false, nil
+        'off'
+    else
+        b.to_s
+    end
+end
+-%>
+ssl on;
 
 <% if @ssl_cert -%>
   ssl_certificate           <%= @ssl_cert %>;
@@ -29,7 +41,7 @@
 <% end -%>
   ssl_protocols             <%= @ssl_protocols %>;
   ssl_ciphers               <%= @ssl_ciphers %>;
-  ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
+  ssl_prefer_server_ciphers <%= bool2config(@ssl_prefer_server_ciphers) %>;
 <% if @ssl_crl -%>
   ssl_crl                   <%= @ssl_crl %>;
 <% end -%>

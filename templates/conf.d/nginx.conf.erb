@@ -107,8 +107,6 @@ http {
 <% unless @server_tokens.nil? -%>
     server_tokens       <%= bool2config(@server_tokens) %>;
 <% end -%>
-  types_hash_max_size <%= @types_hash_max_size %>;
-  types_hash_bucket_size <%= @types_hash_bucket_size %>;
 <% unless @http_tcp_nodelay.nil? -%>
   tcp_nodelay     <%= bool2config(@http_tcp_nodelay) %>;
 <% end -%>

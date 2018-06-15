@@ -166,7 +166,7 @@ define nginx::resource::server (
   Optional[Integer] $ssl_redirect_port                                           = undef,
   Optional[Variant[String, Boolean]] $ssl_key                                    = undef,
   Integer $ssl_port                                                              = 443,
-  Enum['on', 'off'] $ssl_prefer_server_ciphers                                   = $nginx::ssl_prefer_server_ciphers,
+  Optional[Nginx::Switch] $ssl_prefer_server_ciphers                             = $nginx::ssl_prefer_server_ciphers,
   String $ssl_protocols                                                          = $nginx::ssl_protocols,
   $ssl_buffer_size                                                               = undef,
   String $ssl_ciphers                                                            = $nginx::ssl_ciphers,

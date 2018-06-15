@@ -95,7 +95,8 @@ define nginx::resource::mailhost (
   Optional[String] $ssl_key                      = undef,
   Optional[String] $ssl_password_file            = undef,
   Optional[Integer] $ssl_port                    = undef,
-  Enum['on', 'off'] $ssl_prefer_server_ciphers   = $nginx::ssl_prefer_server_ciphers,
+  Optional[Nginx::Switch]
+                    $ssl_prefer_server_ciphers   = $nginx::ssl_prefer_server_ciphers,
   String $ssl_protocols                          = $nginx::ssl_protocols,
   Optional[String] $ssl_session_cache            = undef,
   Optional[String] $ssl_session_ticket_key       = undef,

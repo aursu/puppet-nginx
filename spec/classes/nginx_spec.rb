@@ -558,18 +558,6 @@ describe 'nginx' do
                 match: '  server_tokens on;'
               },
               {
-                title: 'should set types_hash_max_size',
-                attr: 'types_hash_max_size',
-                value: 10,
-                match: '  types_hash_max_size 10;'
-              },
-              {
-                title: 'should set types_hash_bucket_size',
-                attr: 'types_hash_bucket_size',
-                value: 10,
-                match: '  types_hash_bucket_size 10;'
-              },
-              {
                 title: 'should set tcp_nodelay',
                 attr: 'http_tcp_nodelay',
                 value: 'on',
