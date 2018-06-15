@@ -115,6 +115,9 @@ class nginx::config {
   $ssl_prefer_server_ciphers      = $nginx::ssl_prefer_server_ciphers
   $ssl_protocols                  = $nginx::ssl_protocols
   $ssl_ciphers                    = $nginx::ssl_ciphers
+  $open_file_cache                = $nginx::open_file_cache
+  $open_file_cache_valid          = $nginx::open_file_cache_valid
+  $open_file_cache_min_uses       = $nginx::open_file_cache_min_uses
 
   # Non-configurable settings
   $conf_template                  = 'nginx/conf.d/nginx.conf.erb'
