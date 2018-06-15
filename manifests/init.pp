@@ -102,38 +102,34 @@ class nginx (
                     $log_format                              = {},
   Boolean $mail                                              = false,
   Boolean $stream                                            = false,
-  String $multi_accept                                       = 'off',
-  Integer $names_hash_bucket_size                            = 64,
-  Integer $names_hash_max_size                               = 512,
-  $nginx_cfg_prepend                                         = false,
-  String $proxy_buffers                                      = '32 4k',
-  String $proxy_buffer_size                                  = '8k',
-  String $proxy_cache_inactive                               = '20m',
-  String $proxy_cache_keys_zone                              = 'd2:100m',
-  String $proxy_cache_levels                                 = '1',
-  String $proxy_cache_max_size                               = '500m',
-  Optional[Variant[Hash, String]] $proxy_cache_path          = undef,
-  Optional[Integer] $proxy_cache_loader_files                = undef,
-  Optional[String] $proxy_cache_loader_sleep                 = undef,
-  Optional[String] $proxy_cache_loader_threshold             = undef,
-  Optional[Enum['on', 'off']] $proxy_use_temp_path           = undef,
-  $proxy_connect_timeout                                     = '90s',
-  Integer $proxy_headers_hash_bucket_size                    = 64,
-  Optional[String] $proxy_http_version                       = undef,
-  $proxy_read_timeout                                        = '90s',
-  $proxy_redirect                                            = undef,
-  $proxy_send_timeout                                        = '90s',
-  Array $proxy_set_header                                    = [
-    'Host $host',
-    'X-Real-IP $remote_addr',
-    'X-Forwarded-For $proxy_add_x_forwarded_for',
-    'Proxy ""',
-  ],
-  Array $proxy_hide_header                                   = [],
-  Array $proxy_pass_header                                   = [],
-  Array $proxy_ignore_header                                 = [],
-  $sendfile                                                  = 'on',
-  String $server_tokens                                      = 'on',
+
+  Optional[Boolean] $multi_accept                            = undef,  # 'off'
+  Optional[Integer] $names_hash_bucket_size                  = undef,  # 32|64|128
+  Optional[Integer] $names_hash_max_size                     = undef,  # 512
+  Optional[Hash[String, Variant[String, Array[String, 1]], 1]]
+                    $nginx_cfg_prepend                       = undef,
+  Optional[String] $proxy_buffers                            = undef,  # '8 4k|8 8k'
+  Optional[Nginx::Size] $proxy_buffer_size                   = undef,  # '4k|8k'
+  Optional[Hash[String, Nginx::CachePath, 1]]
+                    $proxy_cache_path                        = undef,  # undef
+  Optional[Nginx::Time] $proxy_connect_timeout               = undef,  # 60s
+  Optional[Nginx::Size] $proxy_headers_hash_bucket_size      = undef,  # 64
+  Optional[Enum['1.0', '1.1']] $proxy_http_version           = undef,  # '1.0'
+  Optional[Nginx::Time] $proxy_read_timeout                  = undef,  # 60
+  Optional[String] $proxy_redirect                           = undef,  # 'default'
+  Optional[Nginx::Time] $proxy_send_timeout                  = undef,  # 60
+  Array[String]     $proxy_set_header                        = [       # ['Host $proxy_host',
+      'Host $host',                                                    #  'Connection close']
+      'X-Real-IP $remote_addr',
+      'X-Forwarded-For $proxy_add_x_forwarded_for',
+      'Proxy ""',
+    ],
+  Array[String]     $proxy_hide_header                       = [],
+  Array[String]     $proxy_pass_header                       = [],
+  Array[String]     $proxy_ignore_header                     = [],
+  Optional[Boolean] $sendfile                                = undef,  # 'off'
+  Optional[Boolean] $server_tokens                           = undef,  # 'on',
+
   $spdy                                                      = 'off',
   $http2                                                     = 'off',
   $ssl_stapling                                              = 'off',
