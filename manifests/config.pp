@@ -119,6 +119,9 @@ class nginx::config {
   $conf_template                  = 'nginx/conf.d/nginx.conf.erb'
   # performance settings
   $perf_conf_template             = 'nginx/conf.d/perf.conf.erb'
+  # compression config
+  $gzip_conf_template             = 'nginx/conf.d/gzip.conf.erb'
+  # proxy and caching config
   $proxy_conf_template            = 'nginx/conf.d/proxy.conf.erb'
 
   File {
@@ -238,6 +241,11 @@ class nginx::config {
   file { "${conf_dir}/conf.d/00-perf.conf":
     ensure  => file,
     content => template($perf_conf_template),
+  }
+
+  file { "${conf_dir}/conf.d/00-gzip.conf":
+    ensure  => file,
+    content => template($gzip_conf_template),
   }
 
   file { "${conf_dir}/conf.d/00-proxy.conf":

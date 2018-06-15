@@ -1,0 +1,54 @@
+<%-
+def bool2config(b)
+    case b
+    when true
+        'on'
+    when false, nil
+        'off'
+    else
+        b.to_s
+    end
+end
+-%>
+# Compression
+
+# Enable/Disable Gzip compressed.
+gzip <%= bool2config(@gzip) %>;
+<% if @gzip_comp_level -%>
+# Compression level (1-9).
+# 5 is a perfect compromise between size and cpu usage, offering about
+# 75% reduction for most ascii files (almost identical to level 9).
+gzip_comp_level    <%= @gzip_comp_level %>;
+<% end -%>
+<% if @gzip_min_length -%>
+# Don't compress anything that's already small and unlikely to shrink much
+# if at all (the default is 20 bytes, which is bad as that usually leads to
+# larger files after gzipping).
+gzip_min_length    <%= @gzip_min_length %>;
+<% end -%>
+<% if @gzip_proxied -%>
+# Compress data even for clients that are connecting to us via proxies,
+# identified by the "Via" header (required for CloudFront).
+gzip_proxied       <%= @gzip_proxied %>;
+<% end -%>
+<% if @gzip_vary -%>
+# Tell proxies to cache both the gzipped and regular version of a resource
+# whenever the client's Accept-Encoding capabilities header varies;
+# Avoids the issue where a non-gzip capable client (which is extremely rare
+# today) would display gibberish if their proxy gave them the gzipped version.
+gzip_vary          on;
+<% end -%>
+<% if @gzip_buffers -%>
+gzip_buffers      <%= @gzip_buffers %>;
+<% end -%>
+<% if @gzip_disable -%>
+gzip_disable      <%= @gzip_disable.is_a?(Array) ? @gzip_disable.join(' ') : @gzip_disable %>;
+<% end -%>
+<% if @gzip_http_version -%>
+gzip_http_version <%= @gzip_http_version %>;
+<% end -%>
+<% if @gzip_types -%>
+# Compress all output labeled with one of the following MIME-types.
+gzip_types        <%= @gzip_types.is_a?(Array) ? @gzip_types.join(' ') : @gzip_types %>;
+# text/html is always compressed by HttpGzipModule
+<% end -%>

@@ -76,17 +76,22 @@ class nginx (
                     $fastcgi_cache_path                      = undef,  # undef
   Optional[Variant[Nginx::CacheUseStale, Array[Nginx::CacheUseStale]]]
                     $fastcgi_cache_use_stale                 = undef,  # 'off'
-  $gzip                                                      = 'on',
-  $gzip_buffers                                              = undef,
-  $gzip_comp_level                                           = 1,
-  $gzip_disable                                              = 'msie6',
-  $gzip_min_length                                           = 20,
-  $gzip_http_version                                         = 1.1,
-  $gzip_proxied                                              = 'off',
-  $gzip_types                                                = undef,
-  $gzip_vary                                                 = 'off',
-  Optional[Variant[Hash, Array]] $http_cfg_prepend           = undef,
-  Optional[Variant[Hash, Array]] $http_cfg_append            = undef,
+  Boolean           $gzip                                    = true,   # 'on'
+  Optional[String]  $gzip_buffers                            = undef,  # '32 4k|16 8k'
+  Optional[Integer] $gzip_comp_level                         = undef,  # 1
+  Optional[Variant[String, Array[String, 1]]] $gzip_disable  = undef,  # undef
+  Optional[Integer] $gzip_min_length                         = undef,  # 20
+  Optional[Enum['1.0', '1.1']]
+                    $gzip_http_version                       = undef,  # '1.1'
+  Optional[Nginx::GzipProxied]
+                    $gzip_proxied                            = undef,  # 'off'
+  Optional[Variant[String, Array[String, 1]]]
+                    $gzip_types                              = undef,  # 'text/html'
+  Optional[Boolean] $gzip_vary                               = undef,  # 'off'
+  Optional[Hash[String, Variant[String, Array[String, 1]], 1]]
+                    $http_cfg_prepend                        = undef,
+  Optional[Hash[String, Variant[String, Array[String, 1]], 1]]
+                    $http_cfg_append                         = undef,
   Optional[Variant[Array[String], String]] $http_raw_prepend = undef,
   Optional[Variant[Array[String], String]] $http_raw_append  = undef,
   $http_tcp_nodelay                                          = 'on',
