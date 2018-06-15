@@ -118,6 +118,15 @@ class nginx::config {
   $open_file_cache                = $nginx::open_file_cache
   $open_file_cache_valid          = $nginx::open_file_cache_valid
   $open_file_cache_min_uses       = $nginx::open_file_cache_min_uses
+  $limit_req_zone                 = $nginx::limit_req_zone
+  $proxy_cache_lock               = $nginx::proxy_cache_lock
+  $default_type                   = $nginx::default_type
+  $charset_types                  = $nginx::charset_types
+  $charset                        = $nginx::charset
+  $index                          = $nginx::index
+  $msie_padding                   = $nginx::msie_padding
+  $port_in_redirect               = $nginx::port_in_redirect
+  $client_header_timeout          = $nginx::client_header_timeout
 
   # Non-configurable settings
   $conf_template                  = 'nginx/conf.d/nginx.conf.erb'

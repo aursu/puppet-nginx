@@ -83,7 +83,24 @@ http {
 <% end -%>
 
   include       <%= @conf_dir %>/mime.types;
-  default_type  application/octet-stream;
+<% if @default_type -%>
+    default_type    <%= @default_type %>;
+<% end -%>
+<% if @charset_types -%>
+    charset_types   <%= @charset_types %>;
+<% end -%>
+<% if @charset -%>
+    charset         <%= @charset %>;
+<% end -%>
+<% if @index -%>
+    index           <%= @index %>;
+<% end -%>
+<% unless @msie_padding.nil? -%>
+    msie_padding        <%= bool2config(@msie_padding) %>;
+<% end -%>
+<% unless @port_in_redirect.nil? -%>
+    port_in_redirect    <%= bool2config(@port_in_redirect) %>;
+<% end -%>
 <% if @log_format -%>
 <% @log_format.sort_by{|k,v| k}.each do |key,value| -%>
   log_format <%= key %> '<%= value %>';
