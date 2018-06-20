@@ -30,7 +30,7 @@ class nginx (
   Boolean $confd_only                                        = false,
   Boolean $confd_purge                                       = false,
   $conf_dir                                                  = $nginx::params::conf_dir,
-  Optional[Boolean] $daemon                                  = undef, # 'on'
+  Optional[Nginx::Switch] $daemon                            = undef, # 'on'
   String $daemon_user                                        = $nginx::params::daemon_user,
   Optional[String] $daemon_group                             = undef,
   Array[String] $dynamic_modules                             = [],
@@ -68,7 +68,7 @@ class nginx (
   Optional[Nginx::Time] $client_body_timeout                 = undef,  # 60s
   Optional[Nginx::Time] $send_timeout                        = undef,  # 60s
   Optional[Nginx::Time] $lingering_timeout                   = undef,  # 5s
-  Optional[Boolean] $etag                                    = undef,  # 'on'
+  Optional[Nginx::Switch] $etag                              = undef,  # 'on'
 
   Optional[Nginx::ConnectionProcessing] $events_use          = undef,  # 'epoll'
   Optional[String] $fastcgi_cache_key                        = undef,  # undef
@@ -88,14 +88,12 @@ class nginx (
   Optional[Variant[String, Array[String, 1]]]
                     $gzip_types                              = undef,  # 'text/html'
   Optional[Boolean] $gzip_vary                               = undef,  # 'off'
-  Optional[Hash[String, Variant[String, Array[String, 1]], 1]]
-                    $http_cfg_prepend                        = undef,
-  Optional[Hash[String, Variant[String, Array[String, 1]], 1]]
-                    $http_cfg_append                         = undef,
+  Optional[Nginx::ConfigSet] $http_cfg_prepend               = undef,
+  Optional[Nginx::ConfigSet] $http_cfg_append                = undef,
   Optional[Variant[Array[String], String]] $http_raw_prepend = undef,
   Optional[Variant[Array[String], String]] $http_raw_append  = undef,
   Optional[Boolean] $http_tcp_nodelay                        = undef,  # 'on'
-  Optional[Boolean] $http_tcp_nopush                         = undef,  # 'off'
+  Optional[Nginx::Switch] $http_tcp_nopush                         = undef,  # 'off'
   Optional[Nginx::Time] $keepalive_timeout                   = undef,  # 75
   Optional[Integer] $keepalive_requests                      = undef,  # 100
   Hash[String, String]
@@ -106,8 +104,7 @@ class nginx (
   Optional[Boolean] $multi_accept                            = undef,  # 'off'
   Optional[Integer] $names_hash_bucket_size                  = undef,  # 32|64|128
   Optional[Integer] $names_hash_max_size                     = undef,  # 512
-  Optional[Hash[String, Variant[String, Array[String, 1]], 1]]
-                    $nginx_cfg_prepend                       = undef,
+  Optional[Nginx::ConfigSet] $nginx_cfg_prepend              = undef,
   Optional[String] $proxy_buffers                            = undef,  # '8 4k|8 8k'
   Optional[Nginx::Size] $proxy_buffer_size                   = undef,  # '4k|8k'
   Optional[Hash[String, Nginx::CachePath, 1]]
