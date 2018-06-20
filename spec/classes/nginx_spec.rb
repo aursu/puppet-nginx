@@ -661,12 +661,6 @@ describe 'nginx' do
                 attr: 'client_body_temp_path',
                 value: '/path/to/body_temp',
                 match: '  client_body_temp_path   /path/to/body_temp;'
-              },
-              {
-                title: 'should set proxy_temp_path',
-                attr: 'proxy_temp_path',
-                value: '/path/to/proxy_temp',
-                match: '  proxy_temp_path         /path/to/proxy_temp;'
               }
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
