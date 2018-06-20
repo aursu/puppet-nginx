@@ -269,41 +269,9 @@ describe 'nginx' do
             )
           end
           it do
-            is_expected.to contain_file('/etc/nginx/conf.stream.d').only_with(
-              path: '/etc/nginx/conf.stream.d',
-              ensure: 'directory',
-              owner: 'root',
-              group: 'root',
-              mode: '0644'
-            )
-          end
-          it do
-            is_expected.to contain_file('/etc/nginx/conf.mail.d').only_with(
-              path: '/etc/nginx/conf.mail.d',
-              ensure: 'directory',
-              owner: 'root',
-              group: 'root',
-              mode: '0644'
-            )
-          end
-          it do
             is_expected.to contain_file('/var/nginx').with(
               ensure: 'directory',
               owner: 'root',
-              group: 'root',
-              mode: '0644'
-            )
-          end
-          it do
-            is_expected.to contain_file('/var/nginx/client_body_temp').with(
-              ensure: 'directory',
-              group: 'root',
-              mode: '0644'
-            )
-          end
-          it do
-            is_expected.to contain_file('/var/nginx/proxy_temp').with(
-              ensure: 'directory',
               group: 'root',
               mode: '0644'
             )
@@ -332,8 +300,6 @@ describe 'nginx' do
           end
           case facts[:osfamily]
           when 'RedHat'
-            it { is_expected.to contain_file('/var/nginx/client_body_temp').with(owner: 'nginx') }
-            it { is_expected.to contain_file('/var/nginx/proxy_temp').with(owner: 'nginx') }
             it { is_expected.to contain_file('/etc/nginx/nginx.conf').with_content %r{^user nginx;} }
             it do
               is_expected.to contain_file('/var/log/nginx').with(
@@ -344,8 +310,6 @@ describe 'nginx' do
               )
             end
           when 'Debian'
-            it { is_expected.to contain_file('/var/nginx/client_body_temp').with(owner: 'www-data') }
-            it { is_expected.to contain_file('/var/nginx/proxy_temp').with(owner: 'www-data') }
             it { is_expected.to contain_file('/etc/nginx/nginx.conf').with_content %r{^user www-data;} }
             it do
               is_expected.to contain_file('/var/log/nginx').with(
@@ -821,7 +785,8 @@ describe 'nginx' do
               {
                 confd_purge: true,
                 confd_only: true,
-                server_purge: true
+                server_purge: true,
+                stream: true
               }
             end
 
@@ -843,7 +808,8 @@ describe 'nginx' do
             let(:params) do
               {
                 confd_purge: true,
-                confd_only: true
+                confd_only: true,
+                stream: true
               }
             end
 
@@ -864,7 +830,12 @@ describe 'nginx' do
           end
 
           context 'when server_purge false' do
-            let(:params) { { server_purge: false } }
+            let(:params) do
+              {
+	        server_purge: false,
+	        stream: true
+	      }
+	    end
 
             it do
               is_expected.to contain_file('/etc/nginx/sites-available').without(
@@ -916,8 +887,6 @@ describe 'nginx' do
           context 'when daemon_user = www-data' do
             let(:params) { { daemon_user: 'www-data' } }
 
-            it { is_expected.to contain_file('/var/nginx/client_body_temp').with(owner: 'www-data') }
-            it { is_expected.to contain_file('/var/nginx/proxy_temp').with(owner: 'www-data') }
             it { is_expected.to contain_file('/etc/nginx/nginx.conf').with_content %r{^user www-data;} }
           end
 
