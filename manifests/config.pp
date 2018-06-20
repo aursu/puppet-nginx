@@ -82,14 +82,7 @@ class nginx::config {
   $nginx_cfg_prepend              = $nginx::nginx_cfg_prepend
   $proxy_buffers                  = $nginx::proxy_buffers
   $proxy_buffer_size              = $nginx::proxy_buffer_size
-  $proxy_cache_inactive           = $nginx::proxy_cache_inactive
-  $proxy_cache_keys_zone          = $nginx::proxy_cache_keys_zone
-  $proxy_cache_levels             = $nginx::proxy_cache_levels
-  $proxy_cache_max_size           = $nginx::proxy_cache_max_size
   $proxy_cache_path               = $nginx::proxy_cache_path
-  $proxy_cache_loader_files       = $nginx::proxy_cache_loader_files
-  $proxy_cache_loader_sleep       = $nginx::proxy_cache_loader_sleep
-  $proxy_cache_loader_threshold   = $nginx::proxy_cache_loader_threshold
   $proxy_connect_timeout          = $nginx::proxy_connect_timeout
   $proxy_headers_hash_bucket_size = $nginx::proxy_headers_hash_bucket_size
   $proxy_http_version             = $nginx::proxy_http_version
