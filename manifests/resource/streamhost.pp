@@ -56,7 +56,9 @@ define nginx::resource::streamhost (
   Integer $ipv6_listen_port               = 80,
   String $ipv6_listen_options             = 'default ipv6only=on',
   $proxy                                  = undef,
-  String $proxy_read_timeout              = $nginx::proxy_read_timeout,
+  Optional[Nginx::Time]
+  $proxy_read_timeout                     = $nginx::proxy_read_timeout,
+  Optional[Nginx::Time]
   $proxy_connect_timeout                  = $nginx::proxy_connect_timeout,
   Array $resolver                         = [],
   $raw_prepend                            = undef,
