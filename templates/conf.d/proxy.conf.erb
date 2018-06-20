@@ -43,7 +43,7 @@ proxy_hide_header       <%= header %>;
 <% @proxy_pass_header.each do |header| -%>
 proxy_pass_header       <%= header %>;
 <% end -%>
-<% @proxy_ignore_headers.each do |header| -%>
+<% @proxy_ignore_header.each do |header| -%>
 proxy_ignore_headers    <%= header %>;
 <% end -%>
 <% if @proxy_headers_hash_bucket_size -%>
