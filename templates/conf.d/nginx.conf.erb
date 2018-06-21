@@ -30,14 +30,14 @@ worker_rlimit_nofile <%= @worker_rlimit_nofile %>;
 <% end -%>
 
 <% if @pid -%>
-pid        <%= @pid %>;
+pid <%= @pid %>;
 <% end -%>
 <% if @nginx_error_log.is_a?(Array) -%>
   <%- @nginx_error_log.each do |log_item| -%>
-error_log  <%= log_item %> <%= @nginx_error_log_severity %>;
+error_log <%= log_item %> <%= @nginx_error_log_severity %>;
   <%- end -%>
 <% else -%>
-error_log  <%= @nginx_error_log %> <%= @nginx_error_log_severity %>;
+error_log <%= @nginx_error_log %> <%= @nginx_error_log_severity %>;
 <% end -%>
 
 <% if @nginx_cfg_prepend -%>
@@ -57,8 +57,8 @@ events {
   <%- end -%>
 <% end -%>
   worker_connections <%= @worker_connections -%>;
-<% if @multi_accept -%>
-  multi_accept on;
+<% unless @multi_accept.nil? -%>
+  multi_accept <%= bool2config(@multi_accept) %>;
 <% end -%>
 <%- if @events_use -%>
   use <%= @events_use %>;
@@ -82,24 +82,24 @@ http {
 
 <% end -%>
 
-  include       <%= @conf_dir %>/mime.types;
+  include <%= @conf_dir %>/mime.types;
 <% if @default_type -%>
-  default_type    <%= @default_type %>;
+  default_type <%= @default_type %>;
 <% end -%>
 <% if @charset_types -%>
-  charset_types   <%= @charset_types %>;
+  charset_types <%= @charset_types %>;
 <% end -%>
 <% if @charset -%>
-  charset         <%= @charset %>;
+  charset <%= @charset %>;
 <% end -%>
 <% if @index -%>
-  index           <%= @index %>;
+  index <%= @index %>;
 <% end -%>
 <% unless @msie_padding.nil? -%>
-  msie_padding        <%= bool2config(@msie_padding) %>;
+  msie_padding <%= bool2config(@msie_padding) %>;
 <% end -%>
 <% unless @port_in_redirect.nil? -%>
-  port_in_redirect    <%= bool2config(@port_in_redirect) %>;
+  port_in_redirect <%= bool2config(@port_in_redirect) %>;
 <% end -%>
 <% if @log_format -%>
 <% @log_format.sort_by{|k,v| k}.each do |key,value| -%>
@@ -109,31 +109,31 @@ http {
 
 <% if @http_access_log.is_a?(Array) -%>
   <%- @http_access_log.each do |log_item| -%>
-  access_log  <%= log_item %><% if @http_format_log %> <%= @http_format_log%><% end %>;
+  access_log <%= log_item %><% if @http_format_log %> <%= @http_format_log%><% end %>;
   <%- end -%>
 <% else -%>
-  access_log  <%= @http_access_log %><% if @http_format_log %> <%= @http_format_log%><% end %>;
+  access_log <%= @http_access_log %><% if @http_format_log %> <%= @http_format_log%><% end %>;
 <% end -%>
 
-<%  if @sendfile -%>
-  sendfile        on;
-  <%- if @http_tcp_nopush -%>
-  tcp_nopush      on;
+<% unless @sendfile.nil? -%>
+  sendfile <%= bool2config(@sendfile) %>;
+  <%- unless @http_tcp_nopush.nil? -%>
+  tcp_nopush <%= bool2config(@http_tcp_nopush) %>;
   <%- end -%>
-<%  end -%>
+<% end -%>
 <% unless @server_tokens.nil? -%>
-  server_tokens       <%= bool2config(@server_tokens) %>;
+  server_tokens <%= bool2config(@server_tokens) %>;
 <% end -%>
 <% unless @http_tcp_nodelay.nil? -%>
-  tcp_nodelay     <%= bool2config(@http_tcp_nodelay) %>;
+  tcp_nodelay <%= bool2config(@http_tcp_nodelay) %>;
 <% end -%>
 <% unless @etag.nil? -%>
-  etag            <%= bool2config(@etag) %>;
+  etag <%= bool2config(@etag) %>;
 
 <% end -%>
 
 <% if @client_body_temp_path -%>
-  client_body_temp_path   <%= @client_body_temp_path %>;
+  client_body_temp_path <%= @client_body_temp_path %>;
 <% end -%>
 <% if @http_cfg_append -%>
 

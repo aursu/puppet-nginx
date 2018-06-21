@@ -14,8 +14,10 @@ describe 'nginx' do
           nginx_servers_defaults: { 'listen_options' => 'default_server' },
           nginx_locations: { 'test2.local' => { 'server' => 'test2.local', 'www_root' => '/' } },
           nginx_locations_defaults: { 'expires' => '@12h34m' },
+	  mail: true,
           nginx_mailhosts: { 'smtp.test2.local' => { 'auth_http' => 'server2.example/cgi-bin/auth', 'protocol' => 'smtp', 'listen_port' => 587 } },
           nginx_mailhosts_defaults: { 'listen_options' => 'default_server_smtp' },
+	  stream: true,
           nginx_streamhosts: { 'streamhost1' => { 'proxy' => 'streamproxy' } }
         }
       end
@@ -387,28 +389,28 @@ describe 'nginx' do
                 title: 'should set error_log',
                 attr: 'nginx_error_log',
                 value: '/path/to/error.log',
-                match: 'error_log  /path/to/error.log error;'
+                match: 'error_log /path/to/error.log error;'
               },
               {
                 title: 'should set multiple error_logs',
                 attr: 'nginx_error_log',
                 value: ['/path/to/error.log', 'syslog:server=localhost'],
                 match: [
-                  'error_log  /path/to/error.log error;',
-                  'error_log  syslog:server=localhost error;'
+                  'error_log /path/to/error.log error;',
+                  'error_log syslog:server=localhost error;'
                 ]
               },
               {
                 title: 'should set error_log severity level',
                 attr: 'nginx_error_log_severity',
                 value: 'warn',
-                match: 'error_log  /var/log/nginx/error.log warn;'
+                match: 'error_log /var/log/nginx/error.log warn;'
               },
               {
                 title: 'should set pid',
                 attr: 'pid',
                 value: '/path/to/pid',
-                match: 'pid        /path/to/pid;'
+                match: 'pid /path/to/pid;'
               },
               {
                 title: 'should not set pid',
@@ -427,12 +429,6 @@ describe 'nginx' do
                 attr: 'accept_mutex',
                 value: 'off',
                 match: '  accept_mutex off;'
-              },
-              {
-                title: 'should set accept_mutex_delay',
-                attr: 'accept_mutex_delay',
-                value: '500s',
-                match: '  accept_mutex_delay 500s;'
               },
               {
                 title: 'should set worker_connections',
@@ -467,7 +463,7 @@ describe 'nginx' do
               {
                 title: 'should not set multi_accept',
                 attr: 'multi_accept',
-                value: 'off',
+                value: :undef,
                 notmatch: %r{multi_accept}
               },
               {
@@ -486,33 +482,33 @@ describe 'nginx' do
                 title: 'should set access_log',
                 attr: 'http_access_log',
                 value: '/path/to/access.log',
-                match: '  access_log  /path/to/access.log;'
+                match: '  access_log /path/to/access.log;'
               },
               {
                 title: 'should set multiple access_logs',
                 attr: 'http_access_log',
                 value: ['/path/to/access.log', 'syslog:server=localhost'],
                 match: [
-                  '  access_log  /path/to/access.log;',
-                  '  access_log  syslog:server=localhost;'
+                  '  access_log /path/to/access.log;',
+                  '  access_log syslog:server=localhost;'
                 ]
               },
               {
                 title: 'should set custom log format',
                 attr: 'http_format_log',
                 value: 'mycustomformat',
-                match: '  access_log  /var/log/nginx/access.log mycustomformat;'
+                match: '  access_log /var/log/nginx/access.log mycustomformat;'
               },
               {
                 title: 'should set sendfile',
                 attr: 'sendfile',
                 value: 'on',
-                match: '  sendfile    on;'
+                match: '  sendfile on;'
               },
               {
                 title: 'should not set sendfile',
                 attr: 'sendfile',
-                value: false,
+                value: :undef,
                 notmatch: %r{sendfile}
               },
               {
@@ -525,13 +521,7 @@ describe 'nginx' do
                 title: 'should set tcp_nodelay',
                 attr: 'http_tcp_nodelay',
                 value: 'on',
-                match: '  tcp_nodelay         on;'
-              },
-              {
-                title: 'should set tcp_nopush',
-                attr: 'http_tcp_nopush',
-                value: 'on',
-                match: '  tcp_nopush on;'
+                match: '  tcp_nodelay on;'
               },
               {
                 title: 'should contain http_raw_prepend directives',
@@ -642,7 +632,7 @@ describe 'nginx' do
                 title: 'should set pid',
                 attr: 'pid',
                 value: '/path/to/pid',
-                match: 'pid        /path/to/pid;'
+                match: 'pid /path/to/pid;'
               },
               {
                 title: 'should set mail',
@@ -660,7 +650,7 @@ describe 'nginx' do
                 title: 'should set client_body_temp_path',
                 attr: 'client_body_temp_path',
                 value: '/path/to/body_temp',
-                match: '  client_body_temp_path   /path/to/body_temp;'
+                match: '  client_body_temp_path /path/to/body_temp;'
               }
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
@@ -708,7 +698,7 @@ describe 'nginx' do
           context 'when conf_dir is /path/to/nginx' do
             let(:params) { { conf_dir: '/path/to/nginx' } }
 
-            it { is_expected.to contain_file('/path/to/nginx/nginx.conf').with_content(%r{include       /path/to/nginx/mime\.types;}) }
+            it { is_expected.to contain_file('/path/to/nginx/nginx.conf').with_content(%r{include /path/to/nginx/mime\.types;}) }
             it { is_expected.to contain_file('/path/to/nginx/nginx.conf').with_content(%r{include /path/to/nginx/conf\.d/\*\.conf;}) }
             it { is_expected.to contain_file('/path/to/nginx/nginx.conf').with_content(%r{include /path/to/nginx/sites-enabled/\*;}) }
           end
@@ -896,12 +886,12 @@ describe 'nginx' do
             it { is_expected.to contain_file('/foo/bar').with(ensure: 'directory') }
             it do
               is_expected.to contain_file('/etc/nginx/nginx.conf').with_content(
-                %r{access_log  /foo/bar/access.log;}
+                %r{access_log /foo/bar/access.log;}
               )
             end
             it do
               is_expected.to contain_file('/etc/nginx/nginx.conf').with_content(
-                %r{error_log  /foo/bar/error.log error;}
+                %r{error_log /foo/bar/error.log error;}
               )
             end
           end
