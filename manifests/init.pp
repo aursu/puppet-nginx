@@ -59,7 +59,7 @@ class nginx (
   String $conf_template                                      = 'nginx/conf.d/nginx.conf.erb',
 
   ### START Nginx Configuration ###                                    # default:
-  Optional[Boolean] $accept_mutex                            = undef,  # 'on' (nginx < 1.11.3)
+  Optional[Nginx::Switch] $accept_mutex                      = undef,  # 'on' (nginx < 1.11.3)
                                                                        # 'off' (nginx >= 1.11.3)
   Optional[Nginx::Time] $accept_mutex_delay                  = undef,  # 500ms
   Optional[Nginx::Size] $client_body_buffer_size             = undef,  # 8k|16k
@@ -94,7 +94,7 @@ class nginx (
   Hash[String, String] $log_format                              = {},
   Boolean $mail                                              = false,
   Boolean $stream                                            = false,
-  Optional[Boolean] $multi_accept                            = undef,  # 'off'
+  Optional[Nginx::Switch] $multi_accept                      = undef,  # 'off'
   Optional[Integer] $names_hash_bucket_size                  = undef,  # 32|64|128
   Optional[Integer] $names_hash_max_size                     = undef,  # 512
   Optional[Nginx::ConfigSet] $nginx_cfg_prepend              = undef,
@@ -117,7 +117,7 @@ class nginx (
   Array[String] $proxy_hide_header                           = [],
   Array[String] $proxy_pass_header                           = [],
   Array[String] $proxy_ignore_header                         = [],
-  Optional[Boolean] $sendfile                                = undef,  # 'off'
+  Optional[Nginx::Switch] $sendfile                          = undef,  # 'off'
   Optional[Nginx::Switch] $server_tokens                     = undef,  # 'on',
   $spdy                                                      = 'off',
   $http2                                                     = 'off',
