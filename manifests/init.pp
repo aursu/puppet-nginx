@@ -59,8 +59,7 @@ class nginx (
   String $conf_template                                      = 'nginx/conf.d/nginx.conf.erb',
 
   ### START Nginx Configuration ###                                    # default:
-  Optional[Nginx::Switch] $accept_mutex                      = undef,  # 'on' (nginx < 1.11.3)
-                                                                       # 'off' (nginx >= 1.11.3)
+  Optional[Nginx::Switch] $accept_mutex                      = undef,  # 'on' (nginx < 1.11.3), 'off' (nginx >= 1.11.3)
   Optional[Nginx::Time] $accept_mutex_delay                  = undef,  # 500ms
   Optional[Nginx::Size] $client_body_buffer_size             = undef,  # 8k|16k
   Optional[Nginx::Size] $client_max_body_size                = undef,  # 1m
