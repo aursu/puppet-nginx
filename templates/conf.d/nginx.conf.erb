@@ -28,7 +28,6 @@ worker_processes <%= @worker_processes %>;
 <% if @worker_rlimit_nofile -%>
 worker_rlimit_nofile <%= @worker_rlimit_nofile %>;
 <% end -%>
-
 <% if @pid -%>
 pid <%= @pid %>;
 <% end -%>
@@ -39,7 +38,6 @@ error_log <%= log_item %> <%= @nginx_error_log_severity %>;
 <% else -%>
 error_log <%= @nginx_error_log %> <%= @nginx_error_log_severity %>;
 <% end -%>
-
 <% if @nginx_cfg_prepend -%>
   <%- field_width = @nginx_cfg_prepend.inject(0) { |l, (k, v)| k.size > l ? k.size : l } -%>
   <%- @nginx_cfg_prepend.sort_by{|k, v| k}.each do |key, value| -%>
@@ -48,7 +46,6 @@ error_log <%= @nginx_error_log %> <%= @nginx_error_log_severity %>;
     <%- end -%>
   <%- end -%>
 <% end -%>
-
 events {
 <% unless @accept_mutex.nil? -%>
   accept_mutex <%= bool2config(@accept_mutex) %>;
@@ -71,7 +68,6 @@ http {
   <%= line %>
   <%- end -%>
 <% end -%>
-
 <% if @http_cfg_prepend -%>
   <%- field_width = @http_cfg_prepend.inject(0) { |l,(k,v)| k.size > l ? k.size : l } -%>
   <%- @http_cfg_prepend.sort_by{|k,v| k}.each do |key,value| -%>
@@ -81,7 +77,6 @@ http {
   <%- end -%>
 
 <% end -%>
-
   include <%= @conf_dir %>/mime.types;
 <% if @default_type -%>
   default_type <%= @default_type %>;
@@ -106,7 +101,6 @@ http {
   log_format <%= key %> '<%= value %>';
 <% end -%>
 <% end -%>
-
 <% if @http_access_log.is_a?(Array) -%>
   <%- @http_access_log.each do |log_item| -%>
   access_log <%= log_item %><% if @http_format_log %> <%= @http_format_log%><% end %>;
@@ -114,7 +108,6 @@ http {
 <% else -%>
   access_log <%= @http_access_log %><% if @http_format_log %> <%= @http_format_log%><% end %>;
 <% end -%>
-
 <% unless @sendfile.nil? -%>
   sendfile <%= bool2config(@sendfile) %>;
   <%- unless @http_tcp_nopush.nil? -%>
@@ -129,14 +122,11 @@ http {
 <% end -%>
 <% unless @etag.nil? -%>
   etag <%= bool2config(@etag) %>;
-
 <% end -%>
-
 <% if @client_body_temp_path -%>
   client_body_temp_path <%= @client_body_temp_path %>;
 <% end -%>
 <% if @http_cfg_append -%>
-
   <%- field_width = @http_cfg_append.inject(0) { |l,(k,v)| k.size > l ? k.size : l } -%>
   <%- @http_cfg_append.sort_by{|k,v| k}.each do |key,value| -%>
       <%- Array(value).each do |asubvalue| -%>
@@ -144,13 +134,11 @@ http {
       <%- end -%>
   <%- end -%>
 <% end -%>
-
 <% if @http_raw_append && Array(@http_raw_append).size > 0 -%>
   <%- Array(@http_raw_append).each do |line| -%>
   <%= line %>
   <%- end -%>
 <% end -%>
-
   include <%= @conf_dir %>/conf.d/*.conf;
 <% unless @confd_only -%>
   include <%= @conf_dir %>/sites-enabled/*;
