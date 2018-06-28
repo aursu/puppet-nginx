@@ -98,9 +98,9 @@ http {
   port_in_redirect <%= bool2config(@port_in_redirect) %>;
 <% end -%>
 <% if @log_format -%>
-<% @log_format.sort_by{|k,v| k}.each do |key,value| -%>
+  <% @log_format.sort_by{|k,v| k}.each do |key,value| -%>
   log_format <%= key %> '<%= value %>';
-<% end -%>
+  <% end -%>
 <% end -%>
 <% if @http_access_log.is_a?(Array) -%>
   <%- @http_access_log.each do |log_item| -%>
