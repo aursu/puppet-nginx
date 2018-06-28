@@ -82,6 +82,7 @@ class nginx::config {
   $nginx_cfg_prepend              = $nginx::nginx_cfg_prepend
   $proxy_buffers                  = $nginx::proxy_buffers
   $proxy_buffer_size              = $nginx::proxy_buffer_size
+  $proxy_cache                    = $nginx::proxy_cache
   $proxy_cache_path               = $nginx::proxy_cache_path
   $proxy_connect_timeout          = $nginx::proxy_connect_timeout
   $proxy_headers_hash_bucket_size = $nginx::proxy_headers_hash_bucket_size

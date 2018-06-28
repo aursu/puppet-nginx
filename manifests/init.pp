@@ -99,6 +99,7 @@ class nginx (
   Optional[Nginx::ConfigSet] $nginx_cfg_prepend              = undef,
   Optional[String] $proxy_buffers                            = undef,  # '8 4k|8 8k'
   Optional[Nginx::Size] $proxy_buffer_size                   = undef,  # '4k|8k'
+  Optional[String] $proxy_cache                              = undef,  # off
   Optional[Hash[String, Nginx::CachePath, 1]]
                     $proxy_cache_path                        = undef,  # undef
   Optional[Nginx::Time] $proxy_connect_timeout               = undef,  # 60s

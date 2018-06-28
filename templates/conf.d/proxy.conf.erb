@@ -55,6 +55,9 @@ proxy_ignore_headers <%= header %>;
 <% if @proxy_headers_hash_bucket_size -%>
 proxy_headers_hash_bucket_size <%= @proxy_headers_hash_bucket_size %>;
 <% end -%>
+<% if @proxy_cache -%>
+proxy_cache <%= @proxy_cache %>;
+<% end -%>
 <% if @proxy_cache_path -%>
     <%- @proxy_cache_path.sort_by{|k, v| k}.each do |path, parameters| -%>
 proxy_cache_path <%= path %><% parameters.each do |name, value| %> <%= name %>=<%= bool2config(value) %><% end %>;
