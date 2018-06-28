@@ -46,6 +46,7 @@ error_log <%= @nginx_error_log %> <%= @nginx_error_log_severity %>;
     <%- end -%>
   <%- end -%>
 <% end -%>
+
 events {
 <% unless @accept_mutex.nil? -%>
   accept_mutex <%= bool2config(@accept_mutex) %>;
