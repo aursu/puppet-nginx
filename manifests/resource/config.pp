@@ -6,9 +6,10 @@
 #   nginx::resource::config { 'namevar': }
 define nginx::resource::config (
   String  $template,
-  String  $filename = $name,
+  String  $filename     = $name,
   Stdlib::Unixpath
-          $conf_dir = $nginx::conf_dir,
+          $conf_dir     = $nginx::conf_dir,
+  String  $service_name = $nginx::service_name,
 ) {
   if ! defined(Class['nginx']) {
     fail('You must include the nginx base class before using any defined resources')
@@ -29,5 +30,6 @@ define nginx::resource::config (
     ensure  => file,
     content => template($template),
     require => File["${conf_dir}/conf.d"],
+    notify  => Service[$service_name]
   }
 }

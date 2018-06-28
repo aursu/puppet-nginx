@@ -163,7 +163,7 @@ class nginx (
   $service_ensure                                            = running,
   $service_flags                                             = undef,
   $service_restart                                           = undef,
-  $service_name                                              = 'nginx',
+  String $service_name                                       = 'nginx',
   $service_manage                                            = true,
   ### END Service Configuration ###
 
