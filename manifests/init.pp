@@ -29,7 +29,7 @@ class nginx (
   Optional[String] $client_body_temp_path                    = undef, # 'client_body_temp'
   Boolean $confd_only                                        = false,
   Boolean $confd_purge                                       = false,
-  $conf_dir                                                  = $nginx::params::conf_dir,
+  Stdlib::Unixpath $conf_dir                                 = $nginx::params::conf_dir,
   Optional[Nginx::Switch] $daemon                            = undef, # 'on'
   String $daemon_user                                        = $nginx::params::daemon_user,
   Optional[String] $daemon_group                             = undef,
