@@ -107,8 +107,7 @@ class nginx (
   Optional[Nginx::Time] $proxy_read_timeout                  = undef,  # 60
   Optional[String] $proxy_redirect                           = undef,  # 'default'
   Optional[Nginx::Time] $proxy_send_timeout                  = undef,  # 60
-  Array[String] $proxy_set_header                            = [],     # ['Host $proxy_host',
-                                                                       #  'Connection close']
+  Array[String] $proxy_set_header                            = [],     # ['Host $proxy_host', 'Connection close']
   Array[String] $proxy_hide_header                           = [],
   Array[String] $proxy_pass_header                           = [],
   Array[String] $proxy_ignore_header                         = [],
