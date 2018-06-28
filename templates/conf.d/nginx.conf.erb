@@ -106,7 +106,7 @@ http {
   <%- @http_access_log.each do |log_item| -%>
   access_log <%= log_item %><% if @http_format_log %> <%= @http_format_log%><% end %>;
   <%- end -%>
-<% else -%>
+<% elsif @http_access_log -%>
   access_log <%= @http_access_log %><% if @http_format_log %> <%= @http_format_log%><% end %>;
 <% end -%>
 <% unless @sendfile.nil? -%>

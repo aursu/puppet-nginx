@@ -40,9 +40,9 @@ class nginx (
   $log_dir                                                   = $nginx::params::log_dir,
   $log_group                                                 = $nginx::params::log_group,
   $log_mode                                                  = '0750',
-  Variant[String, Array[String]] $http_access_log            = "${log_dir}/${::nginx::params::http_access_log_file}",
-  $http_format_log                                           = undef,
-  Variant[String, Array[String]] $nginx_error_log            = "${log_dir}/${::nginx::params::nginx_error_log_file}",
+  Optional[Variant[String, Array[String]]] $http_access_log  = "${log_dir}/${nginx::params::http_access_log_file}",
+  Optional[String] $http_format_log                          = undef, # 'combined'
+  Variant[String, Array[String]] $nginx_error_log            = "${log_dir}/${nginx::params::nginx_error_log_file}",
   Nginx::ErrorLogSeverity $nginx_error_log_severity          = 'error',
   $pid                                                       = $nginx::params::pid,
   Optional[String] $proxy_temp_path                          = undef, # 'proxy_temp'
