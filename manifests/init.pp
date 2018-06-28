@@ -90,7 +90,7 @@ class nginx (
   Optional[Nginx::Switch] $http_tcp_nopush                   = undef,  # 'off'
   Optional[Nginx::Time] $keepalive_timeout                   = undef,  # 75
   Optional[Integer] $keepalive_requests                      = undef,  # 100
-  Hash[String, String] $log_format                              = {},
+  Hash[String, String] $log_format                           = {},
   Boolean $mail                                              = false,
   Boolean $stream                                            = false,
   Optional[Nginx::Switch] $multi_accept                      = undef,  # 'off'
