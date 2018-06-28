@@ -110,6 +110,8 @@ class nginx::config {
   $open_file_cache_valid          = $nginx::open_file_cache_valid
   $open_file_cache_min_uses       = $nginx::open_file_cache_min_uses
   $limit_req_zone                 = $nginx::limit_req_zone
+
+  $proxy_connection_upgrade       = $nginx::proxy_connection_upgrade
   $proxy_cache_lock               = $nginx::proxy_cache_lock
   $default_type                   = $nginx::default_type
   $charset_types                  = $nginx::charset_types

@@ -140,6 +140,7 @@ class nginx (
       }]
     ]
   ]                 $limit_req_zone                          = undef,
+  Optional[Boolean] $proxy_connection_upgrade                = true,   # see http://nginx.org/en/docs/http/websocket.html
   Optional[Boolean] $proxy_cache_lock                        = undef,  # 'off'
   Optional[String] $default_type                             = undef,  # 'text/plain'
   Optional[String] $charset_types                            = undef,  # 'text/html text/xml text/plain text/vnd.wap.wml application/javascript application/rss+xml'
