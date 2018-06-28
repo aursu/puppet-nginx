@@ -816,10 +816,10 @@ describe 'nginx' do
           context 'when server_purge false' do
             let(:params) do
               {
-	        server_purge: false,
-	        stream: true
-	      }
-	    end
+                server_purge: false,
+                stream: true
+              }
+            end
 
             it do
               is_expected.to contain_file('/etc/nginx/sites-available').without(
