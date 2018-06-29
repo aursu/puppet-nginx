@@ -79,7 +79,12 @@ class nginx (
   Optional[Variant[String, Array[String, 1]]] $gzip_disable  = undef,  # undef
   Optional[Integer] $gzip_min_length                         = undef,  # 20
   Optional[Enum['1.0', '1.1']] $gzip_http_version            = undef,  # '1.1'
-  Optional[Nginx::GzipProxied] $gzip_proxied                 = undef,  # 'off'
+  Optional[
+      Variant[
+        Nginx::GzipProxied,
+        Array[Nginx::GzipProxied]
+      ]
+  ] $gzip_proxied                                            = undef,  # 'off'
   Optional[Variant[String, Array[String, 1]]] $gzip_types    = undef,  # 'text/html'
   Optional[Boolean] $gzip_vary                               = undef,  # 'off'
   Optional[Nginx::ConfigSet] $http_cfg_prepend               = undef,

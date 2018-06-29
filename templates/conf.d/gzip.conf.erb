@@ -29,7 +29,7 @@ gzip_min_length <%= @gzip_min_length %>;
 <% if @gzip_proxied -%>
 # Compress data even for clients that are connecting to us via proxies,
 # identified by the "Via" header (required for CloudFront).
-gzip_proxied <%= @gzip_proxied %>;
+gzip_proxied <%= @gzip_proxied.is_a?(Array) ? @gzip_proxied.join(' ') : @gzip_proxied %>;
 <% end -%>
 <% if @gzip_vary -%>
 # Tell proxies to cache both the gzipped and regular version of a resource
