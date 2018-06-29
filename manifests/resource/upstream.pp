@@ -41,14 +41,14 @@
 #    upstream_cfg_prepend => $my_config,
 #  }
 define nginx::resource::upstream (
-  Optional[Array] $members                  = undef,
-  $members_tag                              = undef,
-  Enum['present', 'absent'] $ensure         = 'present',
-  Optional[Hash] $upstream_cfg_append       = undef,
-  Optional[Hash] $upstream_cfg_prepend      = undef,
-  $upstream_fail_timeout                    = '10s',
-  $upstream_max_fails                       = undef,
-  Enum['http', 'stream'] $upstream_context  = 'http',
+  Optional[Array] $members                     = undef,
+  $members_tag                                 = undef,
+  Enum['present', 'absent'] $ensure            = 'present',
+  Optional[Hash] $upstream_cfg_append          = undef,
+  Optional[Hash] $upstream_cfg_prepend         = undef,
+  Optional[Nginx::Time] $upstream_fail_timeout = undef, # 10s
+  Optional[Integer] $upstream_max_fails        = undef, # 1
+  Enum['http', 'stream'] $upstream_context     = 'http',
 ) {
 
   if ! defined(Class['nginx']) {
