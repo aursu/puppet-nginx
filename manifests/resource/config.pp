@@ -30,6 +30,6 @@ define nginx::resource::config (
     ensure  => file,
     content => template($template),
     require => File["${conf_dir}/conf.d"],
-    notify  => Service[$service_name]
+    notify  => Service[$service_name],
   }
 }
