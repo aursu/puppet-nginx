@@ -229,7 +229,7 @@ define nginx::resource::server (
   Optional[String] $auth_request                                                 = undef,
   Optional[String] $client_body_timeout                                          = undef,
   Optional[String] $client_header_timeout                                        = undef,
-  $client_max_body_size                                                          = undef,
+  Optional[Nginx::Size] $client_max_body_size                                    = undef,
   Optional[Variant[Array[String], String]] $raw_prepend                          = undef,
   Optional[Variant[Array[String], String]] $raw_append                           = undef,
   Optional[Variant[Array[String], String]] $location_raw_prepend                 = undef,
