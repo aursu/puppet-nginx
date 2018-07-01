@@ -94,6 +94,8 @@
 #   [*proxy_set_body*]        - If defined, sets the body passed to the backend.
 #   [*proxy_buffering*]       - If defined, sets the proxy_buffering to the passed
 #     value.
+#   [*proxy_request_buffering*] - If defined, sets the proxy_buffering to the passed
+#     value.
 #   [*auth_basic*]            - This directive includes testing name and password
 #     with HTTP Basic Authentication.
 #   [*auth_basic_user_file*]  - This directive sets the htpasswd filename for
@@ -213,6 +215,7 @@ define nginx::resource::location (
   Optional[String] $proxy_http_version                 = undef,
   Optional[String] $proxy_set_body                     = undef,
   Optional[Enum['on', 'off']] $proxy_buffering         = undef,
+  Optional[Enum['on', 'off']] $proxy_request_buffering = undef,
   Optional[String] $auth_basic                         = undef,
   Optional[String] $auth_basic_user_file               = undef,
   Optional[String] $auth_request                       = undef,
