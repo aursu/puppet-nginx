@@ -3,10 +3,13 @@
 # @summary A short summary of the purpose of this defined type.
 #
 # @example
-#   nginx::resource::config { 'namevar': }
+#    nginx::resource::config { '99-gitlab-logging':
+#        template => 'profile/gitlab/nginx/conf.d/gitlab-logging.conf.erb',
+#    }
 define nginx::resource::config (
   String  $template,
   String  $filename     = $name,
+  Hash    $options      = {},
   Stdlib::Unixpath
           $conf_dir     = $nginx::conf_dir,
   String  $service_name = $nginx::service_name,
