@@ -14,6 +14,9 @@ end
 
 # Enable/Disable Gzip compressed.
 gzip <%= bool2config(@gzip) %>;
+<% unless @gzip_static.nil? -%>
+gzip_static <%= bool2config(@gzip_static) %>;
+<% end -%>
 <% if @gzip_comp_level -%>
 # Compression level (1-9).
 # 5 is a perfect compromise between size and cpu usage, offering about
