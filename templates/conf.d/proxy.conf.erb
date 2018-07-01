@@ -40,17 +40,25 @@ proxy_buffer_size <%= @proxy_buffer_size %>;
 <% if @proxy_http_version -%>
 proxy_http_version <%= @proxy_http_version %>;
 <% end -%>
-<% @proxy_set_header.each do |header| -%>
+<% if @proxy_set_header.is_a?(Array) -%>
+  <% @proxy_set_header.each do |header| -%>
 proxy_set_header <%= header %>;
+  <% end -%>
 <% end -%>
-<% @proxy_hide_header.each do |header| -%>
+<% if @proxy_hide_header.is_a?(Array) -%>
+  <% @proxy_hide_header.each do |header| -%>
 proxy_hide_header <%= header %>;
+  <% end -%>
 <% end -%>
-<% @proxy_pass_header.each do |header| -%>
+<% if @proxy_pass_header.is_a?(Array) -%>
+  <% @proxy_pass_header.each do |header| -%>
 proxy_pass_header <%= header %>;
+  <% end -%>
 <% end -%>
-<% @proxy_ignore_header.each do |header| -%>
+<% if @proxy_ignore_header.is_a?(Array) -%>
+  <% @proxy_ignore_header.each do |header| -%>
 proxy_ignore_headers <%= header %>;
+  <% end -%>
 <% end -%>
 <% if @proxy_headers_hash_bucket_size -%>
 proxy_headers_hash_bucket_size <%= @proxy_headers_hash_bucket_size %>;
