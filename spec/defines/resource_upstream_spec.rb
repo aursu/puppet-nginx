@@ -77,17 +77,6 @@ describe 'nginx::resource::upstream' do
               ]
             },
             {
-              title: 'should set server',
-              attr: 'members',
-              fragment: 'members',
-              value: %w[test3 test1 test2],
-              match: [
-                '  server test3 fail_timeout=10s;',
-                '  server test1 fail_timeout=10s;',
-                '  server test2 fail_timeout=10s;'
-              ]
-            },
-            {
               title: 'should contain ordered appended directives',
               attr: 'upstream_cfg_append',
               fragment: 'footer',
