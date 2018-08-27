@@ -84,6 +84,7 @@
 #   [*proxy_method*]               - If defined, overrides the HTTP method of the request to be passed to the backend.
 #   [*proxy_http_version*]         - Sets the proxy http version
 #   [*proxy_set_body*]             - If defined, sets the body passed to the backend.
+#   [*absolute_redirect*]          - Enables or disables the absolute redirect functionality of nginx
 #   [*auth_basic*]                 - This directive includes testing name and password with HTTP Basic Authentication.
 #   [*auth_basic_user_file*]       - This directive sets the htpasswd filename for the authentication realm.
 #   [*auth_request*]               - This allows you to specify a custom auth endpoint
@@ -127,6 +128,7 @@
 #   [*error_pages*]                - Hash: setup errors pages, hash key is the http code and hash value the page
 #   [*locations*]                  - Hash of servers resources used by this server
 #   [*locations_defaults*]         - Hash of location default settings
+#   [*add_listen_directive*]       - Boolean to determine if we should add 'ssl on;' to the vhost or not. defaults to true for nginx 1.14 and older, otherwise false
 # Actions:
 #
 # Requires:
@@ -221,6 +223,7 @@ define nginx::resource::server (
   Optional[Hash] $location_custom_cfg_prepend                                    = undef,
   Optional[Hash] $location_custom_cfg_append                                     = undef,
   Optional[Array[String]] $try_files                                             = undef,
+  Optional[Enum['on', 'off']] $absolute_redirect                                 = undef,
   Optional[String] $auth_basic                                                   = undef,
   Optional[String] $auth_basic_user_file                                         = undef,
   Optional[String] $auth_request                                                 = undef,
@@ -257,7 +260,8 @@ define nginx::resource::server (
   String $maintenance_value                                                      = 'return 503',
   $error_pages                                                                   = undef,
   Hash $locations                                                                = {},
-  Hash $locations_defaults                                                       = {}
+  Hash $locations_defaults                                                       = {},
+  Boolean $add_listen_directive                                                  = $nginx::add_listen_directive,
 ) {
 
   if ! defined(Class['nginx']) {

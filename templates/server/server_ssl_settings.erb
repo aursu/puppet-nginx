@@ -10,8 +10,9 @@ def bool2config(b)
     end
 end
 -%>
-ssl on;
-
+<% if @add_listen_directive -%>
+  ssl on;
+<% end -%>
 <% if @ssl_cert -%>
   ssl_certificate           <%= @ssl_cert %>;
 <% end -%>

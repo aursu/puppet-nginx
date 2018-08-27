@@ -45,12 +45,12 @@ describe 'nginx' do
             it { is_expected.to contain_package('nginx') }
             it do
               is_expected.to contain_yumrepo('nginx-release').with(
-                'baseurl'  => "http://nginx.org/packages/#{facts[:operatingsystem] == 'CentOS' ? 'centos' : 'rhel'}/#{facts[:operatingsystemmajrelease]}/$basearch/",
+                'baseurl'  => "https://nginx.org/packages/#{facts[:operatingsystem] == 'CentOS' ? 'centos' : 'rhel'}/#{facts[:operatingsystemmajrelease]}/$basearch/",
                 'descr'    => 'nginx repo',
                 'enabled'  => '1',
                 'gpgcheck' => '1',
                 'priority' => '1',
-                'gpgkey'   => 'http://nginx.org/keys/nginx_signing.key'
+                'gpgkey'   => 'https://nginx.org/keys/nginx_signing.key'
               )
             end
             it do
@@ -68,12 +68,12 @@ describe 'nginx' do
             it { is_expected.to contain_package('nginx') }
             it do
               is_expected.to contain_yumrepo('nginx-release').with(
-                'baseurl'  => "http://nginx.org/packages/#{facts[:operatingsystem] == 'CentOS' ? 'centos' : 'rhel'}/#{facts[:operatingsystemmajrelease]}/$basearch/",
+                'baseurl'  => "https://nginx.org/packages/#{facts[:operatingsystem] == 'CentOS' ? 'centos' : 'rhel'}/#{facts[:operatingsystemmajrelease]}/$basearch/",
                 'descr'    => 'nginx repo',
                 'enabled'  => '1',
                 'gpgcheck' => '1',
                 'priority' => '1',
-                'gpgkey'   => 'http://nginx.org/keys/nginx_signing.key'
+                'gpgkey'   => 'https://nginx.org/keys/nginx_signing.key'
               )
             end
 
@@ -85,7 +85,7 @@ describe 'nginx' do
 
             it do
               is_expected.to contain_yumrepo('nginx-release').with(
-                'baseurl' => "http://nginx.org/packages/mainline/#{facts[:operatingsystem] == 'CentOS' ? 'centos' : 'rhel'}/#{facts[:operatingsystemmajrelease]}/$basearch/"
+                'baseurl' => "https://nginx.org/packages/mainline/#{facts[:operatingsystem] == 'CentOS' ? 'centos' : 'rhel'}/#{facts[:operatingsystemmajrelease]}/$basearch/"
               )
             end
             it do
@@ -198,6 +198,7 @@ describe 'nginx' do
         let :params do
           {
             service_ensure: 'running',
+            service_enable: true,
             service_name: 'nginx',
             service_manage: true
           }
@@ -221,6 +222,7 @@ describe 'nginx' do
             {
               service_restart: 'a restart command',
               service_ensure: 'running',
+              service_enable: true,
               service_name: 'nginx'
             }
           end
@@ -417,6 +419,18 @@ describe 'nginx' do
                 attr: 'pid',
                 value: false,
                 notmatch: %r{pid}
+              },
+              {
+                title: 'should not set absolute_redirect',
+                attr: 'absolute_redirect',
+                value: :undef,
+                notmatch: %r{absolute_redirect}
+              },
+              {
+                title: 'should set absolute_redirect off',
+                attr: 'absolute_redirect',
+                value: 'off',
+                match: '  absolute_redirect off;'
               },
               {
                 title: 'should set accept_mutex on',

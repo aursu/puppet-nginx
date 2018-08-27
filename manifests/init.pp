@@ -167,6 +167,7 @@ class nginx (
 
   ### START Service Configuation ###
   $service_ensure                                            = running,
+  $service_enable                                            = true,
   $service_flags                                             = undef,
   $service_restart                                           = undef,
   String $service_name                                       = 'nginx',
@@ -185,6 +186,7 @@ class nginx (
   $nginx_servers                                             = {},
   $nginx_servers_defaults                                    = {},
   Boolean $purge_passenger_repo                              = true,
+  Boolean $add_listen_directive                              = $nginx::params::add_listen_directive,
   ### END Hiera Lookups ###
 ) inherits nginx::params {
 
