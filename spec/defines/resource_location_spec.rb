@@ -835,20 +835,20 @@ describe 'nginx::resource::location' do
             {
               title: 'should set proxy_read_timeout',
               attr: 'proxy_read_timeout',
-              value: 'value',
-              match: %r{\s+proxy_read_timeout\s+value;}
+              value: '60s',
+              match: %r{\s+proxy_read_timeout\s+60s;}
             },
             {
               title: 'should set proxy_connect_timeout',
               attr: 'proxy_connect_timeout',
-              value: 'value',
-              match: %r{\s+proxy_connect_timeout\s+value;}
+              value: '60s',
+              match: %r{\s+proxy_connect_timeout\s+60s;}
             },
             {
-              title: 'should set proxy_read_timeout',
-              attr: 'proxy_read_timeout',
-              value: 'value',
-              match: %r{\s+proxy_read_timeout\s+value;}
+              title: 'should set proxy_send_timeout',
+              attr: 'proxy_send_timeout',
+              value: '60s',
+              match: %r{\s+proxy_send_timeout\s+60s;}
             },
             {
               title: 'should set proxy headers',

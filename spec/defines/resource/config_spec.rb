@@ -3,8 +3,11 @@ require 'spec_helper'
 describe 'nginx::resource::config' do
   let(:title) { 'namevar' }
   let(:params) do
-    {}
+  {
+    template: 'nginx/conf.d/proxy.conf.erb'
+  }
   end
+  let(:pre_condition) { ['include ::nginx'] }
 
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do

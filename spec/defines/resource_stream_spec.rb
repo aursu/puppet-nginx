@@ -16,11 +16,7 @@ describe 'nginx::resource::streamhost' do
         }
       end
 
-      let :pre_condition do
-        [
-          'include ::nginx'
-        ]
-      end
+      let(:pre_condition) { 'class {"nginx": stream => true}' }
 
       describe 'os-independent items' do
         describe 'basic assumptions' do
@@ -40,7 +36,7 @@ describe 'nginx::resource::streamhost' do
         end
 
         describe 'when confd_only true' do
-          let(:pre_condition) { 'class { "nginx": confd_only => true }' }
+          let(:pre_condition) { 'class {"nginx": confd_only => true, stream => true}' }
           let(:params) { default_params }
 
           it { is_expected.to contain_class('nginx') }
