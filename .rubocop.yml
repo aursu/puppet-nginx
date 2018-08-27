@@ -1,9 +1,10 @@
 require: rubocop-rspec
 AllCops:
-  TargetRubyVersion: 1.9
+  TargetRubyVersion: 2.4
   Include:
-    - ./**/*.rb
+    - "**/*.rb"
   Exclude:
+    - bin/**/*
     - files/**/*
     - vendor/**/*
     - .vendor/**/*
@@ -13,7 +14,7 @@ AllCops:
     - Rakefile
     - Guardfile
     - Vagrantfile
-Lint/ConditionPosition:
+Layout/ConditionPosition:
   Enabled: True
 
 Lint/ElseLayout:
@@ -31,7 +32,7 @@ Lint/EnsureReturn:
 Lint/HandleExceptions:
   Enabled: True
 
-Lint/LiteralInCondition:
+Lint/LiteralAsCondition:
   Enabled: True
 
 Lint/ShadowingOuterLocalVariable:
@@ -84,13 +85,13 @@ Lint/AmbiguousRegexpLiteral:
 Security/Eval:
   Enabled: True
 
-Lint/BlockAlignment:
+Layout/BlockAlignment:
   Enabled: True
 
-Lint/DefEndAlignment:
+Layout/DefEndAlignment:
   Enabled: True
 
-Lint/EndAlignment:
+Layout/EndAlignment:
   Enabled: True
 
 Lint/DeprecatedClassMethods:
@@ -126,7 +127,7 @@ Lint/Void:
 Layout/AccessModifierIndentation:
   Enabled: True
 
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
   Enabled: True
 
 Style/Alias:
@@ -162,7 +163,7 @@ Layout/CaseIndentation:
 Style/CharacterLiteral:
   Enabled: True
 
-Style/ClassAndModuleCamelCase:
+Naming/ClassAndModuleCamelCase:
   Enabled: True
 
 Style/ClassAndModuleChildren:
@@ -202,7 +203,10 @@ Layout/TrailingBlankLines:
 Layout/SpaceInsideBlockBraces:
   Enabled: True
 
-Layout/SpaceInsideBrackets:
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: True
+
+Layout/SpaceInsideReferenceBrackets:
   Enabled: True
 
 Layout/SpaceInsideHashLiteralBraces:
@@ -260,7 +264,7 @@ Style/CommentAnnotation:
 Metrics/CyclomaticComplexity:
   Enabled: False
 
-Style/ConstantName:
+Naming/ConstantName:
   Enabled: True
 
 Style/Documentation:
@@ -327,7 +331,10 @@ Style/StringLiterals:
 Style/TrailingCommaInArguments:
   Enabled: True
 
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInArrayLiteral:
+  Enabled: True
+
+Style/TrailingCommaInHashLiteral:
   Enabled: True
 
 Style/GlobalVars:
@@ -369,7 +376,7 @@ Style/UnlessElse:
 Style/VariableInterpolation:
   Enabled: True
 
-Style/VariableName:
+Naming/VariableName:
   Enabled: True
 
 Style/WhileUntilDo:
@@ -378,7 +385,7 @@ Style/WhileUntilDo:
 Style/EvenOdd:
   Enabled: True
 
-Style/FileName:
+Naming/FileName:
   Enabled: True
 
 Style/For:
@@ -387,7 +394,7 @@ Style/For:
 Style/Lambda:
   Enabled: True
 
-Style/MethodName:
+Naming/MethodName:
   Enabled: True
 
 Style/MultilineTernaryOperator:
@@ -423,7 +430,7 @@ Style/NumericLiterals:
 Style/OneLineConditional:
   Enabled: True
 
-Style/OpMethod:
+Naming/BinaryOperatorParameterName:
   Enabled: True
 
 Style/ParenthesesAroundCondition:
@@ -435,7 +442,7 @@ Style/PercentLiteralDelimiters:
 Style/PerlBackrefs:
   Enabled: True
 
-Style/PredicateName:
+Naming/PredicateName:
   Enabled: True
 
 Style/RedundantException:
