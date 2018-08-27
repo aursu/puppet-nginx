@@ -82,9 +82,9 @@ describe 'nginx::resource::upstream' do
               fragment: 'members',
               value: %w[test3 test1 test2],
               match: [
-                '  server     test3  fail_timeout=10s;',
-                '  server     test1  fail_timeout=10s;',
-                '  server     test2  fail_timeout=10s;'
+                '  server test3 fail_timeout=10s;',
+                '  server test1 fail_timeout=10s;',
+                '  server test2 fail_timeout=10s;'
               ]
             },
             {
