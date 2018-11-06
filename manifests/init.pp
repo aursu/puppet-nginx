@@ -151,7 +151,8 @@ class nginx (
   Optional[Boolean] $proxy_connection_upgrade                = true,   # see http://nginx.org/en/docs/http/websocket.html
   Optional[Boolean] $proxy_cache_lock                        = undef,  # 'off'
   Optional[String] $default_type                             = undef,  # 'text/plain'
-  Optional[String] $charset_types                            = undef,  # 'text/html text/xml text/plain text/vnd.wap.wml application/javascript application/rss+xml'
+  Optional[String] $charset_types                            = undef,  # 'text/html text/xml text/plain text/vnd.wap.wml' 
+                                                                       # 'application/javascript application/rss+xml'
   Optional[String] $charset                                  = undef,  # 'off'
   Optional[String] $index                                    = undef,  # 'index.html'
   Optional[Boolean] $msie_padding                            = undef,  # 'on'
