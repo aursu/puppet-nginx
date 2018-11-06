@@ -26,7 +26,8 @@
 # }
 class nginx (
   ### START Nginx Configuration ###
-  Optional[String] $client_body_temp_path                    = undef, # 'client_body_temp'
+  Optional[Variant[Stdlib::Absolutepath, Boolean]]
+          $client_body_temp_path                             = undef, # 'client_body_temp'
   Boolean $confd_only                                        = false,
   Boolean $confd_purge                                       = false,
   Stdlib::Unixpath $conf_dir                                 = $nginx::params::conf_dir,
@@ -37,15 +38,17 @@ class nginx (
   $global_owner                                              = $nginx::params::global_owner,
   $global_group                                              = $nginx::params::global_group,
   $global_mode                                               = $nginx::params::global_mode,
-  $log_dir                                                   = $nginx::params::log_dir,
-  $log_group                                                 = $nginx::params::log_group,
-  $log_mode                                                  = '0750',
+  Stdlib::Absolutepath $log_dir                              = $nginx::params::log_dir,
+  String[1] $log_user                                        = $nginx::params::log_user,
+  String[1] $log_group                                       = $nginx::params::log_group,
+  Stdlib::Filemode $log_mode                                 = $nginx::params::log_mode,
   Optional[Variant[String, Array[String]]] $http_access_log  = "${log_dir}/${nginx::params::http_access_log_file}",
   Optional[String] $http_format_log                          = undef, # 'combined'
   Variant[String, Array[String]] $nginx_error_log            = "${log_dir}/${nginx::params::nginx_error_log_file}",
   Nginx::ErrorLogSeverity $nginx_error_log_severity          = 'error',
   $pid                                                       = $nginx::params::pid,
-  Optional[String] $proxy_temp_path                          = undef, # 'proxy_temp'
+  Optional[Variant[Stdlib::Absolutepath, Boolean]]
+          $proxy_temp_path                                   = undef, # 'proxy_temp'
   $root_group                                                = $nginx::params::root_group,
   $run_dir                                                   = $nginx::params::run_dir,
   $sites_available_owner                                     = $nginx::params::sites_available_owner,
@@ -74,7 +77,7 @@ class nginx (
                     $fastcgi_cache_path                      = undef,  # undef
   Optional[Variant[Nginx::CacheUseStale, Array[Nginx::CacheUseStale]]]
                     $fastcgi_cache_use_stale                 = undef,  # 'off'
-  Boolean $gzip                                              = true,   # 'on'
+  Nginx::Switch $gzip                                        = false,  # 'on'
   Optional[String] $gzip_buffers                             = undef,  # '32 4k|16 8k'
   Optional[Integer] $gzip_comp_level                         = undef,  # 1
   Optional[Variant[String, Array[String, 1]]] $gzip_disable  = undef,  # undef
@@ -87,7 +90,7 @@ class nginx (
       ]
   ] $gzip_proxied                                            = undef,  # 'off'
   Optional[Variant[String, Array[String, 1]]] $gzip_types    = undef,  # 'text/html'
-  Optional[Boolean] $gzip_vary                               = undef,  # 'off'
+  Optional[Nginx::Switch] $gzip_vary                         = undef,  # 'off'
   Optional[Nginx::ConfigSet] $http_cfg_prepend               = undef,
   Optional[Nginx::ConfigSet] $http_cfg_append                = undef,
   Optional[Variant[Array[String], String]] $http_raw_prepend = undef,
@@ -120,10 +123,9 @@ class nginx (
   Array[String] $proxy_ignore_header                         = [],
   Optional[Nginx::Switch] $sendfile                          = undef,  # 'off'
   Optional[Nginx::Switch] $server_tokens                     = undef,  # 'on',
-  $spdy                                                      = 'off',
-  $http2                                                     = 'off',
-  $ssl_stapling                                              = 'off',
-
+  Nginx::Switch $spdy                                                      = 'off',
+  Nginx::Switch $http2                                                     = 'off',
+  Nginx::Switch $ssl_stapling                                              = 'off',
   Optional[Nginx::Size] $types_hash_bucket_size              = undef,  # 64
   Optional[Nginx::Size] $types_hash_max_size                 = undef,  # 1024
   Integer $worker_connections                                = 1024,   # 512
@@ -161,7 +163,9 @@ class nginx (
   $package_name                                              = $nginx::params::package_name,
   $package_source                                            = 'nginx',
   $package_flavor                                            = undef,
-  $manage_repo                                               = $nginx::params::manage_repo,
+  Boolean $manage_repo                                       = $nginx::params::manage_repo,
+  Hash[String[1], String[1]] $mime_types                     = $nginx::params::mime_types,
+  Boolean $mime_types_preserve_defaults                      = false,
   Optional[String] $repo_release                             = undef,
   $passenger_package_ensure                                  = 'present',
   ### END Package Configuration ###
@@ -184,6 +188,7 @@ class nginx (
   $nginx_mailhosts_defaults                                  = {},
   $nginx_streamhosts                                         = {},
   $nginx_upstreams                                           = {},
+  Nginx::UpstreamMemberDefaults $nginx_upstream_defaults     = {},
   $nginx_servers                                             = {},
   $nginx_servers_defaults                                    = {},
   Boolean $purge_passenger_repo                              = true,
@@ -195,7 +200,7 @@ class nginx (
   contain 'nginx::config'
   contain 'nginx::service'
 
-  create_resources('nginx::resource::upstream', $nginx_upstreams)
+  create_resources('nginx::resource::upstream', $nginx_upstreams, $nginx_upstream_defaults)
   create_resources('nginx::resource::server', $nginx_servers, $nginx_servers_defaults)
   create_resources('nginx::resource::location', $nginx_locations, $nginx_locations_defaults)
   create_resources('nginx::resource::mailhost', $nginx_mailhosts, $nginx_mailhosts_defaults)

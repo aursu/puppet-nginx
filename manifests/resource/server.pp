@@ -112,7 +112,7 @@
 #     in which case it will be omitted in this server stanza (and default to nginx.conf setting)
 #   [*passenger_cgi_param*]        - Allows one to define additional CGI environment variables to pass to the backend application
 #   [*passenger_set_header*]       - Allows one to set headers to pass to the backend application (Passenger 5.0+)
-#   [*passenger_env_var*]          - Allows one to set environemnt variables to pass to the backend application (Passenger 5.0+)
+#   [*passenger_env_var*]          - Allows one to set environment variables to pass to the backend application (Passenger 5.0+)
 #   [*passenger_pre_start*]        - Allows setting a URL to pre-warm the host. Per Passenger docs, the "domain part of the URL" must match
 #     a value of server_name. If this is an array, multiple URLs can be specified.
 #   [*log_by_lua*]                 - Run the Lua source code inlined as the <lua-script-str> at the log request processing phase. This does
@@ -156,7 +156,7 @@ define nginx::resource::server (
   Variant[Array, String] $ipv6_listen_ip                                         = '::',
   Integer $ipv6_listen_port                                                      = 80,
   String $ipv6_listen_options                                                    = 'default ipv6only=on',
-  Optional[Hash] $add_header                                                     = undef,
+  Hash $add_header                                                               = {},
   Boolean $ssl                                                                   = false,
   Boolean $ssl_listen_option                                                     = true,
   Optional[Variant[String, Boolean]] $ssl_cert                                   = undef,
@@ -183,8 +183,8 @@ define nginx::resource::server (
   Optional[String] $ssl_session_ticket_key                                       = undef,
   Optional[String] $ssl_trusted_cert                                             = undef,
   Optional[Integer] $ssl_verify_depth                                            = undef,
-  String $spdy                                                                   = $nginx::spdy,
-  $http2                                                                         = $nginx::http2,
+  Enum['on', 'off'] $spdy                                                        = $nginx::spdy,
+  Enum['on', 'off'] $http2                                                       = $nginx::http2,
   Optional[String] $proxy                                                        = undef,
   Optional[String] $proxy_redirect                                               = undef,
   Optional[Nginx::Time] $proxy_read_timeout                                      = $nginx::proxy_read_timeout,
@@ -207,7 +207,7 @@ define nginx::resource::server (
   Optional[String] $fastcgi                                                      = undef,
   Optional[String] $fastcgi_index                                                = undef,
   $fastcgi_param                                                                 = undef,
-  String $fastcgi_params                                                         = "${::nginx::conf_dir}/fastcgi.conf",
+  String $fastcgi_params                                                         = "${nginx::conf_dir}/fastcgi.conf",
   Optional[String] $fastcgi_script                                               = undef,
   Optional[String] $uwsgi                                                        = undef,
   String $uwsgi_params                                                           = "${nginx::config::conf_dir}/uwsgi_params",
@@ -400,7 +400,7 @@ define nginx::resource::server (
   # Only try to manage these files if they're the default one (as you presumably
   # usually don't want the default template if you're using a custom file.
 
-  if $fastcgi != undef and !defined(File[$fastcgi_params]) and $fastcgi_params == "${::nginx::conf_dir}/fastcgi.conf" {
+  if $fastcgi != undef and !defined(File[$fastcgi_params]) and $fastcgi_params == "${nginx::conf_dir}/fastcgi.conf" {
     file { $fastcgi_params:
       ensure  => present,
       mode    => '0644',
@@ -408,7 +408,7 @@ define nginx::resource::server (
     }
   }
 
-  if $uwsgi != undef and !defined(File[$uwsgi_params]) and $uwsgi_params == "${::nginx::conf_dir}/uwsgi_params" {
+  if $uwsgi != undef and !defined(File[$uwsgi_params]) and $uwsgi_params == "${nginx::conf_dir}/uwsgi_params" {
     file { $uwsgi_params:
       ensure  => present,
       mode    => '0644',

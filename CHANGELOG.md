@@ -4,13 +4,70 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v0.13.0](https://github.com/voxpupuli/puppet-nginx/tree/v0.13.0) (2018-07-07)
+## [v0.15.0](https://github.com/voxpupuli/puppet-nginx/tree/v0.15.0) (2018-10-20)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-nginx/compare/v0.14.0...v0.15.0)
+
+**Breaking changes:**
+
+- Change gzip default to off and update tests [\#1266](https://github.com/voxpupuli/puppet-nginx/pull/1266) ([willrigling](https://github.com/willrigling))
+- Add parameters to upstream and upstreammembers [\#1233](https://github.com/voxpupuli/puppet-nginx/pull/1233) ([SaschaDoering](https://github.com/SaschaDoering))
+
+**Implemented enhancements:**
+
+- gzip is enabled by default [\#1085](https://github.com/voxpupuli/puppet-nginx/issues/1085)
+- Allow setting unquoted or custom flags on add\_headers [\#1249](https://github.com/voxpupuli/puppet-nginx/pull/1249) ([itbm](https://github.com/itbm))
+
+**Closed issues:**
+
+- introduction of $log\_user broke module on OpenBSD [\#1259](https://github.com/voxpupuli/puppet-nginx/issues/1259)
+- nginx::resource::upstream make consistent use of nginx::resource::upstream::member [\#1222](https://github.com/voxpupuli/puppet-nginx/issues/1222)
+
+**Merged pull requests:**
+
+- add default values for AIX servers [\#1263](https://github.com/voxpupuli/puppet-nginx/pull/1263) ([feltra](https://github.com/feltra))
+- Improve example of quick install in README [\#1262](https://github.com/voxpupuli/puppet-nginx/pull/1262) ([natemccurdy](https://github.com/natemccurdy))
+- Archlinux: Set default log user to http [\#1261](https://github.com/voxpupuli/puppet-nginx/pull/1261) ([mauricemeyer](https://github.com/mauricemeyer))
+- add the log\_user with proper value to OpenBSD override section. [\#1260](https://github.com/voxpupuli/puppet-nginx/pull/1260) ([buzzdeee](https://github.com/buzzdeee))
+
+## [v0.14.0](https://github.com/voxpupuli/puppet-nginx/tree/v0.14.0) (2018-10-06)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-nginx/compare/v0.13.0...v0.14.0)
+
+**Implemented enhancements:**
+
+- Move error\_log to the http section [\#1253](https://github.com/voxpupuli/puppet-nginx/pull/1253) ([ekohl](https://github.com/ekohl))
+- Strip line endings in mime.types [\#1252](https://github.com/voxpupuli/puppet-nginx/pull/1252) ([ekohl](https://github.com/ekohl))
+- Propery handle ${client\_body,proxy}\_temp\_path [\#1251](https://github.com/voxpupuli/puppet-nginx/pull/1251) ([ekohl](https://github.com/ekohl))
+- Add mime.types file template and default values for it [\#1243](https://github.com/voxpupuli/puppet-nginx/pull/1243) ([martialblog](https://github.com/martialblog))
+- start one worker process per core [\#1238](https://github.com/voxpupuli/puppet-nginx/pull/1238) ([bastelfreak](https://github.com/bastelfreak))
+
+**Fixed bugs:**
+
+- Fix logging setup on Debian [\#1254](https://github.com/voxpupuli/puppet-nginx/pull/1254) ([ekohl](https://github.com/ekohl))
+
+**Closed issues:**
+
+- Reliance on mime.types [\#1240](https://github.com/voxpupuli/puppet-nginx/issues/1240)
+- Multiple Location Problem [\#1221](https://github.com/voxpupuli/puppet-nginx/issues/1221)
+
+**Merged pull requests:**
+
+- modulesync 2.1.0 and  allow puppet 6.x [\#1257](https://github.com/voxpupuli/puppet-nginx/pull/1257) ([bastelfreak](https://github.com/bastelfreak))
+- Use more Puppet 4 types [\#1255](https://github.com/voxpupuli/puppet-nginx/pull/1255) ([ekohl](https://github.com/ekohl))
+- fix typo in resource/server.pp [\#1248](https://github.com/voxpupuli/puppet-nginx/pull/1248) ([kpankonen](https://github.com/kpankonen))
+- get rid of topscope variables [\#1237](https://github.com/voxpupuli/puppet-nginx/pull/1237) ([bastelfreak](https://github.com/bastelfreak))
+- Use HTTPS for Yum repositories [\#1236](https://github.com/voxpupuli/puppet-nginx/pull/1236) ([mhutter](https://github.com/mhutter))
+- purge duplicate CHANGELOG.md footer [\#1229](https://github.com/voxpupuli/puppet-nginx/pull/1229) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v0.13.0](https://github.com/voxpupuli/puppet-nginx/tree/v0.13.0) (2018-07-09)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-nginx/compare/v0.12.0...v0.13.0)
 
 **Implemented enhancements:**
 
 - nginx::service::service\_enable does not exist [\#1208](https://github.com/voxpupuli/puppet-nginx/issues/1208)
+- add absolute\_redirect support [\#1228](https://github.com/voxpupuli/puppet-nginx/pull/1228) ([bryangwilliam](https://github.com/bryangwilliam))
 - Add service\_enable and simplify service\_ensure, \#1208 [\#1217](https://github.com/voxpupuli/puppet-nginx/pull/1217) ([fnoop](https://github.com/fnoop))
 - Add support for dynamic modules. [\#1180](https://github.com/voxpupuli/puppet-nginx/pull/1180) ([sevencastles](https://github.com/sevencastles))
 
@@ -1283,6 +1340,4 @@ These should not affect the functionality of the module.
 
 [Full Changelog](https://github.com/voxpupuli/puppet-nginx/compare/5d496f29e82632d391ec7b644026f585be94fec8...v0.0.1)
 
-
-
-\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*

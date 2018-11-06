@@ -9,7 +9,7 @@ describe 'nginx' do
 
       let :params do
         {
-          nginx_upstreams: { 'upstream1' => { 'members' => ['localhost:3000'] } },
+          nginx_upstreams: { 'upstream1' => { 'members' => { 'localhost' => { 'port' => 3000 } } } },
           nginx_servers: { 'test2.local' => { 'www_root' => '/' } },
           nginx_servers_defaults: { 'listen_options' => 'default_server' },
           nginx_locations: { 'test2.local' => { 'server' => 'test2.local', 'www_root' => '/' } },
@@ -289,6 +289,14 @@ describe 'nginx' do
             )
           end
           it do
+            is_expected.to contain_file('/etc/nginx/mime.types').with(
+              ensure: 'file',
+              owner: 'root',
+              group: 'root',
+              mode: '0644'
+            )
+          end
+          it do
             is_expected.to contain_file('/tmp/nginx.d').with(
               ensure: 'absent',
               purge: true,
@@ -318,9 +326,9 @@ describe 'nginx' do
             it do
               is_expected.to contain_file('/var/log/nginx').with(
                 ensure: 'directory',
-                owner: 'www-data',
+                owner: 'root',
                 group: 'adm',
-                mode: '0750'
+                mode: '0755'
               )
             end
           end
@@ -391,22 +399,22 @@ describe 'nginx' do
                 title: 'should set error_log',
                 attr: 'nginx_error_log',
                 value: '/path/to/error.log',
-                match: 'error_log /path/to/error.log error;'
+                match: '  error_log /path/to/error.log error;'
               },
               {
                 title: 'should set multiple error_logs',
                 attr: 'nginx_error_log',
                 value: ['/path/to/error.log', 'syslog:server=localhost'],
                 match: [
-                  'error_log /path/to/error.log error;',
-                  'error_log syslog:server=localhost error;'
+                  '  error_log /path/to/error.log error;',
+                  '  error_log syslog:server=localhost error;'
                 ]
               },
               {
                 title: 'should set error_log severity level',
                 attr: 'nginx_error_log_severity',
                 value: 'warn',
-                match: 'error_log /var/log/nginx/error.log warn;'
+                match: '  error_log /var/log/nginx/error.log warn;'
               },
               {
                 title: 'should set pid',
@@ -520,12 +528,6 @@ describe 'nginx' do
                 match: '  sendfile on;'
               },
               {
-                title: 'should not set sendfile',
-                attr: 'sendfile',
-                value: :undef,
-                notmatch: %r{sendfile}
-              },
-              {
                 title: 'should set server_tokens',
                 attr: 'server_tokens',
                 value: 'on',
@@ -536,6 +538,12 @@ describe 'nginx' do
                 attr: 'http_tcp_nodelay',
                 value: 'on',
                 match: '  tcp_nodelay on;'
+              },
+              {
+                title: 'should not set gzip',
+                attr: 'gzip',
+                value: 'off',
+                notmatch: %r{gzip}
               },
               {
                 title: 'should contain http_raw_prepend directives',
@@ -687,6 +695,33 @@ describe 'nginx' do
                 end
               end
             end
+          end
+
+          context 'when mime.types is "[\'text/css css\']"' do
+            let(:params) do
+              {
+                mime_types: { 'text/css' => 'css' }
+              }
+            end
+
+            it { is_expected.to contain_file('/etc/nginx/mime.types').with_content(%r{text/css css;}) }
+          end
+
+          context 'when mime.types is default' do
+            it { is_expected.to contain_file('/etc/nginx/mime.types').with_content(%r{text/css css;}) }
+            it { is_expected.to contain_file('/etc/nginx/mime.types').with_content(%r{audio/mpeg mp3;}) }
+          end
+
+          context 'when mime.types is "[\'custom/file customfile\']" and mime.types.preserve.defaults is true' do
+            let(:params) do
+              {
+                mime_types: { 'custom/file' => 'customfile' },
+                mime_types_preserve_defaults: true
+              }
+            end
+
+            it { is_expected.to contain_file('/etc/nginx/mime.types').with_content(%r{audio/mpeg mp3;}) }
+            it { is_expected.to contain_file('/etc/nginx/mime.types').with_content(%r{custom/file customfile;}) }
           end
 
           context 'when dynamic_modules is "[\'ngx_http_geoip_module\']" ' do
@@ -914,6 +949,99 @@ describe 'nginx' do
             let(:params) { { log_mode: '0771' } }
 
             it { is_expected.to contain_file('/var/log/nginx').with(mode: '0771') }
+          end
+
+          context 'when gzip is non-default (on) test upstream gzip defaults' do
+            let(:params) { { 
+              gzip: 'on',
+              gzip_comp_level: 1,
+              gzip_disable: 'msie6',
+              gzip_min_length: 20,
+              gzip_http_version: '1.1',
+              gzip_vary: false,
+              gzip_proxied: 'off'
+            } }
+
+            it do
+              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
+                %r{gzip on;}
+              )
+            end
+            it do
+              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
+                %r{gzip_comp_level 1;}
+              )
+            end
+            it do
+              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
+                %r{gzip_disable msie6;}
+              )
+            end
+            it do
+              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
+                %r{gzip_min_length 20;}
+              )
+            end
+            it do
+              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
+                %r{gzip_http_version 1.1;}
+              )
+            end
+            it do
+              is_expected.to_not contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
+                %r{gzip_vary off;}
+              )
+            end
+            it do
+              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
+                %r{gzip_proxied off;}
+              )
+            end
+          end
+
+          context 'when gzip is non-default (on) set gzip_types (array)' do
+            let(:params) do
+              {
+                gzip: 'on',
+                gzip_types: ['text/plain', 'text/html']
+              }
+            end
+
+            it do
+              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
+                %r{gzip_types text/plain text/html;}
+              )
+            end
+          end
+
+          context 'when gzip is non-default (on) set gzip types (string)' do
+            let(:params) do
+              {
+                gzip: 'on',
+                gzip_types: 'text/plain'
+              }
+            end
+
+            it do
+              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
+                %r{gzip_types text/plain;}
+              )
+            end
+          end
+
+          context 'when gzip is non-default (on) set gzip buffers' do
+            let(:params) do
+              {
+                gzip: 'on',
+                gzip_buffers: '32 4k'
+              }
+            end
+
+            it do
+              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
+                %r{gzip_buffers 32 4k;}
+              )
+            end
           end
         end
       end
