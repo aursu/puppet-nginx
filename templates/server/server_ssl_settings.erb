@@ -47,7 +47,7 @@ end
   ssl_crl                   <%= @ssl_crl %>;
 <% end -%>
 <%- if instance_variables.any? { |iv| iv.to_s.include? 'ssl_' } -%>
-  <%- if @ssl_stapling -%>
+  <%- if @ssl_stapling == 'on' || @ssl_stapling == true -%>
   ssl_stapling              on;
   <%- end -%>
   <%- if defined? @ssl_stapling_file -%>

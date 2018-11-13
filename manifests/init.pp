@@ -123,9 +123,9 @@ class nginx (
   Array[String] $proxy_ignore_header                         = [],
   Optional[Nginx::Switch] $sendfile                          = undef,  # 'off'
   Optional[Nginx::Switch] $server_tokens                     = undef,  # 'on',
-  Nginx::Switch $spdy                                                      = 'off',
-  Nginx::Switch $http2                                                     = 'off',
-  Nginx::Switch $ssl_stapling                                              = 'off',
+  Nginx::Switch $spdy                                        = false,
+  Nginx::Switch $http2                                       = false,
+  Nginx::Switch $ssl_stapling                                = false,
   Optional[Nginx::Size] $types_hash_bucket_size              = undef,  # 64
   Optional[Nginx::Size] $types_hash_max_size                 = undef,  # 1024
   Integer $worker_connections                                = 1024,   # 512
