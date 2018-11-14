@@ -53,10 +53,10 @@ end
   ssl_crl                   <%= @ssl_crl %>;
 <% end -%>
 <% if @ssl_stapling -%>
-ssl_stapling              <%= bool2config(@ssl_stapling) %>;
+  ssl_stapling              <%= bool2config(@ssl_stapling) %>;
 <% end -%>
 <% if @ssl_stapling_verify -%>
-ssl_stapling_verify       <%= bool2config(@ssl_stapling_verify) %>;
+  ssl_stapling_verify       <%= bool2config(@ssl_stapling_verify) %>;
 <% end -%>
 <%- if instance_variables.any? { |iv| iv.to_s.include? 'ssl_' } -%>
   <%- if defined? @ssl_stapling_file -%>
