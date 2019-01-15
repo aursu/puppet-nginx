@@ -105,7 +105,7 @@ describe 'nginx' do
                 'baseurl'       => "https://oss-binaries.phusionpassenger.com/yum/passenger/el/#{facts[:operatingsystemmajrelease]}/$basearch",
                 'gpgcheck'      => '0',
                 'repo_gpgcheck' => '1',
-                'gpgkey'        => 'https://packagecloud.io/gpg.key'
+                'gpgkey'        => 'https://packagecloud.io/phusion/passenger/gpgkey'
               )
             end
             it do
@@ -673,6 +673,24 @@ describe 'nginx' do
                 attr: 'client_body_temp_path',
                 value: '/path/to/body_temp',
                 match: '  client_body_temp_path /path/to/body_temp;'
+              },
+              {
+                title: 'should set proxy_temp_path',
+                attr: 'proxy_temp_path',
+                value: '/path/to/proxy_temp',
+                match: '  proxy_temp_path         /path/to/proxy_temp;'
+              },
+              {
+                title: 'should set proxy_max_temp_file_size',
+                attr: 'proxy_max_temp_file_size',
+                value: '1024m',
+                match: '  proxy_max_temp_file_size 1024m;'
+              },
+              {
+                title: 'should set proxy_busy_buffers_size',
+                attr: 'proxy_busy_buffers_size',
+                value: '16k',
+                match: '  proxy_busy_buffers_size 16k;'
               }
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do

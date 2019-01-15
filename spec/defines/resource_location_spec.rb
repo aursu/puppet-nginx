@@ -33,6 +33,23 @@ describe 'nginx::resource::location' do
           it { is_expected.not_to contain_file('/etc/nginx/rspec-test_htpasswd') }
         end
 
+        describe 'server/location configuration files' do
+          context 'when we have one location and one server' do
+            let(:params) { { location: 'my_location', proxy: 'proxy_value', server: 'server1' } }
+
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)) }
+            it { is_expected.not_to contain_concat__fragment('server2-500-' + Digest::MD5.hexdigest(params[:location].to_s)) }
+          end
+          context 'when we have one location and two server' do
+            let(:params) { { location: 'my_location', proxy: 'proxy_value', server: %w[server1 server2] } }
+
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)) }
+            it { is_expected.to contain_concat__fragment('server2-500-' + Digest::MD5.hexdigest(params[:location].to_s)) }
+          end
+        end
+
         describe 'server/location_header template content' do
           [
             {
@@ -903,6 +920,18 @@ describe 'nginx::resource::location' do
               attr: 'proxy_buffering',
               value: 'on',
               match: %r{\s+proxy_buffering\s+on;}
+            },
+            {
+              title: 'should set proxy_max_temp_file_size',
+              attr: 'proxy_max_temp_file_size',
+              value: '1024m',
+              match: %r{\s+proxy_max_temp_file_size\s+1024m;}
+            },
+            {
+              title: 'should set proxy_busy_buffers_size',
+              attr: 'proxy_busy_buffers_size',
+              value: '16k',
+              match: %r{\s+proxy_busy_buffers_size\s+16k;}
             }
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do

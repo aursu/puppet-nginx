@@ -88,11 +88,13 @@ class nginx::config {
   $nginx_cfg_prepend              = $nginx::nginx_cfg_prepend
   $proxy_buffers                  = $nginx::proxy_buffers
   $proxy_buffer_size              = $nginx::proxy_buffer_size
+  $proxy_busy_buffers_size        = $nginx::proxy_busy_buffers_size
   $proxy_cache                    = $nginx::proxy_cache
   $proxy_cache_path               = $nginx::proxy_cache_path
   $proxy_connect_timeout          = $nginx::proxy_connect_timeout
   $proxy_headers_hash_bucket_size = $nginx::proxy_headers_hash_bucket_size
   $proxy_http_version             = $nginx::proxy_http_version
+  $proxy_max_temp_file_size       = $nginx::proxy_max_temp_file_size
   $proxy_read_timeout             = $nginx::proxy_read_timeout
   $proxy_redirect                 = $nginx::proxy_redirect
   $proxy_send_timeout             = $nginx::proxy_send_timeout
@@ -224,6 +226,9 @@ class nginx::config {
     }
     file { "${conf_dir}/sites-enabled":
       ensure => directory,
+      owner  => $sites_available_owner,
+      group  => $sites_available_group,
+      mode   => $sites_available_mode,
     }
     if $server_purge {
       File["${conf_dir}/sites-available"] {
@@ -245,6 +250,9 @@ class nginx::config {
       }
       file { "${conf_dir}/streams-available":
         ensure => directory,
+        owner  => $sites_available_owner,
+        group  => $sites_available_group,
+        mode   => $sites_available_mode,
       }
       if $server_purge {
         File["${conf_dir}/streams-enabled"] {

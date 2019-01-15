@@ -121,6 +121,8 @@ class nginx (
   Array[String] $proxy_hide_header                           = [],
   Array[String] $proxy_pass_header                           = [],
   Array[String] $proxy_ignore_header                         = [],
+  Optional[Nginx::Size] $proxy_max_temp_file_size            = undef,
+  Optional[Nginx::Size] $proxy_busy_buffers_size             = undef,
   Optional[Nginx::Switch] $sendfile                          = undef,  # 'off'
   Optional[Nginx::Switch] $server_tokens                     = undef,  # 'on',
   Nginx::Switch $spdy                                        = false,
