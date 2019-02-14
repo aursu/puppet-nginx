@@ -128,13 +128,15 @@ class nginx (
   Nginx::Switch $spdy                                        = false,
   Nginx::Switch $http2                                       = false,
   Nginx::Switch $ssl_stapling                                = false,
+  Stdlib::Absolutepath $snippets_dir                         = $nginx::params::snippets_dir,
+  Boolean $manage_snippets_dir                               = false,
   Optional[Nginx::Size] $types_hash_bucket_size              = undef,  # 64
   Optional[Nginx::Size] $types_hash_max_size                 = undef,  # 1024
   Integer $worker_connections                                = 1024,   # 512
   Optional[Nginx::Switch] $ssl_prefer_server_ciphers         = true,
   Variant[Enum['auto'], Integer] $worker_processes           = 'auto', # 1
   Optional[Integer] $worker_rlimit_nofile                    = undef,  # undef
-  String $ssl_protocols                                      = 'TLSv1 TLSv1.1 TLSv1.2',
+  String $ssl_protocols                                      = 'TLSv1.1 TLSv1.2',
   String $ssl_ciphers                                        = 'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS', # lint:ignore:140chars
   Optional[Stdlib::Unixpath] $ssl_dhparam                    = undef,
   Optional[Nginx::FileCache] $open_file_cache                = undef,  # 'off'
@@ -171,6 +173,7 @@ class nginx (
   Boolean $mime_types_preserve_defaults                      = false,
   Optional[String] $repo_release                             = undef,
   $passenger_package_ensure                                  = 'present',
+  Optional[Stdlib::HTTPUrl] $repo_source                     = undef,
   ### END Package Configuration ###
 
   ### START Service Configuation ###
@@ -183,19 +186,23 @@ class nginx (
   ### END Service Configuration ###
 
   ### START Hiera Lookups ###
-  $geo_mappings                                              = {},
-  $string_mappings                                           = {},
-  $nginx_locations                                           = {},
-  $nginx_locations_defaults                                  = {},
-  $nginx_mailhosts                                           = {},
-  $nginx_mailhosts_defaults                                  = {},
-  $nginx_streamhosts                                         = {},
-  $nginx_upstreams                                           = {},
-  Nginx::UpstreamMemberDefaults $nginx_upstream_defaults     = {},
-  $nginx_servers                                             = {},
-  $nginx_servers_defaults                                    = {},
-  Boolean $purge_passenger_repo                              = true,
-  Boolean $add_listen_directive                              = $nginx::params::add_listen_directive,
+  Hash $geo_mappings                                      = {},
+  Hash $geo_mappings_defaults                             = {},
+  Hash $string_mappings                                   = {},
+  Hash $string_mappings_defaults                          = {},
+  Hash $nginx_locations                                   = {},
+  Hash $nginx_locations_defaults                          = {},
+  Hash $nginx_mailhosts                                   = {},
+  Hash $nginx_mailhosts_defaults                          = {},
+  Hash $nginx_servers                                     = {},
+  Hash $nginx_servers_defaults                            = {},
+  Hash $nginx_streamhosts                                 = {},
+  Hash $nginx_streamhosts_defaults                        = {},
+  Hash $nginx_upstreams                                   = {},
+  Nginx::UpstreamDefaults $nginx_upstreams_defaults       = {},
+  Boolean $purge_passenger_repo                           = true,
+  Boolean $add_listen_directive                           = $nginx::params::add_listen_directive,
+
   ### END Hiera Lookups ###
 ) inherits nginx::params {
 
@@ -203,13 +210,13 @@ class nginx (
   contain 'nginx::config'
   contain 'nginx::service'
 
-  create_resources('nginx::resource::upstream', $nginx_upstreams, $nginx_upstream_defaults)
-  create_resources('nginx::resource::server', $nginx_servers, $nginx_servers_defaults)
-  create_resources('nginx::resource::location', $nginx_locations, $nginx_locations_defaults)
-  create_resources('nginx::resource::mailhost', $nginx_mailhosts, $nginx_mailhosts_defaults)
-  create_resources('nginx::resource::streamhost', $nginx_streamhosts)
-  create_resources('nginx::resource::map', $string_mappings)
-  create_resources('nginx::resource::geo', $geo_mappings)
+  create_resources( 'nginx::resource::geo', $geo_mappings, $geo_mappings_defaults )
+  create_resources( 'nginx::resource::location', $nginx_locations, $nginx_locations_defaults )
+  create_resources( 'nginx::resource::mailhost', $nginx_mailhosts, $nginx_mailhosts_defaults )
+  create_resources( 'nginx::resource::map', $string_mappings, $string_mappings_defaults )
+  create_resources( 'nginx::resource::server', $nginx_servers, $nginx_servers_defaults )
+  create_resources( 'nginx::resource::streamhost', $nginx_streamhosts, $nginx_streamhosts_defaults )
+  create_resources( 'nginx::resource::upstream', $nginx_upstreams, $nginx_upstreams_defaults )
 
   # Allow the end user to establish relationships to the "main" class
   # and preserve the relationship to the implementation classes through

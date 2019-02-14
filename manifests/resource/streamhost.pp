@@ -105,6 +105,7 @@ define nginx::resource::streamhost (
   }
 
   concat { $config_file:
+    ensure  => $ensure,
     owner   => $owner,
     group   => $group,
     mode    => $mode,
