@@ -235,6 +235,7 @@ define nginx::resource::server (
   Optional[String] $client_body_timeout                                          = undef,
   Optional[String] $client_header_timeout                                        = undef,
   Optional[Nginx::Size] $client_max_body_size                                    = undef,
+  Optional[Nginx::Switch] $chunked_transfer_encoding                             = undef,
   Optional[Variant[Array[String], String]] $raw_prepend                          = undef,
   Optional[Variant[Array[String], String]] $raw_append                           = undef,
   Optional[Variant[Array[String], String]] $location_raw_prepend                 = undef,

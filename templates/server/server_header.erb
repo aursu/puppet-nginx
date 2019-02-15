@@ -1,3 +1,15 @@
+<%-
+def bool2config(b)
+    case b
+    when true
+        'on'
+    when false, nil
+        'off'
+    else
+        b.to_s
+    end
+end
+-%>
 # MANAGED BY PUPPET
 <% if @rewrite_www_to_non_www -%>
 <%- @server_name.each do |s| -%>
@@ -69,6 +81,9 @@ server {
   <%- if defined? @client_max_body_size -%>
   client_max_body_size <%= @client_max_body_size %>;
   <%- end -%>
+<% end -%>
+<% unless @chunked_transfer_encoding.nil? -%>
+chunked_transfer_encoding <%= bool2config(@chunked_transfer_encoding) %>;
 <% end -%>
 <% if defined? @gzip_types -%>
   gzip_types <%= @gzip_types %>;
