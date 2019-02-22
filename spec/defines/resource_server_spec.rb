@@ -90,16 +90,22 @@ describe 'nginx::resource::server' do
               match: %r{\s+listen\s+127.0.0.1:80;}
             },
             {
+              title: 'should set the IPv4 listen IP to *',
+              attr: 'listen_ip',
+              value: '*',
+              match: %r{\s+listen\s+\*:80;}
+            },
+            {
               title: 'should set the IPv4 listen port',
               attr: 'listen_port',
               value: 45,
-              match: %r{\s+listen\s+\*:45;}
+              match: %r{\s+listen\s+45;}
             },
             {
               title: 'should set the IPv4 listen options',
               attr: 'listen_options',
               value: 'spdy default',
-              match: %r{\s+listen\s+\*:80 spdy default;}
+              match: %r{\s+listen\s+80 spdy default;}
             },
             {
               title: 'should enable IPv6',
@@ -509,37 +515,37 @@ describe 'nginx::resource::server' do
               title: 'should set the IPv4 SSL listen port',
               attr: 'ssl_port',
               value: 45,
-              match: %r{\s+listen\s+\*:45 ssl;}
+              match: %r{\s+listen\s+45 ssl;}
             },
             {
               title: 'should set SPDY',
               attr: 'spdy',
               value: 'on',
-              match: %r{\s+listen\s+\*:443 ssl spdy;}
+              match: %r{\s+listen\s+443 ssl spdy;}
             },
             {
               title: 'should not set SPDY',
               attr: 'spdy',
               value: 'off',
-              match: %r{\s+listen\s+\*:443 ssl;}
+              match: %r{\s+listen\s+443 ssl;}
             },
             {
               title: 'should set HTTP2',
               attr: 'http2',
               value: 'on',
-              match: %r{\s+listen\s+\*:443 ssl http2;}
+              match: %r{\s+listen\s+443 ssl http2;}
             },
             {
               title: 'should not set HTTP2',
               attr: 'http2',
               value: 'off',
-              match: %r{\s+listen\s+\*:443 ssl;}
+              match: %r{\s+listen\s+443 ssl;}
             },
             {
               title: 'should set the IPv4 listen options',
               attr: 'listen_options',
               value: 'default',
-              match: %r{\s+listen\s+\*:443 ssl default;}
+              match: %r{\s+listen\s+443 ssl default;}
             },
             {
               title: 'should enable IPv6',

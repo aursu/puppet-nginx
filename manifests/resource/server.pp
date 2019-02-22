@@ -146,7 +146,7 @@
 #  }
 define nginx::resource::server (
   Enum['absent', 'present'] $ensure                                              = 'present',
-  Variant[Array, String] $listen_ip                                              = '*',
+  Optional[Variant[Array, String]] $listen_ip                                    = undef,
   Integer $listen_port                                                           = 80,
   Optional[String] $listen_options                                               = undef,
   Boolean $listen_unix_socket_enable                                             = false,

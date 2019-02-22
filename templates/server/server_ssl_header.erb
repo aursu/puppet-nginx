@@ -14,7 +14,9 @@ end
 <% if @rewrite_www_to_non_www -%>
 <%- @server_name.each do |s| -%>
 server {
-  <%- if @listen_ip.is_a?(Array) then -%>
+  <%- if @listen_ip.nil? -%>
+  listen       <%= @ssl_port %> <% if @ssl_listen_option %>ssl<% end %><% if @http2 == 'on' || @http2 == true %> http2<% end %><% if @spdy == 'on' || @spdy == true %> spdy<% end %><% if @listen_options %> <%= @listen_options %><% end %>;
+  <%- elsif @listen_ip.is_a?(Array) -%>
     <%- @listen_ip.each do |ip| -%>
   listen       <%= ip %>:<%= @ssl_port %> <% if @ssl_listen_option %>ssl<% end %><% if @http2 == 'on' || @http2 == true %> http2<% end %><% if @spdy == 'on' %> spdy<% end %><% if @listen_options %> <%= @listen_options %><% end %>;
     <%- end -%>
@@ -32,7 +34,9 @@ server {
 <% end -%>
 <% end -%>
 server {
-  <%- if @listen_ip.is_a?(Array) then -%>
+  <%- if @listen_ip.nil? -%>
+  listen       <%= @ssl_port %> <% if @ssl_listen_option %>ssl<% end %><% if @http2 == 'on' || @http2 == true %> http2<% end %><% if @spdy == 'on' || @spdy == true %> spdy<% end %><% if @listen_options %> <%= @listen_options %><% end %>;
+  <%- elsif @listen_ip.is_a?(Array) -%>
     <%- @listen_ip.each do |ip| -%>
   listen       <%= ip %>:<%= @ssl_port %> <% if @ssl_listen_option %>ssl<% end %><% if @http2 == 'on' || @http2 == true %> http2<% end %><% if @spdy == 'on' || @spdy == true %> spdy<% end %><% if @listen_options %> <%= @listen_options %><% end %>;
     <%- end -%>
