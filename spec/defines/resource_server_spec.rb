@@ -168,6 +168,12 @@ describe 'nginx::resource::server' do
               match: %r{\s+server_name\s+www.foo.com foo.com;}
             },
             {
+              title: 'should set server_name to value _',
+              attr: 'catch_all_server_name',
+              value: true,
+              match: %r{\s+server_name\s+_;}
+            },
+            {
               title: 'should rewrite www servername to non-www',
               attr: 'rewrite_www_to_non_www',
               value: true,

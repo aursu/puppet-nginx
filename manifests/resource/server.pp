@@ -4,7 +4,7 @@
 #
 # Parameters:
 #   [*ensure*]                     - Enables or disables the specified server (present|absent)
-#   [*listen_ip*]                  - Default IP Address for NGINX to listen with this server on. Defaults to all interfaces (*)
+#   [*listen_ip*]                  - Default IP Address for NGINX to listen with this server on. Defaults to all interfaces
 #   [*listen_port*]                - Default IP Port for NGINX to listen with this server on. Defaults to TCP 80
 #   [*listen_options*]             - Extra options for listen directive like 'default_server' to catchall. Undef by default.
 #   [*listen_unix_socket_enable*]  - BOOL value to enable/disable UNIX socket listening support (false|true).
@@ -73,6 +73,7 @@
 #   [*ssl_verify_depth*]           - Integer: Sets the verification depth in the client certificates chain.
 #   [*spdy*]                       - Toggles SPDY protocol.
 #   [*http2*]                      - Toggles HTTP/2 protocol.
+#   [*catch_all_server_name*]      - Bool: Sets server name to be invalid (most common is: server_name _;). false by default.
 #   [*server_name*]                - List of servernames for which this server will respond. Default [$name].
 #   [*www_root*]                   - Specifies the location on disk for files to be read from. Cannot be set in conjunction with $proxy
 #   [*rewrite_www_to_non_www*]     - Adds a server directive and rewrite rule to rewrite www.domain.com to domain.com in order to avoid
@@ -219,6 +220,7 @@ define nginx::resource::server (
   Optional[String] $uwsgi_read_timeout                                           = undef,
   Optional[Array[String]] $index_files                                           = [],
   Optional[String] $autoindex                                                    = undef,
+  Boolean $catch_all_server_name                                                 = false,
   Array[String] $server_name                                                     = [$name],
   Optional[String] $www_root                                                     = undef,
   Boolean $rewrite_www_to_non_www                                                = false,

@@ -44,8 +44,11 @@ server {
   listen       <%= @listen_ip %>:<%= @ssl_port %> <% if @ssl_listen_option %>ssl<% end %><% if @http2 == 'on' || @http2 == true %> http2<% end %><% if @spdy == 'on' || @spdy == true %> spdy<% end %><% if @listen_options %> <%= @listen_options %><% end %>;
   <%- end -%>
 <%= scope.function_template(["nginx/server/server_ssl_ipv6_listen.erb"]) %>
+<%- if @catch_all_server_name  -%>
+  server_name _;
+<%- else -%>
   server_name  <%= @rewrite_www_to_non_www ? @server_name.join("  ").gsub(/(^| )(www\.)?(?=[a-z0-9])/, '') : @server_name.join(" ") %>;
-
+<%- end -%>
 <%= scope.function_template(["nginx/server/server_ssl_settings.erb"]) %>
 <% if @maintenance -%>
   <%= @maintenance_value %>;
