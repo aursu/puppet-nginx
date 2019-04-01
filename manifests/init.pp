@@ -101,6 +101,7 @@ class nginx (
   Optional[Integer] $keepalive_requests                      = undef,  # 100
   Optional[Hash[String, String]] $log_format                 = undef,
   Boolean $mail                                              = false,
+  Variant[String, Boolean] $mime_types_path                  = 'mime.types',
   Boolean $stream                                            = false,
   Optional[Nginx::Switch] $multi_accept                      = undef,  # 'off'
   Optional[Integer] $names_hash_bucket_size                  = undef,  # 32|64|128
