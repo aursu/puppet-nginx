@@ -163,6 +163,8 @@ class nginx (
   Optional[Boolean] $msie_padding                            = undef, # 'on'
   Optional[Boolean] $port_in_redirect                        = undef, # 'on'
   Optional[Nginx::Time] $client_header_timeout               = undef, # 60s
+  Optional[String] $fastcgi_buffers                          = undef, # '8 4k|8 8k'
+  Optional[Nginx::Size] $fastcgi_buffer_size                 = undef, # '4k|8k'
 
   ### START Package Configuration ###
   $package_ensure                                            = present,

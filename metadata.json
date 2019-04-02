@@ -25,7 +25,7 @@
   ],
   "operatingsystem_support": [
     {
-      "operatingsystem": "RedHat",
+      "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "6",
         "7"

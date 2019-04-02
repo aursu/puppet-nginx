@@ -132,6 +132,9 @@ class nginx::config {
   $port_in_redirect               = $nginx::port_in_redirect
   $client_header_timeout          = $nginx::client_header_timeout
 
+  $fastcgi_buffers                = $nginx::fastcgi_buffers
+  $fastcgi_buffer_size            = $nginx::fastcgi_buffer_size
+
   # Non-configurable settings
   $conf_template                  = 'nginx/conf.d/nginx.conf.erb'
   # performance settings
@@ -161,6 +164,7 @@ class nginx::config {
   file { "${conf_dir}/conf.d":
     ensure => directory,
   }
+
   if $confd_purge {
     # Err on the side of caution - make sure *both* $server_purge and
     # $confd_purge are set if $confd_only is set, before purging files
@@ -237,6 +241,7 @@ class nginx::config {
       group  => $sites_available_group,
       mode   => $sites_available_mode,
     }
+
     if $server_purge {
       File["${conf_dir}/sites-available"] {
         purge   => true,

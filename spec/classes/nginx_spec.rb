@@ -263,6 +263,21 @@ describe 'nginx' do
 
       # nginx::config
       context 'nginx::config' do
+        def check_config_file(fname, param)
+          matches = Array(param[:match])
+
+          if matches.all? { |m| m.is_a? Regexp }
+            matches.each { |item| is_expected.to contain_file(fname).with_content(item) }
+          else
+            lines = catalogue.resource('file', fname).send(:parameters)[:content].split("\n")
+            expect(lines & matches).to eq(matches)
+          end
+
+          Array(param[:notmatch]).each do |item|
+            is_expected.to contain_file(fname).without_content(item)
+          end
+        end
+
         context 'with defaults' do
           it do
             is_expected.to contain_file('/etc/nginx').only_with(
@@ -342,6 +357,21 @@ describe 'nginx' do
               )
             end
           end
+
+          it {
+            is_expected.to contain_file('/etc/nginx/nginx.conf')
+              .with_mode('0644')
+          }
+
+          it {
+            is_expected.to contain_file('/etc/nginx/conf.d/00-perf.conf')
+              .with_mode('0644')
+          }
+
+          it {
+            is_expected.to contain_file('/etc/nginx/conf.d/00-proxy.conf')
+              .with_mode('0644')
+          }
 
           describe 'nginx.conf template content' do
             [
@@ -684,29 +714,10 @@ describe 'nginx' do
                 value: '/path/to/body_temp',
                 match: '  client_body_temp_path /path/to/body_temp;'
               },
-              {
-                title: 'should set proxy_temp_path',
-                attr: 'proxy_temp_path',
-                value: '/path/to/proxy_temp',
-                match: '  proxy_temp_path         /path/to/proxy_temp;'
-              },
-              {
-                title: 'should set proxy_max_temp_file_size',
-                attr: 'proxy_max_temp_file_size',
-                value: '1024m',
-                match: '  proxy_max_temp_file_size 1024m;'
-              },
-              {
-                title: 'should set proxy_busy_buffers_size',
-                attr: 'proxy_busy_buffers_size',
-                value: '16k',
-                match: '  proxy_busy_buffers_size 16k;'
-              }
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) { { param[:attr].to_sym => param[:value] } }
 
-                it { is_expected.to contain_file('/etc/nginx/nginx.conf').with_mode('0644') }
                 it param[:title] do
                   matches = Array(param[:match])
 
@@ -720,6 +731,62 @@ describe 'nginx' do
                   Array(param[:notmatch]).each do |item|
                     is_expected.to contain_file('/etc/nginx/nginx.conf').without_content(item)
                   end
+                end
+              end
+            end
+          end
+
+          describe 'conf.d/00-perf.conf template content' do
+            [
+              {
+                title: 'should set fastcgi_buffers',
+                attr: 'fastcgi_buffers',
+                value: '32k',
+                match: 'fastcgi_buffers 32k;'
+              },
+              {
+                title: 'should set fastcgi_buffer_size',
+                attr: 'fastcgi_buffer_size',
+                value: '16 16k',
+                match: 'fastcgi_buffer_size 16 16k;'
+              },
+            ].each do |param|
+              context "when #{param[:attr]} is #{param[:value]}" do
+                let(:params) { { param[:attr].to_sym => param[:value] } }
+
+                it param[:title] do
+                  check_config_file('/etc/nginx/conf.d/00-perf.conf', param)
+                end
+              end
+            end
+          end
+
+          describe 'conf.d/00-proxy.conf template content' do
+            [
+              {
+                title: 'should set proxy_temp_path',
+                attr: 'proxy_temp_path',
+                value: '/path/to/proxy_temp',
+                match: 'proxy_temp_path /path/to/proxy_temp;'
+              },
+              {
+                title: 'should set proxy_busy_buffers_size',
+                attr: 'proxy_busy_buffers_size',
+                value: '16k',
+                match: 'proxy_busy_buffers_size 16k;'
+              },
+              {
+                title: 'should set proxy_max_temp_file_size',
+                attr: 'proxy_max_temp_file_size',
+                value: '1024m',
+                match: 'proxy_max_temp_file_size 1024m;'
+              },
+            ].each do |param|
+              context "when #{param[:attr]} is #{param[:value]}" do
+                let(:params) { { param[:attr].to_sym => param[:value] } }
+
+                it param[:title] do
+                  check_config_file('/etc/nginx/conf.d/00-proxy.conf', param)
                 end
               end
             end
@@ -986,7 +1053,7 @@ describe 'nginx' do
           end
 
           context 'when gzip is non-default (on) test upstream gzip defaults' do
-            let(:params) { { 
+            let(:params) { {
               gzip: 'on',
               gzip_comp_level: 1,
               gzip_disable: 'msie6',

@@ -35,6 +35,12 @@ send_timeout <%= @send_timeout %>; # the timeout is set only between two success
 <% if @lingering_timeout -%>
 lingering_timeout <%= @lingering_timeout %>;
 <% end -%>
+<% if @fastcgi_buffers -%>
+fastcgi_buffers <%= @fastcgi_buffers %>;
+<% end -%>
+<% if @fastcgi_buffer_size -%>
+fastcgi_buffer_size <%= @fastcgi_buffer_size %>;
+<% end -%>
 <% if @client_max_body_size -%>
 client_max_body_size <%= @client_max_body_size %>; # maximum allowed size of the client request body,
                         # specified in the "Content-Length" request header
