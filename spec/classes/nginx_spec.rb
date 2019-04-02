@@ -850,6 +850,80 @@ describe 'nginx' do
             end
           end
 
+          describe 'conf.d/00-gzip.conf template content' do
+            [
+              {
+                title: 'should set gzip_comp_level',
+                attr: 'gzip_comp_level',
+                value: 5,
+                match: 'gzip_comp_level 5;'
+              },
+              {
+                title: 'should set gzip_min_length',
+                attr: 'gzip_min_length',
+                value: 256,
+                match: 'gzip_min_length 256;'
+              },
+              {
+                title: 'should set gzip_proxied',
+                attr: 'gzip_proxied',
+                value: 'any',
+                match: 'gzip_proxied any;'
+              },
+              {
+                title: 'should set gzip_proxied to multiple parameters',
+                attr: 'gzip_proxied',
+                value: [
+                  'private',
+                  'no_etag',
+                ],
+                match: 'gzip_proxied private no_etag;'
+              },
+              {
+                title: 'should set gzip_vary',
+                attr: 'gzip_vary',
+                value: true,
+                match: 'gzip_vary on;'
+              },
+              {
+                title: 'should set gzip_http_version',
+                attr: 'gzip_http_version',
+                value: '1.0',
+                match: 'gzip_http_version 1.0;'
+              },
+              {
+                title: 'should set gzip_types',
+                attr: 'gzip_types',
+                value: [
+                  'application/javascript',
+                  'application/json',
+                  'application/x-javascript',
+                  'application/xml',
+                  'application/xml+rss',
+                  'text/css',
+                  'text/javascript',
+                  'text/plain',
+                  'text/xml'
+                ],
+                match: 'gzip_types application/javascript application/json application/x-javascript application/xml application/xml+rss text/css text/javascript text/plain text/xml;'
+              },
+              {
+                title: 'should set gzip_types to single value',
+                attr: 'gzip_types',
+                value: 'text/plain',
+                match: 'gzip_types text/plain;'
+              },
+            ].each do |param|
+              context "when #{param[:attr]} is #{param[:value]}" do
+                let(:params) { { param[:attr].to_sym => param[:value] } }
+
+                it param[:title] do
+                  check_config_file('/etc/nginx/conf.d/00-gzip.conf', param)
+                end
+              end
+            end
+          end
+
           context 'when mime.types is "[\'text/css css\']"' do
             let(:params) do
               {
@@ -1113,12 +1187,7 @@ describe 'nginx' do
           context 'when gzip is non-default (on) test upstream gzip defaults' do
             let(:params) { {
               gzip: 'on',
-              gzip_comp_level: 1,
               gzip_disable: 'msie6',
-              gzip_min_length: 20,
-              gzip_http_version: '1.1',
-              gzip_vary: false,
-              gzip_proxied: 'off'
             } }
 
             it do
@@ -1128,62 +1197,7 @@ describe 'nginx' do
             end
             it do
               is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
-                %r{gzip_comp_level 1;}
-              )
-            end
-            it do
-              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
                 %r{gzip_disable msie6;}
-              )
-            end
-            it do
-              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
-                %r{gzip_min_length 20;}
-              )
-            end
-            it do
-              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
-                %r{gzip_http_version 1.1;}
-              )
-            end
-            it do
-              is_expected.to_not contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
-                %r{gzip_vary off;}
-              )
-            end
-            it do
-              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
-                %r{gzip_proxied off;}
-              )
-            end
-          end
-
-          context 'when gzip is non-default (on) set gzip_types (array)' do
-            let(:params) do
-              {
-                gzip: 'on',
-                gzip_types: ['text/plain', 'text/html']
-              }
-            end
-
-            it do
-              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
-                %r{gzip_types text/plain text/html;}
-              )
-            end
-          end
-
-          context 'when gzip is non-default (on) set gzip types (string)' do
-            let(:params) do
-              {
-                gzip: 'on',
-                gzip_types: 'text/plain'
-              }
-            end
-
-            it do
-              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
-                %r{gzip_types text/plain;}
               )
             end
           end
