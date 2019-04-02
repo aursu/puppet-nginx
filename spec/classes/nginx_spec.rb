@@ -761,6 +761,64 @@ describe 'nginx' do
             end
           end
 
+          context 'when open_file_cache set' do
+            let(:params) do
+              {
+                open_file_cache: 'off',
+              }
+            end
+
+            [
+              {
+                title: 'should set open_file_cache',
+                attr: 'open_file_cache',
+                value: {
+                  'max'      => 2000,
+                  'inactive' => '20s',
+                },
+                match: 'open_file_cache max=2000 inactive=20s;'
+              },
+              {
+                title: 'should set open_file_cache with default inactive',
+                attr: 'open_file_cache',
+                value: {
+                  'max' => 2000,
+                },
+                match: 'open_file_cache max=2000;'
+              },
+              {
+                title: 'should set open_file_cache to off',
+                attr: 'open_file_cache',
+                value: 'off',
+                match: 'open_file_cache off;'
+              },
+              {
+                title: 'should set open_file_cache_valid',
+                attr: 'open_file_cache_valid',
+                value: '30s',
+                match: 'open_file_cache_valid 30s;'
+              },
+              {
+                title: 'should set open_file_cache_min_uses',
+                attr: 'open_file_cache_min_uses',
+                value: 2,
+                match: 'open_file_cache_min_uses 2;'
+              },
+            ].each do |param|
+              context "when #{param[:attr]} is #{param[:value]}" do
+                let(:params) do
+                  super().merge(
+                    param[:attr].to_sym => param[:value]
+                  )
+                end
+
+                it param[:title] do
+                  check_config_file('/etc/nginx/conf.d/00-perf.conf', param)
+                end
+              end
+            end
+          end
+
           describe 'conf.d/00-proxy.conf template content' do
             [
               {
