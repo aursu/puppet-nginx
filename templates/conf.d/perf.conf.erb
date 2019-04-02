@@ -57,7 +57,11 @@ client_body_buffer_size <%= @client_body_buffer_size %>; # buffer size for readi
 <% if @open_file_cache -%>
 # cache that can store open file descriptors, their sizes and modification
 # times, information on existence of directories, file lookup errors
-open_file_cache <% @open_file_cache.each do |option, value| %> <%= option %>=<%= value %><% end %>;
+<% if @open_file_cache.is_a?(Hash) -%>
+open_file_cache<% @open_file_cache.each do |option, value| %> <%= option %>=<%= value %><% end %>;
+<% else -%>
+open_file_cache off;
+<% end -%>
 open_file_cache_valid <%= @open_file_cache_valid %>;
 open_file_cache_min_uses <%= @open_file_cache_min_uses %>;
 <% end -%>
