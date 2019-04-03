@@ -982,7 +982,7 @@ describe 'nginx' do
           context 'when mime_types_path is /path/to/mime.types' do
             let(:params) { { mime_types_path: '/path/to/mime.types' } }
 
-            it { is_expected.to contain_file('/etc/nginx/nginx.conf').with_content(%r{include       /path/to/mime\.types;}) }
+            it { is_expected.to contain_file('/etc/nginx/nginx.conf').with_content(%r{include /path/to/mime\.types;}) }
           end
 
           context 'when confd_purge true' do
