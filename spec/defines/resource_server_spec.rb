@@ -1448,6 +1448,23 @@ describe 'nginx::resource::server' do
             it { is_expected.to contain_nginx__resource__location('two').with_www_root('/overwrite') }
             it { is_expected.to contain_nginx__resource__location('two').with_expires('@12h34m') }
           end
+
+          context 'with www_root' do
+            let(:params) do
+              {
+                www_root: '/toplevel',
+                locations: {
+                  'one' => {
+                    'location' => '/one'
+                  }
+                }
+              }
+            end
+
+            it { is_expected.to contain_nginx__resource__location('one') }
+            it { is_expected.to contain_nginx__resource__location('one').with_location('/one') }
+            it { is_expected.not_to contain_nginx__resource__location('one').with_www_root('/toplevel') }
+          end
         end
       end
     end
