@@ -71,6 +71,8 @@
 #   [*ssl_trusted_cert*]           - String: Specifies a file with trusted CA certificates in the PEM format used to verify client
 #     certificates and OCSP responses if ssl_stapling is enabled.
 #   [*ssl_verify_depth*]           - Integer: Sets the verification depth in the client certificates chain.
+#   [*ssl_add_header*]             - Hash: Adds headers to the HTTP response when response code is equal to 200, 204, 301, 302 or 304.
+#     for only SSL enabled server block
 #   [*spdy*]                       - Toggles SPDY protocol.
 #   [*http2*]                      - Toggles HTTP/2 protocol.
 #   [*catch_all_server_name*]      - Bool: Sets server name to be invalid (most common is: server_name _;). false by default.
@@ -161,6 +163,7 @@ define nginx::resource::server (
   Integer $ipv6_listen_port                                                      = 80,
   String $ipv6_listen_options                                                    = 'default ipv6only=on',
   Hash $add_header                                                               = {},
+  Hash $ssl_add_header                                                           = {},
   Boolean $ssl                                                                   = false,
   Boolean $ssl_listen_option                                                     = true,
   Optional[Variant[String, Boolean]] $ssl_cert                                   = undef,

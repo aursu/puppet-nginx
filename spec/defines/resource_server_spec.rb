@@ -1371,8 +1371,28 @@ describe 'nginx::resource::server' do
                                    ssl_cert: 'dummy.cert')
             end
 
-            it 'has correctly ordered entries in the config' do
+            it 'has correctly ordered entries in SSL config' do
               is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{\s+add_header\s+"header1" "test value 1";\n\s+add_header\s+"header2" "test value 2" tv2;\n\s+add_header\s+"header3"  'test value 3' tv3;\n})
+            end
+            it 'has correctly ordered entries in non-SSL config' do
+              is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{\s+add_header\s+"header1" "test value 1";\n\s+add_header\s+"header2" "test value 2" tv2;\n\s+add_header\s+"header3"  'test value 3' tv3;\n})
+            end
+          end
+
+          context 'when ssl_add_header is set and ssl => true' do
+            let :params do
+              default_params.merge(ssl_add_header: { 'header3' => { '' => '\'test value 3\' tv3' }, 'header2' => { 'test value 2' => 'tv2' }, 'header1' => 'test value 1' },
+                                   ssl: true,
+                                   ssl_key: 'dummy.key',
+                                   ssl_cert: 'dummy.cert')
+            end
+
+            it 'has correctly ordered entries in SSL config' do
+              is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{\s+add_header\s+"header1" "test value 1";\n\s+add_header\s+"header2" "test value 2" tv2;\n\s+add_header\s+"header3"  'test value 3' tv3;\n})
+            end
+            it 'has not entries in non-SSL config' do
+              is_expected.to contain_concat__fragment("#{title}-header")
+              is_expected.not_to contain_concat__fragment("#{title}-header").with_content(%r{add_header})
             end
           end
         end

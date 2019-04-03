@@ -169,3 +169,4 @@ server {
   passenger_env_var  <%= key %> <%= value %>;
 <% end -%>
 <%= scope.function_template(["nginx/server/locations/headers.erb"]) %>
+<%= scope.function_template(["nginx/server/ssl_headers.erb"]) %>
