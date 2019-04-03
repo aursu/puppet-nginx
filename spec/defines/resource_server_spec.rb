@@ -626,6 +626,12 @@ describe 'nginx::resource::server' do
               match: %r{\s+ssl_dhparam\s+/tmp/dhparam;}
             },
             {
+              title: 'should set ssl_session_tickets',
+              attr: 'ssl_session_tickets',
+              value: false,
+              match: %r{\s+ssl_session_tickets\s+off;}
+            },
+            {
               title: 'should set ssl_ecdh_curve',
               attr: 'ssl_ecdh_curve',
               value: 'secp521r1',

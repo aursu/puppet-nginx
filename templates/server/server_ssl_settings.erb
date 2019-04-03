@@ -35,7 +35,7 @@ end
 <% if @ssl_session_timeout -%>
   ssl_session_timeout       <%= @ssl_session_timeout %>;
 <% end -%>
-<% if @ssl_session_tickets -%>
+<% unless @ssl_session_tickets.nil? -%>
   ssl_session_tickets       <%= bool2config(@ssl_session_tickets) %>;
 <% end -%>
 <% if @ssl_session_ticket_key -%>
