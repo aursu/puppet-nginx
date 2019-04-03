@@ -517,6 +517,110 @@ describe 'nginx::resource::location' do
           end
         end
 
+        describe 'server_location_logging template content' do
+          let :base_params do
+            {
+              location: 'location',
+              server: 'server1',
+            }
+          end
+          let :default_params do
+            base_params.merge(
+              format_log: 'main',
+              access_log: '/var/log/nginx/access_log',
+              error_log: '/var/log/nginx/error_log'
+            )
+          end
+
+          [
+            {
+              title: 'should set access_log',
+              attr: 'access_log',
+              value: '/mnt/log0/server1.access_log',
+              match: %r{\s+access_log /mnt/log0/server1.access_log main;}
+            },
+            {
+              title: 'should set multiple access_log',
+              attr: 'access_log',
+              value: [ '/var/log/nginx/access_log', '/mnt/log0/server1.access_log'],
+              match: [
+                %r{\s+access_log /var/log/nginx/access_log main;},
+                %r{\s+access_log /mnt/log0/server1.access_log main;},
+              ]
+            },
+            {
+              title: 'should set access_log format',
+              attr: 'format_log',
+              value: 'combined',
+              match: %r{\s+access_log /var/log/nginx/access_log combined;},
+            },
+            {
+              title: 'should set error_log',
+              attr: 'error_log',
+              value: '/mnt/log0/server1.error_log',
+              match: %r{\s+error_log /mnt/log0/server1.error_log error;}
+            },
+            {
+              title: 'should set error_log with different log level',
+              attr: 'error_log_level',
+              value: 'info',
+              match: %r{\s+error_log /var/log/nginx/error_log info;}
+            },
+            {
+              title: 'should set multiple error_log',
+              attr: 'error_log',
+              value: [ '/var/log/nginx/error_log', '/mnt/log0/server1.error_log'],
+              match: [
+                %r{\s+error_log /var/log/nginx/error_log error;},
+                %r{\s+error_log /mnt/log0/server1.error_log error;},
+              ]
+            },
+          ].each do |param|
+            context "when #{param[:attr]} is #{param[:value]}" do
+              let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
+
+              it { is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)) }
+              it param[:title] do
+                fragment = 'server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)
+                matches  = Array(param[:match])
+
+                if matches.all? { |m| m.is_a? Regexp }
+                  matches.each { |item| is_expected.to contain_concat__fragment(fragment).with_content(item) }
+                else
+                  lines = catalogue.resource('concat::fragment', fragment).send(:parameters)[:content].split("\n")
+                  expect(lines & matches).to eq(matches)
+                end
+
+                Array(param[:notmatch]).each do |item|
+                  is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)).without_content(item)
+                end
+              end
+            end
+          end
+
+          context "when default parameters" do
+            let(:params) { base_params }
+
+            it {
+              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)).
+                without_content(%r{access_log})
+            }
+            it {
+              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)).
+                without_content(%r{error_log})
+            }
+          end
+
+          context "when access_log is off" do
+            let(:params) { base_params.merge(access_log: 'off') }
+
+            it {
+              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)).
+                with_content(%r{access_log off;})
+            }
+          end
+        end
+
         describe 'server_location_empty template content' do
           [
             {

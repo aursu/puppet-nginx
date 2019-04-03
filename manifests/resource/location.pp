@@ -239,6 +239,10 @@ define nginx::resource::location (
   Boolean $flv                                         = false,
   Optional[String] $expires                            = undef,
   Hash $add_header                                     = {},
+  Optional[Variant[String, Array[String]]] $access_log = undef,
+  Optional[String] $format_log                         = undef, # 'combined'
+  Optional[Variant[String, Array[String]]] $error_log  = undef,
+  Nginx::ErrorLogSeverity $error_log_level             = 'error',
 ) {
 
   if ! defined(Class['nginx']) {

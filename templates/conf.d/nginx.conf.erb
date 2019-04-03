@@ -101,9 +101,9 @@ http {
   absolute_redirect <%= @absolute_redirect %>;
 <% end -%>
 <% if @http_access_log.is_a?(Array) -%>
-<%- @http_access_log.each do |log_item| -%>
+  <%- @http_access_log.each do |log_item| -%>
   access_log <%= log_item %><% if @http_format_log %> <%= @http_format_log%><% end %>;
-<%- end -%>
+  <%- end -%>
 <% elsif @http_access_log -%>
   access_log <%= @http_access_log %><% if @http_format_log %> <%= @http_format_log%><% end %>;
 <% end -%>
@@ -111,7 +111,7 @@ http {
   <%- @nginx_error_log.each do |log_item| -%>
   error_log <%= log_item %> <%= @nginx_error_log_severity %>;
   <%- end -%>
-<% else -%>
+<% elsif @nginx_error_log -%>
   error_log <%= @nginx_error_log %> <%= @nginx_error_log_severity %>;
 <% end -%>
 <% unless @sendfile.nil? -%>
