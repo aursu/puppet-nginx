@@ -173,6 +173,7 @@ define nginx::resource::server (
   Optional[String] $ssl_ecdh_curve                                               = undef,
   Boolean $ssl_redirect                                                          = false,
   Optional[Integer] $ssl_redirect_port                                           = undef,
+  Optional[Stdlib::Fqdn] $ssl_redirect_host                                      = undef,
   Optional[Variant[String, Boolean]] $ssl_key                                    = undef,
   Integer $ssl_port                                                              = 443,
   Optional[Nginx::Switch] $ssl_prefer_server_ciphers                             = $nginx::ssl_prefer_server_ciphers,

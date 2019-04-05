@@ -1030,6 +1030,18 @@ describe 'nginx::resource::server' do
             let(:params) { { ssl_redirect: true, ssl_redirect_port: 8878 } }
 
             it { is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{  return 301 https://\$host:8878\$request_uri;}) }
+
+            context 'ssl_redirect with overridden host' do
+              let(:params) { super().merge(ssl_redirect_host: 'www.domain.com') }
+
+              it { is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{  return 301 https://www.domain.com:8878\$request_uri;}) }
+            end
+          end
+
+          context 'ssl_redirect with overridden host' do
+            let(:params) { { ssl_redirect: true, ssl_redirect_host: 'www.domain.com' } }
+
+            it { is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{  return 301 https://www.domain.com\$request_uri;}) }
           end
 
           context 'ssl_redirect with ssl_port set and overridden redirect port' do
