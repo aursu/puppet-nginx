@@ -107,6 +107,12 @@ describe 'nginx::resource::location' do
               match: '    expires 33d;'
             },
             {
+              title: 'should set return',
+              attr: 'return',
+              value: '404',
+              match: %r{^\s+return 404;$}
+            },
+            {
               title: 'should set location_allow',
               attr: 'location_allow',
               value: %w[127.0.0.1 10.0.0.1],

@@ -112,6 +112,7 @@
 #   [*flv*]             - Indicates whether or not this loation can be
 #     used for flv streaming. Default: false
 #   [*expires*]         - Setup expires time for locations content
+#   [*return*]          - Stops processing and returns the specified code and/or text to a client.
 #   [*add_header*]      - Hash: Adds headers to the location block.  If any are specified, locations will no longer inherit headers from the parent server context
 #
 #
@@ -238,6 +239,7 @@ define nginx::resource::location (
   Boolean $mp4                                         = false,
   Boolean $flv                                         = false,
   Optional[String] $expires                            = undef,
+  Optional[String] $return                             = undef,
   Hash $add_header                                     = {},
   Optional[Variant[String, Array[String]]] $access_log = undef,
   Optional[String] $format_log                         = undef, # 'combined'
