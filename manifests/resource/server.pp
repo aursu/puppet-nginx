@@ -274,6 +274,7 @@ define nginx::resource::server (
   Hash $locations                                                                = {},
   Hash $locations_defaults                                                       = {},
   Boolean $add_listen_directive                                                  = $nginx::add_listen_directive,
+  Optional[Array[String]] $set_real_ip_from                                      = undef,
 ) {
 
   if ! defined(Class['nginx']) {

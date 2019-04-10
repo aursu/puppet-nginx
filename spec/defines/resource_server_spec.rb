@@ -1407,6 +1407,23 @@ describe 'nginx::resource::server' do
               is_expected.not_to contain_concat__fragment("#{title}-header").with_content(%r{add_header})
             end
           end
+
+          context 'when set_real_ip_from is set' do
+            let :params do
+              default_params.merge(set_real_ip_from: ['192.168.1.1', '127.0.0.1'],
+                                   ssl: true,
+                                   ssl_key: 'dummy.key',
+                                   ssl_cert: 'dummy.cert')
+            end
+
+            it {
+              is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{\s+set_real_ip_from\s+192.168.1.1;\n\s+set_real_ip_from\s+127.0.0.1;})
+            }
+
+            it {
+              is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{\s+set_real_ip_from\s+192.168.1.1;\n\s+set_real_ip_from\s+127.0.0.1;})
+            }
+          end
         end
 
         describe 'with locations' do
