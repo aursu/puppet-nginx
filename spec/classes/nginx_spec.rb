@@ -974,7 +974,7 @@ describe 'nginx' do
           context 'when conf_dir is /path/to/nginx' do
             let(:params) { { conf_dir: '/path/to/nginx' } }
 
-            it { is_expected.to contain_file('/path/to/nginx/nginx.conf').with_content(%r{include       mime\.types;}) }
+            it { is_expected.to contain_file('/path/to/nginx/nginx.conf').with_content(%r{include\s+mime\.types;}) }
             it { is_expected.to contain_file('/path/to/nginx/nginx.conf').with_content(%r{include /path/to/nginx/conf\.d/\*\.conf;}) }
             it { is_expected.to contain_file('/path/to/nginx/nginx.conf').with_content(%r{include /path/to/nginx/sites-enabled/\*;}) }
           end

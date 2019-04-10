@@ -11,7 +11,7 @@ describe 'nginx::resource::snippet' do
       end
 
       let :pre_condition do
-        'include nginx'
+        "class {'nginx': manage_snippets_dir => true }"
       end
 
       describe 'basic snippet' do
