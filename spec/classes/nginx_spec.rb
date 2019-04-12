@@ -45,12 +45,13 @@ describe 'nginx' do
             it { is_expected.to contain_package('nginx') }
             it do
               is_expected.to contain_yumrepo('nginx-release').with(
-                'baseurl'  => "https://nginx.org/packages/#{facts[:operatingsystem] == 'CentOS' ? 'centos' : 'rhel'}/#{facts[:operatingsystemmajrelease]}/$basearch/",
-                'descr'    => 'nginx repo',
-                'enabled'  => '1',
-                'gpgcheck' => '1',
-                'priority' => '1',
-                'gpgkey'   => 'https://nginx.org/keys/nginx_signing.key'
+                'baseurl'   => "https://nginx.org/packages/#{facts[:operatingsystem] == 'CentOS' ? 'centos' : 'rhel'}/#{facts[:operatingsystemmajrelease]}/$basearch/",
+                'descr'     => 'nginx repo',
+                'enabled'   => '1',
+                'gpgcheck'  => '1',
+                'priority'  => '1',
+                'sslverify' => 'absent',
+                'gpgkey'    => 'https://nginx.org/keys/nginx_signing.key'
               )
             end
             it do
@@ -131,6 +132,16 @@ describe 'nginx' do
 
             it { is_expected.to contain_package('nginx') }
             it { is_expected.not_to contain_yumrepo('nginx-release') }
+          end
+
+          context 'Enable Yum repository SSL verification' do
+            let(:params) { { yum_repo_sslverify: true } }
+
+            it do
+              is_expected.to contain_yumrepo('nginx-release').with(
+                'sslverify' => true,
+              )
+            end
           end
 
           describe 'installs the requested package version' do

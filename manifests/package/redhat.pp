@@ -13,8 +13,10 @@
 # Sample Usage:
 #
 # This class file is not called directly
-class nginx::package::redhat {
-
+class nginx::package::redhat (
+  Variant[Boolean, Enum['absent']] $sslverify = $nginx::yum_repo_sslverify,
+)
+{
   $package_name             = $nginx::package_name
   $package_source           = $nginx::package_source
   $package_ensure           = $nginx::package_ensure
@@ -35,13 +37,14 @@ class nginx::package::redhat {
     case $package_source {
       'nginx', 'nginx-stable': {
         yumrepo { 'nginx-release':
-          baseurl  => "https://nginx.org/packages/${_os}/${facts['os']['release']['major']}/\$basearch/",
-          descr    => 'nginx repo',
-          enabled  => '1',
-          gpgcheck => '1',
-          priority => '1',
-          gpgkey   => 'https://nginx.org/keys/nginx_signing.key',
-          before   => Package['nginx'],
+          baseurl   => "https://nginx.org/packages/${_os}/${facts['os']['release']['major']}/\$basearch/",
+          descr     => 'nginx repo',
+          enabled   => '1',
+          gpgcheck  => '1',
+          priority  => '1',
+          gpgkey    => 'https://nginx.org/keys/nginx_signing.key',
+          sslverify => $sslverify,
+          before    => Package['nginx'],
         }
 
         if $purge_passenger_repo {
@@ -53,13 +56,14 @@ class nginx::package::redhat {
       }
       'nginx-mainline': {
         yumrepo { 'nginx-release':
-          baseurl  => "https://nginx.org/packages/mainline/${_os}/${facts['os']['release']['major']}/\$basearch/",
-          descr    => 'nginx repo',
-          enabled  => '1',
-          gpgcheck => '1',
-          priority => '1',
-          gpgkey   => 'https://nginx.org/keys/nginx_signing.key',
-          before   => Package['nginx'],
+          baseurl   => "https://nginx.org/packages/mainline/${_os}/${facts['os']['release']['major']}/\$basearch/",
+          descr     => 'nginx repo',
+          enabled   => '1',
+          gpgcheck  => '1',
+          priority  => '1',
+          gpgkey    => 'https://nginx.org/keys/nginx_signing.key',
+          sslverify => $sslverify,
+          before    => Package['nginx'],
         }
 
         if $purge_passenger_repo {

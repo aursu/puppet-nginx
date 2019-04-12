@@ -172,6 +172,7 @@ class nginx (
   $package_source                                            = 'nginx',
   $package_flavor                                            = undef,
   Boolean $manage_repo                                       = $nginx::params::manage_repo,
+  Variant[Boolean, Enum['absent']] $yum_repo_sslverify       = 'absent',
   Hash[String[1], String[1]] $mime_types                     = $nginx::params::mime_types,
   Boolean $mime_types_preserve_defaults                      = false,
   Optional[String] $repo_release                             = undef,
