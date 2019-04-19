@@ -1,0 +1,34 @@
+# MANAGED BY PUPPET
+server {
+<%- if @listen_ip.nil? -%>
+  listen       <%= @listen_port %><% if @listen_options %> <%= @listen_options %><% end %>;
+<%- elsif @listen_ip.is_a?(Array) -%>
+  <%- @listen_ip.each do |ip| -%>
+  listen <%= ip %>:<%= @listen_port %><% if @listen_options %> <%= @listen_options %><% end %>;
+  <%- end -%>
+<%- else -%>
+  listen <%= @listen_ip %>:<%= @listen_port %><% if @listen_options %> <%= @listen_options %><% end %>;
+<%- end -%>
+<%- if @listen_unix_socket_enable -%>
+  <%- if @listen_unix_socket.is_a?(Array) then -%>
+    <%- @listen_unix_socket.each do |unix_socket| -%>
+  listen unix:<%= unix_socket %><% if @listen_unix_socket_options %> <%= @listen_unix_socket_options %><% end %>;
+    <%- end -%>
+  <%- else -%>
+  listen unix:<%= @listen_unix_socket %><% if @listen_unix_socket_options %> <%= @listen_unix_socket_options %><% end %>;
+  <%- end -%>
+<%- end -%>
+<%= scope.function_template(["nginx/server/server_ipv6_listen.erb"]) %>
+<%- if @catch_all_server_name  -%>
+  server_name _;
+<%- else -%>
+  server_name           <%= @rewrite_www_to_non_www ? @server_name.join("  ").gsub(/(^| )(www\.)?(?=[a-z0-9])/, '') : @server_name.join(" ") %>;
+<%- end -%>
+<%- if @ssl_redirect_host -%>
+  return 301 https://<%= @ssl_redirect_host %><% if @_ssl_redirect_port.to_i != 443 %>:<%= @_ssl_redirect_port %><% end %>$request_uri;
+<%- else -%>
+  return 301 https://$host<% if @_ssl_redirect_port.to_i != 443 %>:<%= @_ssl_redirect_port %><% end %>$request_uri;
+<%- end -%>
+}
+
+

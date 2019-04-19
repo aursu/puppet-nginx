@@ -1014,6 +1014,18 @@ describe 'nginx::resource::server' do
             it { is_expected.to contain_concat__fragment("#{title}-header").without_content(%r{^\s*location\s+}) }
           end
 
+          context 'ssl_redirect_only' do
+            let(:params) do
+              {
+                ssl_redirect_only: true,
+              }
+            end
+
+            it { is_expected.to contain_concat__fragment("#{title}-header").without_content(%r{^\s*access_log\s+}) }
+            it { is_expected.to contain_concat__fragment("#{title}-header").without_content(%r{^\s*error_log\s+}) }
+            it { is_expected.not_to contain_concat__fragment("#{title}-footer") }
+          end
+
           context 'ssl_redirect with alternate port' do
             let(:params) { { ssl_redirect: true, ssl_port: 8888 } }
 
@@ -1069,10 +1081,34 @@ describe 'nginx::resource::server' do
             it { is_expected.to contain_nginx__resource__location("#{title}-default").with_ssl_only(true) }
           end
 
+          context 'ssl_redirect_only should set ssl_only when ssl => true' do
+            let(:params) do
+              {
+                ssl_redirect_only: true,
+                ssl: true,
+                ssl_key: 'dummy.key',
+                ssl_cert: 'dummy.crt'
+              }
+            end
+
+            it { is_expected.to contain_nginx__resource__location("#{title}-default").with_ssl_only(true) }
+          end
+
           context 'ssl_redirect should not include default location when ssl => false' do
             let(:params) do
               {
                 ssl_redirect: true,
+                ssl: false
+              }
+            end
+
+            it { is_expected.not_to contain_nginx__resource__location("#{title}-default") }
+          end
+
+          context 'ssl_redirect_only should not include default location when ssl => false' do
+            let(:params) do
+              {
+                ssl_redirect_only: true,
                 ssl: false
               }
             end
