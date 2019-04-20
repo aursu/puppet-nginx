@@ -98,9 +98,9 @@ server {
   access_log            <%= log_item %> <%= @format_log %>;
   <%- end -%>
 <% elsif @access_log == 'absent' -%>
-<% elsif @access_log == 'off' -%>
+<% elsif @access_log == 'off' || @access_log == false -%>
   access_log            off;
-<% elsif not @access_log -%>
+<% elsif @access_log == true || ! @access_log -%>
   access_log            <%= scope['::nginx::config::log_dir'] %>/ssl-<%= @name_sanitized %>.access.log <%= @format_log %>;
 <% else -%>
   access_log            <%= @access_log %> <%= @format_log %>;
@@ -109,8 +109,8 @@ server {
   <%- @error_log.each do |log_item| -%>
   error_log             <%= log_item %>;
   <%- end -%>
-<% elsif @error_log == 'absent' -%>
-<% elsif not @error_log -%>
+<% elsif @error_log == 'absent' || @error_log == false -%>
+<% elsif @error_log == true || ! @error_log -%>
   error_log             <%= scope['::nginx::config::log_dir'] %>/ssl-<%= @name_sanitized %>.error.log;
 <% else -%>
   error_log             <%= @error_log %>;
@@ -171,3 +171,12 @@ server {
 <%= scope.function_template(["nginx/server/locations/headers.erb"]) %>
 <%= scope.function_template(["nginx/server/ssl_headers.erb"]) %>
 <%= scope.function_template(["nginx/server/ngx_http_realip_module.erb"]) %>
+<% if @return.is_a?(Hash) -%>
+  <%- @return.each do |code, text| -%>
+  return <%= code %> "<%= text %>";
+  <%- end -%>
+<% elsif @return.is_a?(String) -%>
+  return "<%= @return %>";
+<% elsif @return -%>
+  return <%= @return %>;
+<% end -%>

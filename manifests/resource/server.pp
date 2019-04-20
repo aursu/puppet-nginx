@@ -253,8 +253,8 @@ define nginx::resource::server (
   Optional[Hash] $server_cfg_ssl_prepend                                         = undef,
   Optional[Hash] $server_cfg_ssl_append                                          = undef,
   Optional[Array[String]] $include_files                                         = undef,
-  Optional[Variant[String, Array]] $access_log                                   = undef,
-  Optional[Variant[String, Array]] $error_log                                    = undef,
+  Optional[Variant[Boolean, String, Array]] $access_log                          = 'absent',
+  Optional[Variant[Boolean, String, Array]] $error_log                           = false,
   $format_log                                                                    = 'combined',
   Optional[Hash] $passenger_cgi_param                                            = undef,
   Optional[Hash] $passenger_set_header                                           = undef,
@@ -277,6 +277,7 @@ define nginx::resource::server (
   Hash $locations_defaults                                                       = {},
   Boolean $add_listen_directive                                                  = $nginx::add_listen_directive,
   Optional[Array[String]] $set_real_ip_from                                      = undef,
+  Optional[Nginx::ReturnFormat] $return                                          = undef,
 ) {
 
   if ! defined(Class['nginx']) {
