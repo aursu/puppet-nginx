@@ -1046,6 +1046,17 @@ describe 'nginx::resource::server' do
             it { is_expected.not_to contain_concat__fragment("#{title}-footer") }
           end
 
+          context 'ssl_redirect_only with custom url' do
+            let(:params) do
+              {
+                ssl_redirect_only: true,
+                ssl_redirect_url: 'https://www.domain.com$request_uri'
+              }
+            end
+
+            it { is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{^\s+return 301 https://www.domain.com\$request_uri;}) }
+          end
+
           context 'ssl_redirect with alternate port' do
             let(:params) { { ssl_redirect: true, ssl_port: 8888 } }
 

@@ -24,7 +24,9 @@ server {
 <%- else -%>
   server_name           <%= @rewrite_www_to_non_www ? @server_name.join("  ").gsub(/(^| )(www\.)?(?=[a-z0-9])/, '') : @server_name.join(" ") %>;
 <%- end -%>
-<%- if @ssl_redirect_host -%>
+<%- if @ssl_redirect_url -%>
+  return 301 <%= @ssl_redirect_url %>;
+<%- elsif @ssl_redirect_host -%>
   return 301 https://<%= @ssl_redirect_host %><% if @_ssl_redirect_port.to_i != 443 %>:<%= @_ssl_redirect_port %><% end %>$request_uri;
 <%- else -%>
   return 301 https://$host<% if @_ssl_redirect_port.to_i != 443 %>:<%= @_ssl_redirect_port %><% end %>$request_uri;
