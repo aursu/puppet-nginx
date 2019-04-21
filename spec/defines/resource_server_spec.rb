@@ -15,7 +15,8 @@ describe 'nginx::resource::server' do
           www_root: '/',
           ipv6_enable: true,
           listen_unix_socket_enable: true,
-          fastcgi_index: 'index.php'
+          fastcgi_index: 'index.php',
+          use_default_location: true,
         }
       end
 
@@ -1105,7 +1106,8 @@ describe 'nginx::resource::server' do
                 ssl_redirect: true,
                 ssl: true,
                 ssl_key: 'dummy.key',
-                ssl_cert: 'dummy.crt'
+                ssl_cert: 'dummy.crt',
+                use_default_location: true,
               }
             end
 
@@ -1118,7 +1120,8 @@ describe 'nginx::resource::server' do
                 ssl_redirect_only: true,
                 ssl: true,
                 ssl_key: 'dummy.key',
-                ssl_cert: 'dummy.crt'
+                ssl_cert: 'dummy.crt',
+                use_default_location: true,
               }
             end
 

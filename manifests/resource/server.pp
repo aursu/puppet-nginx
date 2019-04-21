@@ -263,7 +263,7 @@ define nginx::resource::server (
   Optional[Variant[Array[String], String]] $passenger_pre_start                  = undef,
   Optional[String] $log_by_lua                                                   = undef,
   Optional[String] $log_by_lua_file                                              = undef,
-  $use_default_location                                                          = true,
+  Boolean $use_default_location                                                  = false,
   $rewrite_rules                                                                 = [],
   $string_mappings                                                               = {},
   $geo_mappings                                                                  = {},
