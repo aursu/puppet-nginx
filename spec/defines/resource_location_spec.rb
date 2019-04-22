@@ -364,6 +364,12 @@ describe 'nginx::resource::location' do
               match: '    autoindex on;'
             },
             {
+              title: 'should set default_type',
+              attr: 'default_type',
+              value: 'application/zip',
+              match: %r{^\s+default_type\s+application/zip;}
+            },
+            {
               title: 'should set try_file(s)',
               attr: 'try_files',
               value: %w[name1 name2],

@@ -39,7 +39,10 @@
 <% end -%>
 <%- if defined? @auth_request -%>
   auth_request <%= @auth_request %>;
-  <%- end -%>
+<%- end -%>
+<% if @default_type -%>
+    default_type <%= @default_type %>;
+<% end -%>
 <% if @location_custom_cfg_prepend -%>
   <%- @location_custom_cfg_prepend.each do |key,value| -%>
     <%- if value.is_a?(Hash) -%>

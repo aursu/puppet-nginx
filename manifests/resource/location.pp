@@ -13,6 +13,7 @@
 #   [*location_satisfy*]     - Allows access if all (all) or at least one (any) of the auth modules allow access.
 #   [*location_allow*]       - Array: Locations to allow connections from.
 #   [*location_deny*]        - Array: Locations to deny connections from.
+#   [*default_type*]         - Defines the default MIME type of a response
 #   [*www_root*]             - Specifies the location on disk for files to be
 #     read from. Cannot be set in conjunction with $proxy
 #   [*autoindex*]            - Set it on 'on' to activate autoindex directory
@@ -182,6 +183,7 @@ define nginx::resource::location (
   String $location                                     = $name,
   Variant[String[1],Array[String[1],1]] $server        = undef,
   Optional[String] $www_root                           = undef,
+  Optional[String] $default_type                       = undef, # 'text/plain'
   Optional[String] $autoindex                          = undef,
   Optional[Array[String]] $index_files                 = [],
   Optional[String] $proxy                              = undef,
