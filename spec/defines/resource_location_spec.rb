@@ -709,6 +709,39 @@ describe 'nginx::resource::location' do
               attr: 'fastcgi',
               value: 'value',
               match: %r{\s+fastcgi_pass\s+value;}
+            },
+            {
+              title: 'should set fastcgi_buffering',
+              attr: 'fastcgi_buffering',
+              value: 'on',
+              match: %r{\s+fastcgi_buffering\s+on;}
+            },
+            {
+              title: 'should set fastcgi_buffering when true',
+              attr: 'fastcgi_buffering',
+              value: true,
+              match: %r{\s+fastcgi_buffering\s+on;}
+            },
+            {
+              title: 'should set fastcgi_request_buffering',
+              attr: 'fastcgi_request_buffering',
+              value: 'on',
+              match: %r{\s+fastcgi_request_buffering\s+on;}
+            },
+            {
+              title: 'should set fastcgi_request_buffering when true',
+              attr: 'fastcgi_request_buffering',
+              value: true,
+              match: %r{\s+fastcgi_request_buffering\s+on;}
+            },
+            {
+              title: 'should pass FastCGI headers',
+              attr: 'fastcgi_pass_header',
+              value: ['X-TestHeader1 value1', 'X-TestHeader2 value2'],
+              match: [
+                %r{^\s+fastcgi_pass_header\s+X-TestHeader1 value1;},
+                %r{^\s+fastcgi_pass_header\s+X-TestHeader2 value2;}
+              ]
             }
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do

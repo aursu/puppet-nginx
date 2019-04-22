@@ -42,6 +42,9 @@
 #   [*fastcgi_script*]       - optional SCRIPT_FILE parameter
 #   [*fastcgi_split_path*]   - Allows settings of fastcgi_split_path_info so
 #     that you can split the script_name and path_info via regex
+#   [*fastcgi_pass_header*]  - Permits passing otherwise disabled header fields from a FastCGI server to a client.
+#   [*fastcgi_buffering*]    - Enables or disables buffering of responses from the FastCGI server.
+#   [*fastcgi_request_buffering*] - Enables or disables buffering of a client request body.
 #   [*uwsgi*]              - location of uwsgi (host:port)
 #   [*uwsgi_param*]        - Set additional custom uwsgi_params
 #   [*uwsgi_params*]       - optional alternative uwsgi_params file to use
@@ -197,6 +200,9 @@ define nginx::resource::location (
   String $fastcgi_params                               = "${nginx::conf_dir}/fastcgi.conf",
   Optional[String] $fastcgi_script                     = undef,
   Optional[String] $fastcgi_split_path                 = undef,
+  Optional[Array[String]] $fastcgi_pass_header         = undef,
+  Optional[Nginx::Switch] $fastcgi_buffering           = undef,
+  Optional[Nginx::Switch] $fastcgi_request_buffering   = undef,
   Optional[String] $uwsgi                              = undef,
   Optional[Hash] $uwsgi_param                          = undef,
   String $uwsgi_params                                 = "${nginx::config::conf_dir}/uwsgi_params",

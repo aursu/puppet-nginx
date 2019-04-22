@@ -1,3 +1,15 @@
+<%-
+def bool2config(b)
+    case b
+    when true
+        'on'
+    when false, nil
+        'off'
+    else
+        b.to_s
+    end
+end
+-%>
 <% if @fastcgi -%>
 <% if defined? @www_root -%>
     root          <%= @www_root %>;
@@ -22,5 +34,16 @@
 	<%- @fastcgi_param.sort_by {|k,v| k}.each do |key, val| -%>
     fastcgi_param <%= sprintf("%-*s", field_width, key) %> <%= val %>;
 	<%- end -%>
+<% end -%>
+<% if @fastcgi_pass_header.is_a?(Array) -%>
+  <% @fastcgi_pass_header.each do |header| -%>
+    fastcgi_pass_header <%= header %>;
+  <% end -%>
+<% end -%>
+<% unless @fastcgi_buffering.nil? -%>
+    fastcgi_buffering <%= bool2config(@fastcgi_buffering) %>;
+<% end -%>
+<% unless @fastcgi_request_buffering.nil? -%>
+    fastcgi_request_buffering <%= bool2config(@fastcgi_request_buffering) %>;
 <% end -%>
 <% end -%>
