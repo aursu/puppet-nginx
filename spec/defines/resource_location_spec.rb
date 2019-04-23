@@ -865,6 +865,42 @@ describe 'nginx::resource::location' do
               attr: 'uwsgi_read_timeout',
               value: '300s',
               match: %r{\s+uwsgi_read_timeout\s+300s;}
+            },
+            {
+              title: 'should set uwsgi_connect_timeout',
+              attr: 'uwsgi_connect_timeout',
+              value: '300s',
+              match: %r{\s+uwsgi_connect_timeout\s+300s;}
+            },
+            {
+              title: 'should set uwsgi_send_timeout',
+              attr: 'uwsgi_send_timeout',
+              value: '300s',
+              match: %r{\s+uwsgi_send_timeout\s+300s;}
+            },
+            {
+              title: 'should set uwsgi_buffering',
+              attr: 'uwsgi_buffering',
+              value: 'on',
+              match: %r{\s+uwsgi_buffering\s+on;}
+            },
+            {
+              title: 'should set uwsgi_buffering when true',
+              attr: 'uwsgi_buffering',
+              value: true,
+              match: %r{\s+uwsgi_buffering\s+on;}
+            },
+            {
+              title: 'should set uwsgi_request_buffering',
+              attr: 'uwsgi_request_buffering',
+              value: 'on',
+              match: %r{\s+uwsgi_request_buffering\s+on;}
+            },
+            {
+              title: 'should set uwsgi_request_buffering when true',
+              attr: 'uwsgi_request_buffering',
+              value: true,
+              match: %r{\s+uwsgi_request_buffering\s+on;}
             }
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do

@@ -1,3 +1,15 @@
+<%-
+def bool2config(b)
+    case b
+    when true
+        'on'
+    when false, nil
+        'off'
+    else
+        b.to_s
+    end
+end
+-%>
 <% if @uwsgi -%>
 <% if defined? @www_root -%>
     root  <%= @www_root %>;
@@ -10,7 +22,19 @@
     uwsgi_param <%= sprintf("%-*s", field_width, key) %> <%= val %>;
 	<%- end -%>
 <% end -%>
+<% if @uwsgi_connect_timeout-%>
+    uwsgi_connect_timeout <%= @uwsgi_connect_timeout %>;
+<% end -%>
 <% if @uwsgi_read_timeout-%>
     uwsgi_read_timeout <%= @uwsgi_read_timeout %>;
+<% end -%>
+<% if @uwsgi_send_timeout-%>
+    uwsgi_send_timeout <%= @uwsgi_send_timeout %>;
+<% end -%>
+<% unless @uwsgi_buffering.nil? -%>
+    uwsgi_buffering <%= bool2config(@uwsgi_buffering) %>;
+<% end -%>
+<% unless @uwsgi_request_buffering.nil? -%>
+    uwsgi_request_buffering <%= bool2config(@uwsgi_request_buffering) %>;
 <% end -%>
 <% end -%>

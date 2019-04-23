@@ -49,7 +49,9 @@
 #   [*uwsgi*]              - location of uwsgi (host:port)
 #   [*uwsgi_param*]        - Set additional custom uwsgi_params
 #   [*uwsgi_params*]       - optional alternative uwsgi_params file to use
-#   [*uwsgi_read_timeout*]   - optional value for uwsgi_read_timeout
+#   [*uwsgi_read_timeout*]    - Defines a timeout for reading a response from the uwsgi server.
+#   [*uwsgi_connect_timeout*] - Defines a timeout for establishing a connection with a uwsgi server.
+#   [*uwsgi_send_timeout*]    - Sets a timeout for transmitting a request to the uwsgi server.
 #   [*ssl*]                  - Indicates whether to setup SSL bindings for
 #     this location.
 #   [*ssl_only*]             - Required if the SSL and normal server have the
@@ -208,7 +210,11 @@ define nginx::resource::location (
   Optional[String] $uwsgi                              = undef,
   Optional[Hash] $uwsgi_param                          = undef,
   String $uwsgi_params                                 = "${nginx::config::conf_dir}/uwsgi_params",
-  Optional[String] $uwsgi_read_timeout                 = undef,
+  Optional[Nginx::Time] $uwsgi_read_timeout            = undef,
+  Optional[Nginx::Time] $uwsgi_connect_timeout         = undef,
+  Optional[Nginx::Time] $uwsgi_send_timeout            = undef,
+  Optional[Nginx::Switch] $uwsgi_buffering             = undef,
+  Optional[Nginx::Switch] $uwsgi_request_buffering     = undef,
   Boolean $ssl                                         = false,
   Boolean $ssl_only                                    = false,
   Optional[String] $location_alias                     = undef,
