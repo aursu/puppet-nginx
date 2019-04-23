@@ -379,6 +379,12 @@ describe 'nginx::resource::server' do
               value: { 301 => 'https://www.domain.com'},
               match: %r{^\s+return 301 "https://www.domain.com";$}
             },
+            {
+              title: 'should set send_timeout',
+              attr: 'send_timeout',
+              value: '300s',
+              match: %r{^\s+send_timeout 300s;$}
+            }
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
@@ -890,6 +896,12 @@ describe 'nginx::resource::server' do
               value: { 301 => 'https://www.domain.com'},
               match: %r{^\s+return 301 "https://www.domain.com";$}
             },
+            {
+              title: 'should set send_timeout',
+              attr: 'send_timeout',
+              value: 3600,
+              match: %r{^\s+send_timeout 3600;$}
+            }
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let :params do

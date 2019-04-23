@@ -171,6 +171,7 @@ server {
 <%= scope.function_template(["nginx/server/locations/headers.erb"]) %>
 <%= scope.function_template(["nginx/server/ssl_headers.erb"]) %>
 <%= scope.function_template(["nginx/server/ngx_http_realip_module.erb"]) %>
+<%= scope.function_template(["nginx/server/ngx_http_core_module.erb"]) %>
 <% if @return.is_a?(Hash) -%>
   <%- @return.each do |code, text| -%>
   return <%= code %> "<%= text %>";
