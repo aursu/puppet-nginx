@@ -384,7 +384,13 @@ describe 'nginx::resource::server' do
               attr: 'send_timeout',
               value: '300s',
               match: %r{^\s+send_timeout 300s;$}
-            }
+            },
+            {
+              title: 'should set recursive_error_pages',
+              attr: 'recursive_error_pages',
+              value: 'on',
+              match: '  recursive_error_pages on;'
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
@@ -901,7 +907,13 @@ describe 'nginx::resource::server' do
               attr: 'send_timeout',
               value: 3600,
               match: %r{^\s+send_timeout 3600;$}
-            }
+            },
+            {
+              title: 'should set recursive_error_pages',
+              attr: 'recursive_error_pages',
+              value: 'on',
+              match: '  recursive_error_pages on;'
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let :params do

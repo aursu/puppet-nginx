@@ -1,3 +1,18 @@
+<%-
+def bool2config(b)
+    case b
+    when true
+        'on'
+    when false, nil
+        'off'
+    else
+        b.to_s
+    end
+end
+-%>
 <% if @send_timeout -%>
   send_timeout <%= @send_timeout %>;
+<% end -%>
+<% unless @recursive_error_pages.nil? -%>
+  recursive_error_pages <%= bool2config(@recursive_error_pages) %>;
 <% end -%>
