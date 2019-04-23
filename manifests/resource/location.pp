@@ -44,6 +44,9 @@
 #   [*fastcgi_split_path*]   - Allows settings of fastcgi_split_path_info so
 #     that you can split the script_name and path_info via regex
 #   [*fastcgi_pass_header*]  - Permits passing otherwise disabled header fields from a FastCGI server to a client.
+#   [*fastcgi_read_timeout*]    - Defines a timeout for reading a response from the FastCGI server.
+#   [*fastcgi_connect_timeout*] - Defines a timeout for establishing a connection with a FastCGI server.
+#   [*fastcgi_send_timeout*]    - Sets a timeout for transmitting a request to the FastCGI server.
 #   [*fastcgi_buffering*]    - Enables or disables buffering of responses from the FastCGI server.
 #   [*fastcgi_request_buffering*] - Enables or disables buffering of a client request body.
 #   [*uwsgi*]              - location of uwsgi (host:port)
@@ -205,6 +208,9 @@ define nginx::resource::location (
   Optional[String] $fastcgi_script                     = undef,
   Optional[String] $fastcgi_split_path                 = undef,
   Optional[Array[String]] $fastcgi_pass_header         = undef,
+  Optional[Nginx::Time] $fastcgi_read_timeout          = undef,
+  Optional[Nginx::Time] $fastcgi_connect_timeout       = undef,
+  Optional[Nginx::Time] $fastcgi_send_timeout          = undef,
   Optional[Nginx::Switch] $fastcgi_buffering           = undef,
   Optional[Nginx::Switch] $fastcgi_request_buffering   = undef,
   Optional[String] $uwsgi                              = undef,

@@ -717,6 +717,24 @@ describe 'nginx::resource::location' do
               match: %r{\s+fastcgi_pass\s+value;}
             },
             {
+              title: 'should set fastcgi_read_timeout',
+              attr: 'fastcgi_read_timeout',
+              value: '300s',
+              match: %r{\s+fastcgi_read_timeout\s+300s;}
+            },
+            {
+              title: 'should set fastcgi_connect_timeout',
+              attr: 'fastcgi_connect_timeout',
+              value: '300s',
+              match: %r{\s+fastcgi_connect_timeout\s+300s;}
+            },
+            {
+              title: 'should set fastcgi_send_timeout',
+              attr: 'fastcgi_send_timeout',
+              value: '300s',
+              match: %r{\s+fastcgi_send_timeout\s+300s;}
+            },
+            {
               title: 'should set fastcgi_buffering',
               attr: 'fastcgi_buffering',
               value: 'on',

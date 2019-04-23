@@ -40,6 +40,15 @@ end
     fastcgi_pass_header <%= header %>;
   <% end -%>
 <% end -%>
+<% if @fastcgi_connect_timeout-%>
+    fastcgi_connect_timeout <%= @fastcgi_connect_timeout %>;
+<% end -%>
+<% if @fastcgi_read_timeout-%>
+    fastcgi_read_timeout <%= @fastcgi_read_timeout %>;
+<% end -%>
+<% if @fastcgi_send_timeout-%>
+    fastcgi_send_timeout <%= @fastcgi_send_timeout %>;
+<% end -%>
 <% unless @fastcgi_buffering.nil? -%>
     fastcgi_buffering <%= bool2config(@fastcgi_buffering) %>;
 <% end -%>
