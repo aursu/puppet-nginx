@@ -90,6 +90,9 @@ server {
 <% if defined? @autoindex -%>
   autoindex <%= @autoindex %>;
 <% end -%>
+<% if defined? @charset -%>
+  charset <%= @charset %>;
+<% end -%>
 <% if @absolute_redirect -%>
   absolute_redirect <%= @absolute_redirect %>;
 <% end -%>

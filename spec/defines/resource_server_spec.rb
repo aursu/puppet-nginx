@@ -368,6 +368,12 @@ describe 'nginx::resource::server' do
               match: '  autoindex on;'
             },
             {
+              title: 'should set charset',
+              attr: 'charset',
+              value: 'off',
+              match: '  charset off;'
+            },
+            {
               title: 'should set return to code 404',
               attr: 'return',
               value: 404,
@@ -889,6 +895,12 @@ describe 'nginx::resource::server' do
               attr: 'autoindex',
               value: 'on',
               match: '  autoindex on;'
+            },
+            {
+              title: 'should set charset',
+              attr: 'charset',
+              value: 'off',
+              match: '  charset off;'
             },
             {
               title: 'should set return to code 404',

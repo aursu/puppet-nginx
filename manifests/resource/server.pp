@@ -22,6 +22,7 @@
 #   [*add_header*]                 - Hash: Adds headers to the HTTP response when response code is equal to 200, 204, 301, 302 or 304.
 #   [*index_files*]                - Default index files for NGINX to read when traversing a directory
 #   [*autoindex*]                  - Set it on 'on' or 'off 'to activate/deactivate autoindex directory listing. Undef by default.
+#   [*charset*]                    - Adds the specified charset to the “Content-Type” response header field.
 #   [*proxy*]                      - Proxy server(s) for the root location to connect to.  Accepts a single value, can be used in
 #     conjunction with nginx::resource::upstream
 #   [*proxy_read_timeout*]         - Override the default proxy read timeout value of 90 seconds
@@ -230,6 +231,7 @@ define nginx::resource::server (
   Optional[String] $uwsgi_read_timeout                                           = undef,
   Optional[Array[String]] $index_files                                           = [],
   Optional[String] $autoindex                                                    = undef,
+  Optional[String] $charset                                                      = undef, # 'off'
   Boolean $catch_all_server_name                                                 = false,
   Array[String] $server_name                                                     = [$name],
   Optional[String] $www_root                                                     = undef,
