@@ -65,6 +65,8 @@ server {
 <%= scope.function_template(["nginx/server/server_ipv6_listen.erb"]) %>
 <%- if @catch_all_server_name  -%>
   server_name _;
+<%- elsif @empty_host_header -%>
+  server_name "";
 <%- else -%>
   server_name           <%= @rewrite_www_to_non_www ? @server_name.join("  ").gsub(/(^| )(www\.)?(?=[a-z0-9])/, '') : @server_name.join(" ") %>;
 <%- end -%>

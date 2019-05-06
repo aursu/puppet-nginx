@@ -173,6 +173,12 @@ describe 'nginx::resource::server' do
               match: %r{\s+server_name\s+_;}
             },
             {
+              title: 'should set server_name to empty strng',
+              attr: 'empty_host_header',
+              value: true,
+              match: %r{\s+server_name\s+"";}
+            },
+            {
               title: 'should rewrite www servername to non-www',
               attr: 'rewrite_www_to_non_www',
               value: true,
