@@ -1267,18 +1267,6 @@ describe 'nginx::resource::location' do
             it { is_expected.not_to contain_concat__fragment('server1-800-' + Digest::MD5.hexdigest('rspec-test') + '-ssl') }
           end
 
-          context 'www_root and proxy are set' do
-            let :params do
-              {
-                server: 'server1',
-                www_root: '/',
-                proxy: 'http://localhost:8000/uri/'
-              }
-            end
-
-            it { expect { is_expected.to contain_class('nginx::resource::location') }.to raise_error(Puppet::Error, %r{Cannot define both directory and proxy in server1:rspec-test}) }
-          end
-
           context 'when server name is sanitized' do
             let(:title) { 'www.rspec-location.com' }
             let :params do

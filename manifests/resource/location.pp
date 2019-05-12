@@ -289,10 +289,6 @@ define nginx::resource::location (
     default  => file,
   }
 
-  if ($www_root and $proxy) {
-    fail("Cannot define both directory and proxy in ${server}:${title}")
-  }
-
   # Use proxy, fastcgi or uwsgi template if $proxy is defined, otherwise use directory template.
   # fastcgi_script is deprecated
   if ($fastcgi_script != undef) {
