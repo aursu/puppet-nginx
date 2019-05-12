@@ -619,7 +619,7 @@ describe 'nginx::resource::mailhost' do
                 facts.merge(nginx_version: '1.16.0')
               end
 
-              let(:pre_condition) { ['include ::nginx'] }
+              let(:pre_condition) { ['class {"::nginx": mail => true}'] }
 
               it 'has `ssl` at end of listen directive' do
                 content = catalogue.resource('concat::fragment', "#{title}-ssl").send(:parameters)[:content]
@@ -627,7 +627,7 @@ describe 'nginx::resource::mailhost' do
               end
             end
             context 'when version comes from parameter' do
-              let(:pre_condition) { ['class { "nginx": nginx_version => "1.16.0"}'] }
+              let(:pre_condition) { ['class { "nginx": nginx_version => "1.16.0", mail => true}'] }
 
               it 'also has `ssl` at end of listen directive' do
                 content = catalogue.resource('concat::fragment', "#{title}-ssl").send(:parameters)[:content]
