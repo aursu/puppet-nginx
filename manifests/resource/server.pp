@@ -140,7 +140,6 @@
 #   [*recursive_error_pages*]      - Enables or disables doing several redirects using the error_page directive.
 #   [*locations*]                  - Hash of servers resources used by this server
 #   [*locations_defaults*]         - Hash of location default settings
-#   [*add_listen_directive*]       - Boolean to determine if we should add 'ssl on;' to the vhost or not. defaults to true for nginx 1.14 and older, otherwise false
 # Actions:
 #
 # Requires:
@@ -285,7 +284,6 @@ define nginx::resource::server (
   Optional[Nginx::Switch] $recursive_error_pages                                 = undef, # 'off'
   Hash $locations                                                                = {},
   Hash $locations_defaults                                                       = {},
-  Boolean $add_listen_directive                                                  = $nginx::add_listen_directive,
   Optional[Array[String]] $set_real_ip_from                                      = undef,
   Optional[Nginx::ReturnFormat] $return                                          = undef,
 ) {
