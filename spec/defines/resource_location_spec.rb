@@ -1317,6 +1317,36 @@ describe 'nginx::resource::location' do
 
             it { is_expected.not_to contain_concat__fragment('server1-800-' + Digest::MD5.hexdigest('rspec-test') + '-ssl') }
           end
+
+          context 'when error_pages set' do
+            let(:params) do
+              {
+                location: 'location',
+                server: 'server1',
+                error_pages: { '503' => '/foo.html' },
+              }
+            end
+
+            it do
+              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s))
+                .with_content(%r{\s*error_page\s+503 /foo.html;})
+            end
+          end
+
+          context 'when recursive_error_pages set' do
+            let(:params) do
+              {
+                location: 'location',
+                server: 'server1',
+                recursive_error_pages: true,
+              }
+            end
+
+            it do
+              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s))
+                .with_content(%r{\s*recursive_error_pages\s+on;})
+            end
+          end
         end
       end
     end

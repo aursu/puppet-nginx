@@ -16,3 +16,9 @@ end
 <% unless @recursive_error_pages.nil? -%>
   recursive_error_pages <%= bool2config(@recursive_error_pages) %>;
 <% end -%>
+<% if @error_pages -%>
+
+  <%- @error_pages.keys.sort.each do |key| -%>
+  error_page  <%= key %> <%= @error_pages[key] %>;
+  <%- end -%>
+<% end -%>

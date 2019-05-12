@@ -120,12 +120,6 @@ server {
 <% else -%>
   error_log             <%= @error_log %>;
 <% end -%>
-<% if @error_pages -%>
-
-  <%- @error_pages.keys.sort.each do |key| -%>
-  error_page  <%= key %> <%= @error_pages[key] %>;
-  <%- end -%>
-<% end -%>
 <% if @server_cfg_prepend -%>
 
   <%- @server_cfg_prepend.sort_by{ |k, v| k.to_s == 'allow' ? '' : k.to_s }.each do |key,value| -%>

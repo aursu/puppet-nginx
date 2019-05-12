@@ -137,7 +137,7 @@
 #   [*maintenance*]                - A boolean value to set a server in maintenance
 #   [*maintenance_value*]          - Value to return when maintenance is on.  Default to return 503
 #   [*error_pages*]                - Hash: setup errors pages, hash key is the http code and hash value the page
-#   [*recursive_error_pages*]      - Enables or disables doing several redirects using the error_page directive.         -
+#   [*recursive_error_pages*]      - Enables or disables doing several redirects using the error_page directive.
 #   [*locations*]                  - Hash of servers resources used by this server
 #   [*locations_defaults*]         - Hash of location default settings
 #   [*add_listen_directive*]       - Boolean to determine if we should add 'ssl on;' to the vhost or not. defaults to true for nginx 1.14 and older, otherwise false

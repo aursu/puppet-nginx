@@ -193,12 +193,6 @@ server {
 <% else -%>
   error_log             <%= @error_log %>;
 <% end -%>
-<% if @error_pages -%>
-
-  <%- @error_pages.keys.sort.each do |key| -%>
-  error_page  <%= key %> <%= @error_pages[key] %>;
-  <%- end -%>
-<% end -%>
 <% if @return.is_a?(Hash) -%>
   <%- @return.each do |code, text| -%>
   return <%= code %> "<%= text %>";
