@@ -34,6 +34,12 @@ class nginx::package::redhat (
   }
 
   if $manage_repo {
+    exec { 'yum-clean-b114182':
+      command     => 'yum clean all',
+      path        => '/bin:/usr/bin',
+      refreshonly => true,
+    }
+
     case $package_source {
       'nginx', 'nginx-stable': {
         yumrepo { 'nginx-release':
@@ -45,12 +51,14 @@ class nginx::package::redhat (
           gpgkey    => 'https://nginx.org/keys/nginx_signing.key',
           sslverify => $sslverify,
           before    => Package['nginx'],
+          notify    => Exec['yum-clean-b114182'],
         }
 
         if $purge_passenger_repo {
           yumrepo { 'passenger':
             ensure => absent,
             before => Package['nginx'],
+            notify => Exec['yum-clean-b114182'],
           }
         }
       }
@@ -64,12 +72,14 @@ class nginx::package::redhat (
           gpgkey    => 'https://nginx.org/keys/nginx_signing.key',
           sslverify => $sslverify,
           before    => Package['nginx'],
+          notify    => Exec['yum-clean-b114182'],
         }
 
         if $purge_passenger_repo {
           yumrepo { 'passenger':
             ensure => absent,
             before => Package['nginx'],
+            notify => Exec['yum-clean-b114182'],
           }
         }
       }
@@ -84,11 +94,13 @@ class nginx::package::redhat (
             priority      => '1',
             gpgkey        => 'https://packagecloud.io/phusion/passenger/gpgkey',
             before        => Package['nginx'],
+            notify        => Exec['yum-clean-b114182'],
           }
 
           yumrepo { 'nginx-release':
             ensure => absent,
             before => Package['nginx'],
+            notify => Exec['yum-clean-b114182'],
           }
 
           package { 'passenger':
