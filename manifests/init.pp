@@ -56,7 +56,8 @@ class nginx (
   Nginx::ErrorLogSeverity $nginx_error_log_severity          = 'error',
   $pid                                                       = $nginx::params::pid,
   Optional[Variant[Stdlib::Absolutepath, Boolean]]
-          $proxy_temp_path                                   = undef, # 'proxy_temp'
+          $proxy_temp_path                                   = undef,  # 'proxy_temp'
+  Optional[String] $proxy_cache_key                          = undef,  # $scheme$proxy_host$request_uri
   $root_group                                                = $nginx::params::root_group,
   $run_dir                                                   = $nginx::params::run_dir,
   $sites_available_owner                                     = $nginx::params::sites_available_owner,

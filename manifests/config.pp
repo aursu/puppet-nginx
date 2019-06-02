@@ -38,6 +38,7 @@ class nginx::config {
   $nginx_error_log_severity       = $nginx::nginx_error_log_severity
   $pid                            = $nginx::pid
   $proxy_temp_path                = $nginx::proxy_temp_path
+  $proxy_cache_key                = $nginx::proxy_cache_key
   $root_group                     = $nginx::root_group
   $run_dir                        = $nginx::run_dir
   $sites_available_owner          = $nginx::sites_available_owner

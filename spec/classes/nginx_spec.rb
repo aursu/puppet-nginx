@@ -833,6 +833,12 @@ describe 'nginx' do
           describe 'conf.d/00-proxy.conf template content' do
             [
               {
+                title: 'should set proxy_cache_key',
+                attr: 'proxy_cache_key',
+                value: '$host$request_uri',
+                match: 'proxy_cache_key $host$request_uri;'
+              },
+              {
                 title: 'should set proxy_temp_path',
                 attr: 'proxy_temp_path',
                 value: '/path/to/proxy_temp',
@@ -849,7 +855,7 @@ describe 'nginx' do
                 attr: 'proxy_max_temp_file_size',
                 value: '1024m',
                 match: 'proxy_max_temp_file_size 1024m;'
-              },
+              }
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) { { param[:attr].to_sym => param[:value] } }
