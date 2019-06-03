@@ -558,6 +558,18 @@ describe 'nginx' do
                 match: '  access_log /path/to/access.log;'
               },
               {
+                title: 'should set access_log with format',
+                attr: 'http_access_log',
+                value: {
+                  '/path/to/access.log' => 'combined',
+                  'syslog:server=localhost' => 'main if=$loggable'
+                },
+                match: [
+                  '  access_log /path/to/access.log combined;',
+                  '  access_log syslog:server=localhost main if=$loggable;'
+                ]
+              },
+              {
                 title: 'should set multiple access_logs',
                 attr: 'http_access_log',
                 value: ['/path/to/access.log', 'syslog:server=localhost'],

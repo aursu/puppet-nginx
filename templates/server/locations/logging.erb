@@ -2,6 +2,10 @@
   <%- @access_log.each do |log_item| -%>
   access_log <%= log_item %><% if @format_log %> <%= @format_log%><% end %>;
   <%- end -%>
+<% elsif @access_log.is_a?(Hash) -%>
+  <%- @access_log.each do |path, format| -%>
+  access_log <%= path %> <%= format %>;
+  <%- end -%>
 <% elsif @access_log -%>
   access_log <%= @access_log %><% if @format_log %> <%= @format_log%><% end %>;
 <% end -%>

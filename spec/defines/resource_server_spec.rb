@@ -290,6 +290,18 @@ describe 'nginx::resource::server' do
               match: '  access_log            /path/to/access.log combined;'
             },
             {
+              title: 'should set access_log with format',
+              attr: 'access_log',
+              value: {
+                '/path/to/access.log' => 'combined',
+                'syslog:server=localhost' => 'main if=$loggable'
+              },
+              match: [
+                %r{\s*access_log /path/to/access.log combined;},
+                %r{\s*access_log syslog:server=localhost main if=\$loggable;}
+              ]
+            },
+            {
               title: 'should set multiple access_log directives',
               attr: 'access_log',
               value: ['/path/to/log/1', 'syslog:server=localhost'],

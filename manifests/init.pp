@@ -50,7 +50,11 @@ class nginx (
   String[1] $log_user                                        = $nginx::params::log_user,
   String[1] $log_group                                       = $nginx::params::log_group,
   Stdlib::Filemode $log_mode                                 = $nginx::params::log_mode,
-  Optional[Variant[String, Array[String]]] $http_access_log  = "${log_dir}/${nginx::params::http_access_log_file}",
+  Optional[Variant[
+    String,
+    Array[String],
+    Hash[String, String]
+  ]] $http_access_log                                        = "${log_dir}/${nginx::params::http_access_log_file}",
   Optional[String] $http_format_log                          = undef, # 'combined'
   Variant[String, Array[String]] $nginx_error_log            = "${log_dir}/${nginx::params::nginx_error_log_file}",
   Nginx::ErrorLogSeverity $nginx_error_log_severity          = 'error',

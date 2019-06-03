@@ -102,6 +102,10 @@ server {
   <%- @access_log.each do |log_item| -%>
   access_log            <%= log_item %> <%= @format_log %>;
   <%- end -%>
+<% elsif @access_log.is_a?(Hash) -%>
+  <%- @access_log.each do |log_item, format| -%>
+  access_log <%= log_item %> <%= format %>;
+  <%- end -%>
 <% elsif @access_log == 'absent' -%>
 <% elsif @access_log == 'off' || @access_log == false -%>
   access_log            off;

@@ -104,6 +104,10 @@ http {
   <%- @http_access_log.each do |log_item| -%>
   access_log <%= log_item %><% if @http_format_log %> <%= @http_format_log%><% end %>;
   <%- end -%>
+<% elsif @http_access_log.is_a?(Hash) -%>
+  <%- @http_access_log.each do |path, format| -%>
+  access_log <%= path %> <%= format %>;
+  <%- end -%>
 <% elsif @http_access_log -%>
   access_log <%= @http_access_log %><% if @http_format_log %> <%= @http_format_log%><% end %>;
 <% end -%>

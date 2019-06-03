@@ -261,7 +261,12 @@ define nginx::resource::server (
   Optional[Hash] $server_cfg_ssl_prepend                                         = undef,
   Optional[Hash] $server_cfg_ssl_append                                          = undef,
   Optional[Array[String]] $include_files                                         = undef,
-  Optional[Variant[Boolean, String, Array]] $access_log                          = 'absent',
+  Optional[Variant[
+    Boolean,
+    String,
+    Array[String],
+    Hash[String, String]
+  ]] $access_log                                                                 = 'absent',
   Optional[Variant[Boolean, String, Array]] $error_log                           = false,
   $format_log                                                                    = 'combined',
   Optional[Hash] $passenger_cgi_param                                            = undef,

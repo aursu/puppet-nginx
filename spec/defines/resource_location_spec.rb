@@ -552,6 +552,18 @@ describe 'nginx::resource::location' do
               match: %r{\s+access_log /mnt/log0/server1.access_log main;}
             },
             {
+              title: 'should set access_log with format',
+              attr: 'access_log',
+              value: {
+                '/path/to/access.log' => 'combined',
+                'syslog:server=localhost' => 'main if=$loggable'
+              },
+              match: [
+                %r{\s*access_log /path/to/access.log combined;},
+                %r{\s*access_log syslog:server=localhost main if=\$loggable;}
+              ]
+            },
+            {
               title: 'should set multiple access_log',
               attr: 'access_log',
               value: [ '/var/log/nginx/access_log', '/mnt/log0/server1.access_log'],
