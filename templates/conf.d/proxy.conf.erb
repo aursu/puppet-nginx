@@ -16,20 +16,8 @@ map $http_upgrade $connection_upgrade {
     ''      close;
 }
 <% end -%>
-<% if @proxy_redirect -%>
-proxy_redirect <%= @proxy_redirect %>;
-<% end -%>
 <% if @proxy_temp_path -%>
 proxy_temp_path <%= @proxy_temp_path %>;
-<% end -%>
-<% if @proxy_connect_timeout -%>
-proxy_connect_timeout <%= @proxy_connect_timeout %>;
-<% end -%>
-<% if @proxy_send_timeout -%>
-proxy_send_timeout <%= @proxy_send_timeout %>;
-<% end -%>
-<% if @proxy_read_timeout -%>
-proxy_read_timeout <%= @proxy_read_timeout %>;
 <% end -%>
 <% if @proxy_buffers -%>
 proxy_buffers <%= @proxy_buffers %>;
@@ -37,52 +25,15 @@ proxy_buffers <%= @proxy_buffers %>;
 <% if @proxy_buffer_size -%>
 proxy_buffer_size <%= @proxy_buffer_size %>;
 <% end -%>
-<% if @proxy_busy_buffers_size -%>
-proxy_busy_buffers_size <%= @proxy_busy_buffers_size %>;
-<% end -%>
-<% if @proxy_max_temp_file_size -%>
-proxy_max_temp_file_size <%= @proxy_max_temp_file_size %>;
-<% end -%>
-<% if @proxy_http_version -%>
-proxy_http_version <%= @proxy_http_version %>;
-<% end -%>
-<% if @proxy_set_header.is_a?(Array) -%>
-  <%- @proxy_set_header.each do |header| -%>
-proxy_set_header <%= header %>;
-  <%- end -%>
-<% end -%>
-<% if @proxy_hide_header.is_a?(Array) -%>
-  <%- @proxy_hide_header.each do |header| -%>
-proxy_hide_header <%= header %>;
-  <%- end -%>
-<% end -%>
-<% if @proxy_pass_header.is_a?(Array) -%>
-  <%- @proxy_pass_header.each do |header| -%>
-proxy_pass_header <%= header %>;
-  <%- end -%>
-<% end -%>
-<% if @proxy_ignore_header.is_a?(Array) -%>
-  <%- @proxy_ignore_header.each do |header| -%>
-proxy_ignore_headers <%= header %>;
-  <%- end -%>
-<% end -%>
 <% if @proxy_headers_hash_bucket_size -%>
 proxy_headers_hash_bucket_size <%= @proxy_headers_hash_bucket_size %>;
-<% end -%>
-<% if @proxy_cache -%>
-proxy_cache <%= @proxy_cache %>;
-<% end -%>
-<% if @proxy_cache_key -%>
-proxy_cache_key <%= @proxy_cache_key %>;
 <% end -%>
 <% if @proxy_cache_path -%>
   <%- @proxy_cache_path.sort_by{|k, v| k}.each do |path, parameters| -%>
 proxy_cache_path <%= path %><% parameters.each do |name, value| %> <%= name %>=<%= bool2config(value) %><% end %>;
   <%- end -%>
 <% end -%>
-<% if @proxy_cache_lock -%>
-proxy_cache_lock on;
-<% end -%>
+<%= scope.function_template(['nginx/server/locations/proxy.erb']) -%>
 <% if @fastcgi_cache_path -%>
   <%- @fastcgi_cache_path.sort_by{|k, v| k}.each do |path, parameters| -%>
 fastcgi_cache_path <%= path %><% parameters.each do |name, value| %> <%= name %>=<%= bool2config(value) %><% end %>;
