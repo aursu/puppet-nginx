@@ -143,6 +143,9 @@ server {
 <%= scope.function_template(["nginx/server/locations/headers.erb"]) %>
 <%= scope.function_template(["nginx/server/ngx_http_realip_module.erb"]) %>
 <%= scope.function_template(["nginx/server/ngx_http_core_module.erb"]) %>
+<% if @server_proxy_settings -%>
+<%= scope.function_template(["nginx/server/locations/proxy.erb"]) %>
+<% end -%>
 <% if @maintenance -%>
   <%= @maintenance_value %>;
 <% end -%>

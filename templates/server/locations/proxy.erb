@@ -82,9 +82,12 @@ end
     proxy_cache_bypass <%= line %>;
   <% end -%>
 <% end -%>
-<% if @proxy_cache_lock -%>
+<% unless @proxy_cache_lock.nil? -%>
     proxy_cache_lock <%= bool2config(@proxy_cache_lock) %>;
 <% end -%>
 <% if @proxy_next_upstream -%>
     proxy_next_upstream <%= @proxy_next_upstream %>;
+<% end -%>
+<% unless @proxy_cache_revalidate.nil? -%>
+    proxy_cache_revalidate <%= bool2config(@proxy_cache_revalidate) %>;
 <% end -%>

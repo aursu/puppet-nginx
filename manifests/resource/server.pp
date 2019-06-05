@@ -220,6 +220,7 @@ define nginx::resource::server (
   Optional[String] $proxy_buffering                                              = undef,
   Optional[Nginx::Size] $proxy_max_temp_file_size                                = undef,
   Optional[Nginx::Size] $proxy_busy_buffers_size                                 = undef,
+  Optional[Boolean] $proxy_cache_revalidate                                      = undef,
   Array $resolver                                                                = [],
   Optional[String] $fastcgi                                                      = undef,
   Optional[String] $fastcgi_index                                                = undef,
@@ -291,6 +292,7 @@ define nginx::resource::server (
   Hash $locations_defaults                                                       = {},
   Optional[Array[String]] $set_real_ip_from                                      = undef,
   Optional[Nginx::ReturnFormat] $return                                          = undef,
+  Boolean $server_proxy_settings                                                 = false,
 ) {
 
   if ! defined(Class['nginx']) {
