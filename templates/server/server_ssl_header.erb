@@ -11,7 +11,7 @@ def bool2config(b)
 end
 -%>
 # MANAGED BY PUPPET
-<% if @rewrite_www_to_non_www -%>
+<% if @rewrite_www_to_non_www || @rewrite_non_www_to_www -%>
 <%- @server_name.each do |s| -%>
 server {
   <%- if @listen_ip.nil? -%>
@@ -24,8 +24,13 @@ server {
   listen       <%= @listen_ip %>:<%= @ssl_port %> <% if @ssl_listen_option %>ssl<% end %><% if @http2 == 'on' || @http2 == true %> http2<% end %><% if @spdy == 'on' || @spdy == true %> spdy<% end %><% if @listen_options %> <%= @listen_options %><% end %>;
   <%- end -%>
 <%= scope.function_template(["nginx/server/server_ssl_ipv6_listen.erb"]) %>
+<%- if @rewrite_www_to_non_www -%>
   server_name  www.<%= s.gsub(/^www\./, '') %>;
   return       301 https://<%= s.gsub(/^www\./, '') %>$request_uri;
+<%- elsif @rewrite_non_www_to_www %>
+  server_name  <%= s.gsub(/^www\./, '') %>;
+  return       301 https://www.<%= s %>$request_uri;
+<%- end -%>
 
 <%= scope.function_template(["nginx/server/server_ssl_settings.erb"]) %>
 
