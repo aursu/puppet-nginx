@@ -133,9 +133,7 @@ http {
 <% unless @etag.nil? -%>
   etag <%= bool2config(@etag) %>;
 <% end -%>
-<% if @client_body_temp_path -%>
-  client_body_temp_path <%= @client_body_temp_path %>;
-<% end -%>
+<%= scope.function_template(["nginx/ngx_http_core_module.erb"]) %>
 <% if @http_cfg_append -%>
 <%- field_width = @http_cfg_append.inject(0) { |l,(k,v)| k.size > l ? k.size : l } -%>
 <%- @http_cfg_append.sort_by{|k,v| k}.each do |key,value| -%>

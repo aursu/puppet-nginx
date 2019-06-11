@@ -737,6 +737,12 @@ describe 'nginx' do
                 value: '/path/to/body_temp',
                 match: '  client_body_temp_path /path/to/body_temp;'
               },
+              {
+                title: 'should set recursive_error_pages',
+                attr: 'recursive_error_pages',
+                value: true,
+                match: '  recursive_error_pages on;'
+              },
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) { { param[:attr].to_sym => param[:value] } }

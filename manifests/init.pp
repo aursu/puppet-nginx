@@ -36,6 +36,7 @@ class nginx (
   ### START Nginx Configuration ###
   Optional[Variant[Stdlib::Absolutepath, Boolean]]
           $client_body_temp_path                             = undef, # 'client_body_temp'
+  Optional[Boolean] $recursive_error_pages                   = undef, # off
   Boolean $confd_only                                        = false,
   Boolean $confd_purge                                       = false,
   Stdlib::Unixpath $conf_dir                                 = $nginx::params::conf_dir,

@@ -18,6 +18,7 @@ class nginx::config {
   assert_private()
 
   $client_body_temp_path          = $nginx::client_body_temp_path
+  $recursive_error_pages          = $nginx::recursive_error_pages
   $confd_only                     = $nginx::confd_only
   $confd_purge                    = $nginx::confd_purge
   $conf_dir                       = $nginx::conf_dir

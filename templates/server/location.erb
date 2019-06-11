@@ -1,6 +1,6 @@
 <%= scope.function_template(['nginx/server/location_header.erb']) -%>
 <%= scope.function_template(['nginx/server/locations/alias.erb']) -%>
-<%= scope.function_template(["nginx/server/ngx_http_core_module.erb"]) %>
+<%= scope.function_template(['nginx/ngx_http_core_module.erb']) %>
 <%= scope.function_template(['nginx/server/locations/headers.erb']) -%>
 <%= scope.function_template(['nginx/server/locations/stub_status.erb']) -%>
 <%= scope.function_template(['nginx/server/locations/directory.erb']) -%>

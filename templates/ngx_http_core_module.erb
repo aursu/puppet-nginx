@@ -10,6 +10,9 @@ def bool2config(b)
     end
 end
 -%>
+<% if @client_body_temp_path -%>
+  client_body_temp_path <%= @client_body_temp_path %>;
+<% end -%>
 <% if @send_timeout -%>
   send_timeout <%= @send_timeout %>;
 <% end -%>
