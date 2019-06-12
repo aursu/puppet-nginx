@@ -28,10 +28,6 @@ client_body_timeout <%= @client_body_timeout %>; # if client does not transmit a
                     # time the 408 (Request Time-out) error is returned
                     # to the client.
 <% end -%>
-<% if @send_timeout -%>
-send_timeout <%= @send_timeout %>; # the timeout is set only between two successive write
-                # operations, not for the transmission of the whole response
-<% end -%>
 <% if @lingering_timeout -%>
 lingering_timeout <%= @lingering_timeout %>;
 <% end -%>

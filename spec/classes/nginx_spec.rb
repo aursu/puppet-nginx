@@ -743,6 +743,12 @@ describe 'nginx' do
                 value: true,
                 match: '  recursive_error_pages on;'
               },
+              {
+                title: 'should set send_timeout',
+                attr: 'send_timeout',
+                value: '300s',
+                match: '  send_timeout 300s;'
+              },
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) { { param[:attr].to_sym => param[:value] } }
