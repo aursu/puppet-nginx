@@ -186,6 +186,12 @@ describe 'nginx::resource::server' do
               match: %r{\s+server_name\s+_;}
             },
             {
+              title: 'should not set server_name',
+              attr: 'server_name',
+              value: [],
+              notmatch: %r{server_name}
+            },
+            {
               title: 'should set server_name to empty strng',
               attr: 'empty_host_header',
               value: true,
@@ -752,6 +758,12 @@ describe 'nginx::resource::server' do
               attr: 'server_name',
               value: ['www.foo.com', 'foo.com'],
               match: %r{\s+server_name\s+www.foo.com foo.com;}
+            },
+            {
+              title: 'should not set server_name',
+              attr: 'server_name',
+              value: [],
+              notmatch: %r{server_name}
             },
             {
               title: 'should rewrite www servername to non-www',
