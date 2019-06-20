@@ -17,8 +17,7 @@
 #     exists on your system before enabling.
 #   [*ipv6_listen_ip*]             - Default IPv6 Address for NGINX to listen with this server on. Defaults to all interfaces (::)
 #   [*ipv6_listen_port*]           - Default IPv6 Port for NGINX to listen with this server on. Defaults to TCP 80
-#   [*ipv6_listen_options*]        - Extra options for listen directive like 'default' to catchall. Template will allways add ipv6only=on.
-#     While issue jfryman/puppet-nginx#30 is discussed, default value is 'default'.
+#   [*ipv6_listen_options*]        - Extra options for listen directive like 'default' to catchall.
 #   [*add_header*]                 - Hash: Adds headers to the HTTP response when response code is equal to 200, 204, 301, 302 or 304.
 #   [*index_files*]                - Default index files for NGINX to read when traversing a directory
 #   [*autoindex*]                  - Set it on 'on' or 'off 'to activate/deactivate autoindex directory listing. Undef by default.
@@ -168,7 +167,7 @@ define nginx::resource::server (
   Boolean $ipv6_enable                                                           = false,
   Variant[Array, String] $ipv6_listen_ip                                         = '::',
   Integer $ipv6_listen_port                                                      = 80,
-  String $ipv6_listen_options                                                    = 'default ipv6only=on',
+  Optional[String] $ipv6_listen_options                                          = undef,
   Hash $add_header                                                               = {},
   Hash $ssl_add_header                                                           = {},
   Boolean $ssl                                                                   = false,
