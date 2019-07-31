@@ -112,8 +112,31 @@ class nginx::package::redhat (
           fail("${facts['os']['name']} version ${facts['os']['release']['major']} is unsupported with \$package_source 'passenger'")
         }
       }
+      'openresty': {
+        # https://openresty.org/en/linux-packages.html
+        yumrepo { 'openresty':
+          baseurl             => "https://openresty.org/package/${_os}/\$releasever/\$basearch",
+          descr               => "Official OpenResty Open Source Repository for ${facts['os']['name']}",
+          skip_if_unavailable => '0',
+          enabled             => '1',
+          gpgcheck            => '1',
+          repo_gpgcheck       => '0',
+          gpgkey              => 'https://openresty.org/package/pubkey.gpg',
+          sslverify           => $sslverify,
+          before              => Package['nginx'],
+          notify              => Exec['yum-clean-b114182'],
+        }
+
+        if $purge_passenger_repo {
+          yumrepo { 'passenger':
+            ensure => absent,
+            before => Package['nginx'],
+            notify => Exec['yum-clean-b114182'],
+          }
+        }
+      }
       default: {
-        fail("\$package_source must be 'nginx-stable', 'nginx-mainline', or 'passenger'. It was set to '${package_source}'")
+        fail("\$package_source must be 'nginx-stable', 'nginx-mainline', 'openresty' or 'passenger'. It was set to '${package_source}'")
       }
     }
   }

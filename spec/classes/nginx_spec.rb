@@ -119,6 +119,24 @@ describe 'nginx' do
             it { is_expected.to contain_package('passenger').with('ensure' => 'present') }
           end
 
+          context 'package_source => openresty' do
+            let(:params) { { package_source: 'openresty' } }
+            let(:os_path) { facts[:operatingsystem] == 'CentOS' ? 'centos' : 'rhel' }
+
+            it do
+              is_expected.to contain_yumrepo('openresty').with(
+                'baseurl' => "https://openresty.org/package/#{os_path}/$releasever/$basearch"
+              )
+            end
+            it do
+              is_expected.to contain_yumrepo('passenger').with(
+                'ensure' => 'absent'
+              )
+            end
+            it { is_expected.to contain_yumrepo('openresty').that_comes_before('Package[nginx]') }
+            it { is_expected.to contain_yumrepo('passenger').that_comes_before('Package[nginx]') }
+          end
+
           describe 'installs the requested passenger package version' do
             let(:params) { { package_source: 'passenger', passenger_package_ensure: '4.1.0-1.el9' } }
 
