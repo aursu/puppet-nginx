@@ -130,8 +130,8 @@
 #   [*log_by_lua_file*]            - Equivalent to log_by_lua, except that the file specified by <path-to-lua-script-file> contains the Lua
 #     code, or, as from the v0.5.0rc32 release, the Lua/LuaJIT bytecode to be executed.
 #   [*gzip_types*]                 - Defines gzip_types, nginx default is text/html
-#   [*send_timeout*]               - Sets a timeout for transmitting a response to the client. The timeout is set only between two successive
-#                                    write operations, not for the transmission of the whole response
+#   [*send_timeout*]               - Sets a timeout for transmitting a response to the client. The timeout is set only between two
+#                                    successive write operations, not for the transmission of the whole response
 #   [*owner*]                      - Defines owner of the .conf file
 #   [*group*]                      - Defines group of the .conf file
 #   [*mode*]                       - Defines mode of the .conf file
