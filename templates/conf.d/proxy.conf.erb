@@ -19,12 +19,6 @@ map $http_upgrade $connection_upgrade {
 <% if @proxy_temp_path -%>
 proxy_temp_path <%= @proxy_temp_path %>;
 <% end -%>
-<% if @proxy_buffers -%>
-proxy_buffers <%= @proxy_buffers %>;
-<% end -%>
-<% if @proxy_buffer_size -%>
-proxy_buffer_size <%= @proxy_buffer_size %>;
-<% end -%>
 <% if @proxy_headers_hash_bucket_size -%>
 proxy_headers_hash_bucket_size <%= @proxy_headers_hash_bucket_size %>;
 <% end -%>

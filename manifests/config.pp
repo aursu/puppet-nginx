@@ -89,6 +89,7 @@ class nginx::config {
   $names_hash_bucket_size         = $nginx::names_hash_bucket_size
   $names_hash_max_size            = $nginx::names_hash_max_size
   $nginx_cfg_prepend              = $nginx::nginx_cfg_prepend
+  $proxy_buffering                = $nginx::proxy_buffering
   $proxy_buffers                  = $nginx::proxy_buffers
   $proxy_buffer_size              = $nginx::proxy_buffer_size
   $proxy_busy_buffers_size        = $nginx::proxy_busy_buffers_size

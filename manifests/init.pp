@@ -92,7 +92,7 @@ class nginx (
   Optional[Variant[Nginx::CacheUseStale, Array[Nginx::CacheUseStale]]]
                     $fastcgi_cache_use_stale                 = undef,  # 'off'
   Nginx::Switch $gzip                                        = false,  # 'on'
-  Optional[String] $gzip_buffers                             = undef,  # '32 4k|16 8k'
+  Optional[Nginx::Buffers] $gzip_buffers                     = undef,  # '32 4k|16 8k'
   Optional[Integer] $gzip_comp_level                         = undef,  # 1
   Optional[Variant[String, Array[String, 1]]] $gzip_disable  = undef,  # undef
   Optional[Integer] $gzip_min_length                         = undef,  # 20
@@ -121,7 +121,8 @@ class nginx (
   Optional[Integer] $names_hash_bucket_size                  = undef,  # 32|64|128
   Optional[Integer] $names_hash_max_size                     = undef,  # 512
   Optional[Nginx::ConfigSet] $nginx_cfg_prepend              = undef,
-  Optional[String] $proxy_buffers                            = undef,  # '8 4k|8 8k'
+  Optional[Boolean] $proxy_buffering                         = undef,  # on
+  Optional[Nginx::Buffers] $proxy_buffers                    = undef,  # '8 4k|8 8k'
   Optional[Nginx::Size] $proxy_buffer_size                   = undef,  # '4k|8k'
   Optional[String] $proxy_cache                              = undef,  # off
   Optional[Hash[String, Nginx::CachePath, 1]]
@@ -177,7 +178,7 @@ class nginx (
   Optional[Boolean] $msie_padding                            = undef, # 'on'
   Optional[Boolean] $port_in_redirect                        = undef, # 'on'
   Optional[Nginx::Time] $client_header_timeout               = undef, # 60s
-  Optional[String] $fastcgi_buffers                          = undef, # '8 4k|8 8k'
+  Optional[Nginx::Buffers] $fastcgi_buffers                  = undef, # '8 4k|8 8k'
   Optional[Nginx::Size] $fastcgi_buffer_size                 = undef, # '4k|8k'
 
   ### START Package Configuration ###

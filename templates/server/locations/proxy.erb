@@ -31,8 +31,14 @@ end
 <% if @proxy_set_body -%>
     proxy_set_body <%= @proxy_set_body %>;
 <% end -%>
-<% if @proxy_buffering -%>
-    proxy_buffering <%= @proxy_buffering %>;
+<% unless @proxy_buffering.nil? -%>
+    proxy_buffering <%= bool2config(@proxy_buffering) %>;
+<% end -%>
+<% if @proxy_buffer_size -%>
+    proxy_buffer_size <%= @proxy_buffer_size %>;
+<% end -%>
+<% if @proxy_buffers -%>
+    proxy_buffers <%= @proxy_buffers %>;
 <% end -%>
 <% if @proxy_busy_buffers_size -%>
     proxy_busy_buffers_size <%= @proxy_busy_buffers_size %>;

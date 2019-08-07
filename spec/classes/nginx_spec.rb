@@ -794,14 +794,14 @@ describe 'nginx' do
               {
                 title: 'should set fastcgi_buffers',
                 attr: 'fastcgi_buffers',
-                value: '32k',
-                match: 'fastcgi_buffers 32k;'
+                value: '4 32k',
+                match: 'fastcgi_buffers 4 32k;'
               },
               {
                 title: 'should set fastcgi_buffer_size',
                 attr: 'fastcgi_buffer_size',
-                value: '16 16k',
-                match: 'fastcgi_buffer_size 16 16k;'
+                value: '16k',
+                match: 'fastcgi_buffer_size 16k;'
               },
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
@@ -897,7 +897,25 @@ describe 'nginx' do
                 attr: 'proxy_max_temp_file_size',
                 value: '1024m',
                 match: %r{^\s*proxy_max_temp_file_size 1024m;}
-              }
+              },
+              {
+                title: 'should set proxy_buffering',
+                attr: 'proxy_buffering',
+                value: false,
+                match: %r{^\s*proxy_buffering off;}
+              },
+              {
+                title: 'should set proxy_buffer_size',
+                attr: 'proxy_buffer_size',
+                value: '16k',
+                match: %r{^\s*proxy_buffer_size 16k;}
+              },
+              {
+                title: 'should set proxy_buffers',
+                attr: 'proxy_buffers',
+                value: '8 16k',
+                match: %r{^\s*proxy_buffers 8 16k;}
+              },
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) { { param[:attr].to_sym => param[:value] } }
