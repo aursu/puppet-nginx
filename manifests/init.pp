@@ -60,7 +60,7 @@ class nginx (
   Variant[String, Array[String]] $nginx_error_log            = "${log_dir}/${nginx::params::nginx_error_log_file}",
   Nginx::ErrorLogSeverity $nginx_error_log_severity          = 'error',
   $pid                                                       = $nginx::params::pid,
-  Optional[Variant[Stdlib::Absolutepath, Boolean]]
+  Optional[Stdlib::Absolutepath]
           $proxy_temp_path                                   = undef,  # 'proxy_temp'
   Optional[String] $proxy_cache_key                          = undef,  # $scheme$proxy_host$request_uri
   $root_group                                                = $nginx::params::root_group,
