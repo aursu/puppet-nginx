@@ -71,4 +71,7 @@ end
   <%- if @ssl_verify_depth -%>
   ssl_verify_depth          <%= @ssl_verify_depth %>;
   <%- end -%>
+  <%- if @ssl_password_file -%>
+  ssl_password_file         <%= @ssl_password_file %>;
+  <%- end -%>
 <% end -%>

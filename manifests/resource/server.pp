@@ -74,6 +74,7 @@
 #   [*ssl_verify_depth*]           - Integer: Sets the verification depth in the client certificates chain.
 #   [*ssl_add_header*]             - Hash: Adds headers to the HTTP response when response code is equal to 200, 204, 301, 302 or 304.
 #     for only SSL enabled server block
+#   [*ssl_password_file*]          - String: File containing the password for the SSL Key file.
 #   [*spdy*]                       - Toggles SPDY protocol.
 #   [*http2*]                      - Toggles HTTP/2 protocol.
 #   [*catch_all_server_name*]      - Bool: Sets server name to be invalid (most common is: server_name _;). false by default.
@@ -201,6 +202,7 @@ define nginx::resource::server (
   Optional[Integer] $ssl_verify_depth                                            = undef,
   Nginx::Switch $spdy                                                            = $nginx::spdy,
   Nginx::Switch $http2                                                           = $nginx::http2,
+  Optional[Stdlib::Absolutepath] $ssl_password_file                              = undef,
   Optional[String] $proxy                                                        = undef,
   Optional[String] $proxy_redirect                                               = undef,
   Optional[Nginx::Time] $proxy_read_timeout                                      = $nginx::proxy_read_timeout,
