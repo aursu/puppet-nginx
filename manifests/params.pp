@@ -107,7 +107,8 @@ class nginx::params {
       }
     }
     'Debian': {
-      if ($facts['os']['name'] == 'ubuntu' and $facts['lsbdistcodename'] in ['lucid', 'precise', 'trusty', 'xenial', 'bionic'])
+      # $facts['os']['distro']['codename'] is not yet well established, so we stick with the legact lsb facts for now
+      if ($facts['os']['name'] == 'ubuntu' and $facts['lsbdistcodename'] in ['lucid', 'precise', 'trusty', 'xenial', 'bionic']) # lint:ignore:legacy_facts
       or ($facts['os']['name'] == 'debian' and $facts['os']['release']['major'] in ['6', '7', '8', '9']) {
         $_module_os_overrides = {
           'manage_repo' => true,
@@ -115,6 +116,7 @@ class nginx::params {
           'log_user'    => 'root',
           'log_group'   => 'adm',
           'log_mode'    => '0755',
+          'run_dir'     => '/run/nginx',
         }
       } else {
         $_module_os_overrides = {
@@ -122,6 +124,7 @@ class nginx::params {
           'log_user'    => 'root',
           'log_group'   => 'adm',
           'log_mode'    => '0755',
+          'run_dir'     => '/run/nginx',
         }
       }
     }

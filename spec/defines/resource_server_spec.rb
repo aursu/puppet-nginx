@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'nginx::resource::server' do
   on_supported_os.each do |os, facts|
-    context "on #{os}" do
+    context "on #{os} with Facter #{facts[:facterversion]} and Puppet #{facts[:puppetversion]}" do
       let(:facts) do
         facts
       end
@@ -440,6 +440,12 @@ describe 'nginx::resource::server' do
               value: true,
               match: %r{^\s*proxy_cache_revalidate on;$}
             },
+            {
+              title: 'should set autoindex_exact_size',
+              attr: 'autoindex_exact_size',
+              value: 'on',
+              match: '  autoindex_exact_size on;'
+            }
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
@@ -461,7 +467,7 @@ describe 'nginx::resource::server' do
             end
           end
 
-          context 'with a naked domain title' do
+          context 'with a naked domain title over http' do
             let(:title) { 'rspec.example.com' }
 
             [
@@ -513,6 +519,64 @@ describe 'nginx::resource::server' do
                   end
                   Array(param[:notmatch]).each do |item|
                     is_expected.to contain_concat__fragment("#{title}-header").without_content(item)
+                  end
+                end
+              end
+            end
+          end
+
+          context 'with a naked domain title over https' do
+            let(:title) { 'rspec.example.com' }
+
+            [
+              {
+                title: 'should not contain non-www to www rewrite',
+                attr: 'rewrite_non_www_to_www',
+                value: false,
+                notmatch: %r{
+                ^
+                \s+server_name\s+rspec\.example\.com;\n
+                \s+return\s+301\s+https://www\.rspec\.example\.com\$request_uri;
+                }x
+              },
+              {
+                title: 'should contain non-www to www rewrite',
+                attr: 'rewrite_non_www_to_www',
+                value: true,
+                match: %r{
+                ^
+                \s+server_name\s+rspec\.example\.com;\n
+                \s+return\s+301\s+https://www\.rspec\.example\.com\$request_uri;
+                }x
+              },
+              {
+                title: 'should rewrite non-www servername to www',
+                attr: 'rewrite_non_www_to_www',
+                value: true,
+                match: %r{\s+server_name\s+www.rspec.example.com;}
+              },
+              {
+                title: 'should not rewrite non-www servername to www',
+                attr: 'rewrite_non_www_to_www',
+                value: false,
+                notmatch: %r{\s+server_name\s+www.rspec.example.com;}
+              }
+            ].each do |param|
+              context "when #{param[:attr]} is #{param[:value]}" do
+                let(:params) { default_params.merge(param[:attr].to_sym => param[:value], ssl: true, ssl_cert: '/tmp/dummy.crt', ssl_key: '/tmp/dummy.key', listen_port: 443) }
+
+                it { is_expected.to contain_concat__fragment("#{title}-ssl-header") }
+                it param[:title] do
+                  matches = Array(param[:match])
+
+                  if matches.all? { |m| m.is_a? Regexp }
+                    matches.each { |item| is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(item) }
+                  else
+                    lines = catalogue.resource('concat::fragment', "#{title}-ssl-header").send(:parameters)[:content].split("\n")
+                    expect(lines & Array(param[:match])).to eq(Array(param[:match]))
+                  end
+                  Array(param[:notmatch]).each do |item|
+                    is_expected.to contain_concat__fragment("#{title}-ssl-header").without_content(item)
                   end
                 end
               end
@@ -1073,6 +1137,12 @@ describe 'nginx::resource::server' do
               value: true,
               match: %r{^\s*proxy_cache_revalidate on;$}
             },
+            {
+              title: 'should set autoindex_exact_size',
+              attr: 'autoindex_exact_size',
+              value: 'on',
+              match: '  autoindex_exact_size on;'
+            }
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let :params do
@@ -1221,7 +1291,7 @@ describe 'nginx::resource::server' do
             let(:params) { { ssl_redirect: true } }
 
             it { is_expected.to contain_concat__fragment("#{title}-header").without_content(%r{^\s*index\s+}) }
-            it { is_expected.to contain_concat__fragment("#{title}-header").without_content(%r{^\s*location\s+}) }
+            it { is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{    return 301 https://\$host\$request_uri;}) }
           end
 
           context 'ssl_redirect_only' do

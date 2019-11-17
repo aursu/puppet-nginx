@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'nginx' do
   on_supported_os.each do |os, facts|
-    context "on #{os}" do
+    context "on #{os} with Facter #{facts[:facterversion]} and Puppet #{facts[:puppetversion]}" do
       let(:facts) do
         facts
       end
@@ -327,12 +327,22 @@ describe 'nginx' do
             )
           end
           it do
-            is_expected.to contain_file('/var/nginx').with(
-              ensure: 'directory',
-              owner: 'root',
-              group: 'root',
-              mode: '0644'
-            )
+            case facts[:osfamily]
+            when 'Debian'
+              is_expected.to contain_file('/run/nginx').with(
+                ensure: 'directory',
+                owner: 'root',
+                group: 'root',
+                mode: '0644'
+              )
+            else
+              is_expected.to contain_file('/var/nginx').with(
+                ensure: 'directory',
+                owner: 'root',
+                group: 'root',
+                mode: '0644'
+              )
+            end
           end
           it do
             is_expected.to contain_file('/etc/nginx/nginx.conf').with(

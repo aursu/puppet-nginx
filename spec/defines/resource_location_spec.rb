@@ -3,7 +3,7 @@ require 'digest/md5'
 
 describe 'nginx::resource::location' do
   on_supported_os.each do |os, facts|
-    context "on #{os}" do
+    context "on #{os} with Facter #{facts[:facterversion]} and Puppet #{facts[:puppetversion]}" do
       let(:facts) do
         facts
       end
@@ -370,6 +370,12 @@ describe 'nginx::resource::location' do
               match: %r{^\s+default_type\s+application/zip;}
             },
             {
+              title: 'should set autoindex_format',
+              attr: 'autoindex_format',
+              value: 'html',
+              match: '    autoindex_format html;'
+            },
+            {
               title: 'should set try_file(s)',
               attr: 'try_files',
               value: %w[name1 name2],
@@ -525,6 +531,26 @@ describe 'nginx::resource::location' do
             it 'does not set autoindex' do
               is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest('location')).
                 without_content(%r{^[ ]+autoindex[^;]+;})
+            end
+          end
+
+          context "when autoindex_localtime is 'on'" do
+            let(:params) { default_params.merge(autoindex_localtime: 'on') }
+
+            it { is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest('location')) }
+            it 'sets autoindex_localtime' do
+              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest('location')).
+                with_content(%r{^[ ]+autoindex_localtime\s+on;})
+            end
+          end
+
+          context 'when autoindex_localtime is not set' do
+            let(:params) { default_params }
+
+            it { is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest('location')) }
+            it 'does not set autoindex_localtime' do
+              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest('location')).
+                without_content(%r{^[ ]+autoindex_localtime[^;]+;})
             end
           end
         end

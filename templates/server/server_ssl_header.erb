@@ -55,11 +55,11 @@ server {
   server_name "";
 <%- elsif @server_name.any? -%>
 <%-   if @rewrite_www_to_non_www -%>
-  server_name           <%= @server_name.join("  ").gsub(/(^| )(www\.)?(?=[a-z0-9])/, '') %>;
+  server_name  <%= @server_name.join("  ").gsub(/(^| )(www\.)?(?=[a-z0-9])/, '') %>;
 <%-   elsif @rewrite_non_www_to_www -%>
-  server_name           <%= @server_name.join("  ").gsub(/(^| )(?=[a-z0-9])/, 'www.') %>;
+  server_name  <%= @server_name.join("  ").gsub(/(^| )(?=[a-z0-9])/, 'www.') %>;
 <%-   else %>
-  server_name           <%= @server_name.join(" ") %>;
+  server_name  <%= @server_name.join(" ") %>;
 <%-   end -%>
 <%- end -%>
 <%= scope.function_template(["nginx/server/server_ssl_settings.erb"]) %>
@@ -105,6 +105,15 @@ server {
 <% end -%>
 <% if defined? @charset -%>
   charset <%= @charset %>;
+<% end -%>
+<% if defined? @autoindex_exact_size -%>
+  autoindex_exact_size <%= @autoindex_exact_size %>;
+<% end -%>
+<% if defined? @autoindex_format -%>
+  autoindex_format <%= @autoindex_format %>;
+<% end -%>
+<% if defined? @autoindex_localtime -%>
+  autoindex_localtime <%= @autoindex_localtime %>;
 <% end -%>
 <% if @absolute_redirect -%>
   absolute_redirect <%= @absolute_redirect %>;
