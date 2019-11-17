@@ -23,6 +23,7 @@ describe 'nginx::resource::upstream define:' do
     }
     nginx::resource::server { 'rack.puppetlabs.com':
       ensure => present,
+      server_proxy_settings => true,
       proxy  => 'http://puppet_rack_app',
     }
     "
