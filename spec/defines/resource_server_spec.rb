@@ -441,6 +441,14 @@ describe 'nginx::resource::server' do
               match: %r{^\s*proxy_cache_revalidate on;$}
             },
             {
+              title: 'should set proxy_ignore_header',
+              attr: 'proxy_ignore_header',
+              value: [
+                'Set-Cookie',
+              ],
+              match: %r{^\s*proxy_ignore_headers Set-Cookie;$}
+            },
+            {
               title: 'should set autoindex_exact_size',
               attr: 'autoindex_exact_size',
               value: 'on',
@@ -1136,6 +1144,14 @@ describe 'nginx::resource::server' do
               attr: 'proxy_cache_revalidate',
               value: true,
               match: %r{^\s*proxy_cache_revalidate on;$}
+            },
+            {
+              title: 'should set proxy_ignore_header',
+              attr: 'proxy_ignore_header',
+              value: [
+                'Set-Cookie',
+              ],
+              match: %r{^\s*proxy_ignore_headers Set-Cookie;$}
             },
             {
               title: 'should set autoindex_exact_size',
