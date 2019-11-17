@@ -157,7 +157,7 @@ describe 'nginx' do
 
             it do
               is_expected.to contain_yumrepo('nginx-release').with(
-                'sslverify' => true,
+                'sslverify' => true
               )
             end
           end
@@ -398,18 +398,15 @@ describe 'nginx' do
           end
 
           it {
-            is_expected.to contain_file('/etc/nginx/nginx.conf')
-              .with_mode('0644')
+            is_expected.to contain_file('/etc/nginx/nginx.conf').with_mode('0644')
           }
 
           it {
-            is_expected.to contain_file('/etc/nginx/conf.d/00-perf.conf')
-              .with_mode('0644')
+            is_expected.to contain_file('/etc/nginx/conf.d/00-perf.conf').with_mode('0644')
           }
 
           it {
-            is_expected.to contain_file('/etc/nginx/conf.d/00-proxy.conf')
-              .with_mode('0644')
+            is_expected.to contain_file('/etc/nginx/conf.d/00-proxy.conf').with_mode('0644')
           }
 
           describe 'nginx.conf template content' do
@@ -776,7 +773,7 @@ describe 'nginx' do
                 attr: 'send_timeout',
                 value: '300s',
                 match: '  send_timeout 300s;'
-              },
+              }
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) { { param[:attr].to_sym => param[:value] } }
@@ -812,7 +809,7 @@ describe 'nginx' do
                 attr: 'fastcgi_buffer_size',
                 value: '16k',
                 match: 'fastcgi_buffer_size 16k;'
-              },
+              }
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) { { param[:attr].to_sym => param[:value] } }
@@ -827,7 +824,7 @@ describe 'nginx' do
           context 'when open_file_cache set' do
             let(:params) do
               {
-                open_file_cache: 'off',
+                open_file_cache: 'off'
               }
             end
 
@@ -837,7 +834,7 @@ describe 'nginx' do
                 attr: 'open_file_cache',
                 value: {
                   'max'      => 2000,
-                  'inactive' => '20s',
+                  'inactive' => '20s'
                 },
                 match: 'open_file_cache max=2000 inactive=20s;'
               },
@@ -845,7 +842,7 @@ describe 'nginx' do
                 title: 'should set open_file_cache with default inactive',
                 attr: 'open_file_cache',
                 value: {
-                  'max' => 2000,
+                  'max' => 2000
                 },
                 match: 'open_file_cache max=2000;'
               },
@@ -866,7 +863,7 @@ describe 'nginx' do
                 attr: 'open_file_cache_min_uses',
                 value: 2,
                 match: 'open_file_cache_min_uses 2;'
-              },
+              }
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) do
@@ -925,7 +922,7 @@ describe 'nginx' do
                 attr: 'proxy_buffers',
                 value: '8 16k',
                 match: %r{^\s*proxy_buffers 8 16k;}
-              },
+              }
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) { { param[:attr].to_sym => param[:value] } }
@@ -960,10 +957,10 @@ describe 'nginx' do
               {
                 title: 'should set gzip_proxied to multiple parameters',
                 attr: 'gzip_proxied',
-                value: [
-                  'private',
-                  'no_etag',
-                ],
+                value: %w[
+                         private
+                         no_etag
+                       ],
                 match: 'gzip_proxied private no_etag;'
               },
               {
@@ -999,7 +996,7 @@ describe 'nginx' do
                 attr: 'gzip_types',
                 value: 'text/plain',
                 match: 'gzip_types text/plain;'
-              },
+              }
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) { { param[:attr].to_sym => param[:value] } }
@@ -1272,10 +1269,12 @@ describe 'nginx' do
           end
 
           context 'when gzip is non-default (on) test upstream gzip defaults' do
-            let(:params) { {
-              gzip: 'on',
-              gzip_disable: 'msie6',
-            } }
+            let(:params) do
+              {
+                gzip: 'on',
+                gzip_disable: 'msie6'
+              }
+            end
 
             it do
               is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(

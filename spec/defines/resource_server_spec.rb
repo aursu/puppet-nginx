@@ -17,7 +17,7 @@ describe 'nginx::resource::server' do
           listen_unix_socket_enable: true,
           fastcgi_index: 'index.php',
           use_default_location: false,
-          server_proxy_settings: true,
+          server_proxy_settings: true
         }
       end
 
@@ -419,7 +419,7 @@ describe 'nginx::resource::server' do
             {
               title: 'should set return to code with url',
               attr: 'return',
-              value: { 301 => 'https://www.domain.com'},
+              value: { 301 => 'https://www.domain.com' },
               match: %r{^\s+return 301 "https://www.domain.com";$}
             },
             {
@@ -444,7 +444,7 @@ describe 'nginx::resource::server' do
               title: 'should set proxy_ignore_header',
               attr: 'proxy_ignore_header',
               value: [
-                'Set-Cookie',
+                'Set-Cookie'
               ],
               match: %r{^\s*proxy_ignore_headers Set-Cookie;$}
             },
@@ -1124,7 +1124,7 @@ describe 'nginx::resource::server' do
             {
               title: 'should set return to code with url',
               attr: 'return',
-              value: { 301 => 'https://www.domain.com'},
+              value: { 301 => 'https://www.domain.com' },
               match: %r{^\s+return 301 "https://www.domain.com";$}
             },
             {
@@ -1149,7 +1149,7 @@ describe 'nginx::resource::server' do
               title: 'should set proxy_ignore_header',
               attr: 'proxy_ignore_header',
               value: [
-                'Set-Cookie',
+                'Set-Cookie'
               ],
               match: %r{^\s*proxy_ignore_headers Set-Cookie;$}
             },
@@ -1242,9 +1242,9 @@ describe 'nginx::resource::server' do
             context "when #{param[:attr]} is #{param[:value]}" do
               let :params do
                 default_params.merge(param[:attr].to_sym => param[:value],
-                                     :ssl                => true,
-                                     :ssl_key            => 'dummy.key',
-                                     :ssl_cert           => 'dummy.crt')
+                                     :ssl => true,
+                                     :ssl_key => 'dummy.key',
+                                     :ssl_cert => 'dummy.crt')
               end
 
               it { is_expected.to contain_concat__fragment("#{title}-ssl-footer") }
@@ -1313,7 +1313,7 @@ describe 'nginx::resource::server' do
           context 'ssl_redirect_only' do
             let(:params) do
               {
-                ssl_redirect_only: true,
+                ssl_redirect_only: true
               }
             end
 
@@ -1380,7 +1380,7 @@ describe 'nginx::resource::server' do
                 ssl: true,
                 ssl_key: 'dummy.key',
                 ssl_cert: 'dummy.crt',
-                use_default_location: true,
+                use_default_location: true
               }
             end
 
@@ -1394,7 +1394,7 @@ describe 'nginx::resource::server' do
                 ssl: true,
                 ssl_key: 'dummy.key',
                 ssl_cert: 'dummy.crt',
-                use_default_location: true,
+                use_default_location: true
               }
             end
 
@@ -1497,7 +1497,7 @@ describe 'nginx::resource::server' do
           context 'when fastcgi_params is non-default' do
             let :params do
               super().merge(fastcgi: 'localhost:9000',
-                                   fastcgi_params: '/etc/nginx/mycustomparams')
+                            fastcgi_params: '/etc/nginx/mycustomparams')
             end
 
             it { is_expected.to contain_nginx__resource__location("#{title}-default").with_fastcgi_params('/etc/nginx/mycustomparams') }
@@ -1507,7 +1507,7 @@ describe 'nginx::resource::server' do
           context 'when fastcgi_params is not defined' do
             let :params do
               super().merge(fastcgi: 'localhost:9000',
-                                   fastcgi_params: nil)
+                            fastcgi_params: nil)
             end
 
             it { is_expected.to contain_nginx__resource__location("#{title}-default").with_fastcgi_params('nil') }
@@ -1541,7 +1541,7 @@ describe 'nginx::resource::server' do
           context 'when uwsgi_params is non-default' do
             let :params do
               super().merge(uwsgi: 'uwsgi_upstream',
-                                   uwsgi_params: '/etc/nginx/bogusparams')
+                            uwsgi_params: '/etc/nginx/bogusparams')
             end
 
             it { is_expected.not_to contain_file('/etc/nginx/bogusparams') }
@@ -1550,8 +1550,8 @@ describe 'nginx::resource::server' do
           context 'when listen_port == ssl_port but ssl = false' do
             let :params do
               super().merge(listen_port: 80,
-                                   ssl_port: 80,
-                                   ssl: false)
+                            ssl_port: 80,
+                            ssl: false)
             end
 
             # TODO: implement test after this can be tested
@@ -1562,7 +1562,7 @@ describe 'nginx::resource::server' do
           context 'when listen_port != ssl_port' do
             let :params do
               super().merge(listen_port: 80,
-                                   ssl_port: 443)
+                            ssl_port: 443)
             end
 
             it { is_expected.to contain_concat__fragment("#{title}-header") }
@@ -1572,9 +1572,9 @@ describe 'nginx::resource::server' do
           context 'when ensure => absent' do
             let :params do
               super().merge(ensure: 'absent',
-                                   ssl: true,
-                                   ssl_key: 'dummy.key',
-                                   ssl_cert: 'dummy.cert')
+                            ssl: true,
+                            ssl_key: 'dummy.key',
+                            ssl_cert: 'dummy.cert')
             end
 
             it { is_expected.to contain_nginx__resource__location("#{title}-default").with_ensure('absent') }
@@ -1585,10 +1585,10 @@ describe 'nginx::resource::server' do
           context 'when ssl => true and ssl_port == listen_port' do
             let :params do
               super().merge(ssl: true,
-                                   listen_port: 80,
-                                   ssl_port: 80,
-                                   ssl_key: 'dummy.key',
-                                   ssl_cert: 'dummy.cert')
+                            listen_port: 80,
+                            ssl_port: 80,
+                            ssl_key: 'dummy.key',
+                            ssl_cert: 'dummy.cert')
             end
 
             it { is_expected.to contain_nginx__resource__location("#{title}-default").with_ssl_only(true) }
@@ -1600,12 +1600,12 @@ describe 'nginx::resource::server' do
           context 'when ssl_client_cert is set' do
             let :params do
               super().merge(ssl: true,
-                                   listen_port: 80,
-                                   ssl_port: 80,
-                                   ssl_key: 'dummy.key',
-                                   ssl_cert: 'dummy.cert',
-                                   ssl_client_cert: 'client.cert',
-                                   ssl_verify_client: 'optional')
+                            listen_port: 80,
+                            ssl_port: 80,
+                            ssl_key: 'dummy.key',
+                            ssl_cert: 'dummy.cert',
+                            ssl_client_cert: 'client.cert',
+                            ssl_verify_client: 'optional')
             end
 
             it { is_expected.to contain_nginx__resource__location("#{title}-default").with_ssl_only(true) }
@@ -1625,9 +1625,9 @@ describe 'nginx::resource::server' do
           context 'when passenger_cgi_param is set and ssl => true' do
             let :params do
               super().merge(passenger_cgi_param: { 'test1' => 'test value 1', 'test2' => 'test value 2', 'test3' => 'test value 3' },
-                                   ssl: true,
-                                   ssl_key: 'dummy.key',
-                                   ssl_cert: 'dummy.cert')
+                            ssl: true,
+                            ssl_key: 'dummy.key',
+                            ssl_cert: 'dummy.cert')
             end
 
             it { is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{passenger_set_cgi_param  test1 test value 1;}) }
@@ -1648,9 +1648,9 @@ describe 'nginx::resource::server' do
           context 'when passenger_set_header is set and ssl => true' do
             let :params do
               super().merge(passenger_set_header: { 'test1' => 'test value 1', 'test2' => 'test value 2', 'test3' => 'test value 3' },
-                                   ssl: true,
-                                   ssl_key: 'dummy.key',
-                                   ssl_cert: 'dummy.cert')
+                            ssl: true,
+                            ssl_key: 'dummy.key',
+                            ssl_cert: 'dummy.cert')
             end
 
             it { is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{passenger_set_header  test1 test value 1;}) }
@@ -1671,9 +1671,9 @@ describe 'nginx::resource::server' do
           context 'when passenger_env_var is set and ssl => true' do
             let :params do
               super().merge(passenger_env_var: { 'test1' => 'test value 1', 'test2' => 'test value 2', 'test3' => 'test value 3' },
-                                   ssl: true,
-                                   ssl_key: 'dummy.key',
-                                   ssl_cert: 'dummy.cert')
+                            ssl: true,
+                            ssl_key: 'dummy.key',
+                            ssl_cert: 'dummy.cert')
             end
 
             it { is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{passenger_env_var  test1 test value 1;}) }
@@ -1718,9 +1718,9 @@ describe 'nginx::resource::server' do
           context 'when add_header is set and ssl => true' do
             let :params do
               super().merge(add_header: { 'header3' => { '' => '\'test value 3\' tv3' }, 'header2' => { 'test value 2' => 'tv2' }, 'header1' => 'test value 1' },
-                                   ssl: true,
-                                   ssl_key: 'dummy.key',
-                                   ssl_cert: 'dummy.cert')
+                            ssl: true,
+                            ssl_key: 'dummy.key',
+                            ssl_cert: 'dummy.cert')
             end
 
             it 'has correctly ordered entries in SSL config' do
@@ -1734,9 +1734,9 @@ describe 'nginx::resource::server' do
           context 'when ssl_add_header is set and ssl => true' do
             let :params do
               super().merge(ssl_add_header: { 'header3' => { '' => '\'test value 3\' tv3' }, 'header2' => { 'test value 2' => 'tv2' }, 'header1' => 'test value 1' },
-                                   ssl: true,
-                                   ssl_key: 'dummy.key',
-                                   ssl_cert: 'dummy.cert')
+                            ssl: true,
+                            ssl_key: 'dummy.key',
+                            ssl_cert: 'dummy.cert')
             end
 
             it 'has correctly ordered entries in SSL config' do
@@ -1751,9 +1751,9 @@ describe 'nginx::resource::server' do
           context 'when set_real_ip_from is set' do
             let :params do
               super().merge(set_real_ip_from: ['192.168.1.1', '127.0.0.1'],
-                                   ssl: true,
-                                   ssl_key: 'dummy.key',
-                                   ssl_cert: 'dummy.cert')
+                            ssl: true,
+                            ssl_key: 'dummy.key',
+                            ssl_cert: 'dummy.cert')
             end
 
             it {
@@ -1769,7 +1769,8 @@ describe 'nginx::resource::server' do
             let :params do
               super().merge(
                 format_log: 'custom',
-                access_log: '/var/log/nginx/www.rspec.example.com.access.log')
+                access_log: '/var/log/nginx/www.rspec.example.com.access.log'
+              )
             end
 
             it {
@@ -1788,9 +1789,9 @@ describe 'nginx::resource::server' do
           context 'should set format_log custom_format' do
             let :params do
               super().merge(access_log: true,
-                                   ssl: true,
-                                   ssl_key: 'dummy.key',
-                                   ssl_cert: 'dummy.cert')
+                            ssl: true,
+                            ssl_key: 'dummy.key',
+                            ssl_cert: 'dummy.cert')
             end
 
             it { is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{access_log\s+/var/log/nginx/ssl-www\.rspec\.example\.com\.access\.log combined;}) }
@@ -1807,9 +1808,9 @@ describe 'nginx::resource::server' do
           context 'should set format_log custom_format' do
             let :params do
               super().merge(error_log: true,
-                                   ssl: true,
-                                   ssl_key: 'dummy.key',
-                                   ssl_cert: 'dummy.cert')
+                            ssl: true,
+                            ssl_key: 'dummy.key',
+                            ssl_cert: 'dummy.cert')
             end
 
             it { is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{error_log\s+/var/log/nginx/ssl-www\.rspec\.example\.com\.error\.log}) }

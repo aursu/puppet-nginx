@@ -3,9 +3,9 @@ require 'spec_helper'
 describe 'nginx::resource::config' do
   let(:title) { 'namevar' }
   let(:params) do
-  {
-    template: 'nginx/conf.d/proxy.conf.erb'
-  }
+    {
+      template: 'nginx/conf.d/proxy.conf.erb'
+    }
   end
   let(:pre_condition) { ['include ::nginx'] }
 

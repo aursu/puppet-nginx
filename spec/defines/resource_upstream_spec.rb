@@ -51,21 +51,21 @@ describe 'nginx::resource::upstream' do
               with_content(%r{upstream #{title}}).
               with(
                 'target' => "/etc/nginx/conf.d/#{title}-upstream.conf",
-                'order'  => 10
+                'order' => 10
               )
           }
           it {
             is_expected.to contain_concat__fragment("#{title}_upstream_member_#{params[:members].keys[0]}").
               with(
                 'target' => "/etc/nginx/conf.d/#{title}-upstream.conf",
-                'order'  => 40
+                'order' => 40
               )
           }
           it {
             is_expected.to contain_concat__fragment("#{title}_upstream_footer").
               with(
                 'target' => "/etc/nginx/conf.d/#{title}-upstream.conf",
-                'order'  => 90
+                'order' => 90
               ).
               with_content("}\n")
           }
@@ -91,21 +91,21 @@ describe 'nginx::resource::upstream' do
                 with_content(%r{upstream #{title}}).
                 with(
                   'target' => "#{conf_d_path}/#{title}-upstream.conf",
-                  'order'  => 10
+                  'order' => 10
                 )
             }
             it {
               is_expected.to contain_concat__fragment("#{title}_upstream_member_#{params[:members].keys[0]}").
                 with(
                   'target' => "#{conf_d_path}/#{title}-upstream.conf",
-                  'order'  => 40
+                  'order' => 40
                 )
             }
             it {
               is_expected.to contain_concat__fragment("#{title}_upstream_footer").
                 with(
                   'target' => "#{conf_d_path}/#{title}-upstream.conf",
-                  'order'  => 90
+                  'order' => 90
                 ).
                 with_content("}\n")
             }
@@ -475,6 +475,7 @@ describe 'nginx::resource::upstream' do
               it {
                 is_expected.to compile.with_all_deps
               }
+
               it {
                 is_expected.to contain_concat("#{conf_d_path}/#{title}-upstream.conf").
                   with_ensure('absent')

@@ -559,7 +559,7 @@ describe 'nginx::resource::location' do
           let :base_params do
             {
               location: 'location',
-              server: 'server1',
+              server: 'server1'
             }
           end
           let :default_params do
@@ -592,17 +592,17 @@ describe 'nginx::resource::location' do
             {
               title: 'should set multiple access_log',
               attr: 'access_log',
-              value: [ '/var/log/nginx/access_log', '/mnt/log0/server1.access_log'],
+              value: ['/var/log/nginx/access_log', '/mnt/log0/server1.access_log'],
               match: [
                 %r{\s+access_log /var/log/nginx/access_log main;},
-                %r{\s+access_log /mnt/log0/server1.access_log main;},
+                %r{\s+access_log /mnt/log0/server1.access_log main;}
               ]
             },
             {
               title: 'should set access_log format',
               attr: 'format_log',
               value: 'combined',
-              match: %r{\s+access_log /var/log/nginx/access_log combined;},
+              match: %r{\s+access_log /var/log/nginx/access_log combined;}
             },
             {
               title: 'should set error_log',
@@ -619,12 +619,12 @@ describe 'nginx::resource::location' do
             {
               title: 'should set multiple error_log',
               attr: 'error_log',
-              value: [ '/var/log/nginx/error_log', '/mnt/log0/server1.error_log'],
+              value: ['/var/log/nginx/error_log', '/mnt/log0/server1.error_log'],
               match: [
                 %r{\s+error_log /var/log/nginx/error_log error;},
-                %r{\s+error_log /mnt/log0/server1.error_log error;},
+                %r{\s+error_log /mnt/log0/server1.error_log error;}
               ]
-            },
+            }
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
@@ -648,7 +648,7 @@ describe 'nginx::resource::location' do
             end
           end
 
-          context "when default parameters" do
+          context 'when default parameters' do
             let(:params) { base_params }
 
             it {
@@ -661,7 +661,7 @@ describe 'nginx::resource::location' do
             }
           end
 
-          context "when access_log is off" do
+          context 'when access_log is off' do
             let(:params) { base_params.merge(access_log: 'off') }
 
             it {
@@ -1349,13 +1349,12 @@ describe 'nginx::resource::location' do
               {
                 location: 'location',
                 server: 'server1',
-                error_pages: { '503' => '/foo.html' },
+                error_pages: { '503' => '/foo.html' }
               }
             end
 
             it do
-              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s))
-                .with_content(%r{\s*error_page\s+503 /foo.html;})
+              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)).with_content(%r{\s*error_page\s+503 /foo.html;})
             end
           end
 
@@ -1364,13 +1363,12 @@ describe 'nginx::resource::location' do
               {
                 location: 'location',
                 server: 'server1',
-                recursive_error_pages: true,
+                recursive_error_pages: true
               }
             end
 
             it do
-              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s))
-                .with_content(%r{\s*recursive_error_pages\s+on;})
+              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)).with_content(%r{\s*recursive_error_pages\s+on;})
             end
           end
         end
