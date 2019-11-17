@@ -958,9 +958,9 @@ describe 'nginx' do
                 title: 'should set gzip_proxied to multiple parameters',
                 attr: 'gzip_proxied',
                 value: %w[
-                         private
-                         no_etag
-                       ],
+                  private
+                  no_etag
+                ],
                 match: 'gzip_proxied private no_etag;'
               },
               {

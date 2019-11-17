@@ -556,3 +556,6 @@ RSpec/ImplicitSubject:
 
 RSpec/EmptyLineAfterExample:
   Enabled: false
+
+Style/SafeNavigation:
+  Enabled: false
