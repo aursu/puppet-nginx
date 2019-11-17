@@ -164,13 +164,6 @@ server {
 <% if @maintenance -%>
   <%= @maintenance_value %>;
 <% end -%>
-<% if @ssl_redirect -%>
-  <%- if @ssl_redirect_host -%>
-  return 301 https://<%= @ssl_redirect_host %><% if @_ssl_redirect_port.to_i != 443 %>:<%= @_ssl_redirect_port %><% end %>$request_uri;
-  <%- else -%>
-  return 301 https://$host<% if @_ssl_redirect_port.to_i != 443 %>:<%= @_ssl_redirect_port %><% end %>$request_uri;
-  <%- end -%>
-<% end -%>
 <% if @index_files and @index_files.count > 0 and not @ssl_only -%>
   index <% Array(@index_files).each do |i| %> <%= i %><% end %>;
 <% end -%>
@@ -236,6 +229,10 @@ server {
 <% if @ssl_redirect -%>
 
   location / {
+<%- if @ssl_redirect_host -%>
+    return 301 https://<%= @ssl_redirect_host %><% if @_ssl_redirect_port.to_i != 443 %>:<%= @_ssl_redirect_port %><% end %>$request_uri;
+<%- else -%>
     return 301 https://$host<% if @_ssl_redirect_port.to_i != 443 %>:<%= @_ssl_redirect_port %><% end %>$request_uri;
+<%- end -%>
   }
 <% end -%>
