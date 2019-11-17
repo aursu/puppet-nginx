@@ -40,6 +40,6 @@ describe 'nginx::resource::upstream define:' do
 
   describe file('/etc/nginx/sites-available/rack.puppetlabs.com.conf') do
     it { is_expected.to be_file }
-    it { is_expected.to contain 'proxy_pass            http://puppet_rack_app;' }
+    it { is_expected.to contain 'proxy_pass http://puppet_rack_app;' }
   end
 end

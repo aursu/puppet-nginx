@@ -38,7 +38,7 @@ describe 'nginx::resource::location define:' do
   describe file('/etc/nginx/sites-available/www.puppetlabs.com.conf') do
     it { is_expected.to be_file }
     it { is_expected.to contain '# MANAGED BY PUPPET' }
-    it { is_expected.to contain '  root      /var/www/www.puppetlabs.com;' }
+    it { is_expected.to contain '  root /var/www/www.puppetlabs.com;' }
     it { is_expected.to contain '  location /media {' }
     it { is_expected.to contain '    root      /var/www/staticfiles/production;' }
     it { is_expected.not_to contain '    root      /var/www/staticfiles/stage;' }
@@ -48,7 +48,7 @@ describe 'nginx::resource::location define:' do
   describe file('/etc/nginx/sites-available/stage.puppetlabs.com.conf') do
     it { is_expected.to be_file }
     it { is_expected.to contain '# MANAGED BY PUPPET' }
-    it { is_expected.to contain '  root      /var/www/stage.puppetlabs.com;' }
+    it { is_expected.to contain '  root /var/www/stage.puppetlabs.com;' }
     it { is_expected.to contain '  location /media {' }
     it { is_expected.to contain '    root      /var/www/staticfiles/stage;' }
     it { is_expected.not_to contain '    root      /var/www/staticfiles/production;' }

@@ -91,7 +91,7 @@ describe 'nginx::resource::upstream define:' do
   describe file('/etc/nginx/sites-available/www.puppetlabs.com.conf') do
     it { is_expected.to be_file }
     it { is_expected.to contain '# MANAGED BY PUPPET' }
-    it { is_expected.to contain '    proxy_pass            http://production;' }
+    it { is_expected.to contain '    proxy_pass http://production;' }
   end
 
   describe file('/etc/nginx/conf.d/socket-upstream.conf') do
@@ -105,7 +105,7 @@ describe 'nginx::resource::upstream define:' do
   describe file('/etc/nginx/sites-available/socket.puppetlabs.com.conf') do
     it { is_expected.to be_file }
     it { is_expected.to contain '# MANAGED BY PUPPET' }
-    it { is_expected.to contain '    proxy_pass            http://socket;' }
+    it { is_expected.to contain '    proxy_pass http://socket;' }
   end
 
   describe service('nginx') do
