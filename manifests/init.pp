@@ -121,7 +121,7 @@ class nginx (
   Optional[Integer] $names_hash_bucket_size                  = undef,  # 32|64|128
   Optional[Integer] $names_hash_max_size                     = undef,  # 512
   Optional[Nginx::ConfigSet] $nginx_cfg_prepend              = undef,
-  Optional[Boolean] $proxy_buffering                         = undef,  # on
+  Optional[Nginx::Switch] $proxy_buffering                   = undef,  # on
   Optional[Nginx::Buffers] $proxy_buffers                    = undef,  # '8 4k|8 8k'
   Optional[Nginx::Size] $proxy_buffer_size                   = undef,  # '4k|8k'
   Optional[String] $proxy_cache                              = undef,  # off

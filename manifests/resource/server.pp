@@ -220,7 +220,7 @@ define nginx::resource::server (
   Optional[String] $proxy_method                                                 = undef,
   Optional[String] $proxy_http_version                                           = undef,
   Optional[String] $proxy_set_body                                               = undef,
-  Optional[String] $proxy_buffering                                              = undef,
+  Optional[Nginx::Switch] $proxy_buffering                                       = undef,
   Optional[Nginx::Size] $proxy_max_temp_file_size                                = undef,
   Optional[Nginx::Size] $proxy_busy_buffers_size                                 = undef,
   Optional[Boolean] $proxy_cache_revalidate                                      = undef,
