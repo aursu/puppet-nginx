@@ -66,12 +66,12 @@ describe 'nginx::resource::upstream define:' do
 
     nginx::resource::server { 'www.puppetlabs.com':
       ensure => present,
-      server_proxy_settings => true,
+      use_default_location => true,
       proxy  => 'http://production',
     }
     nginx::resource::server { 'socket.puppetlabs.com':
       ensure => present,
-      server_proxy_settings => true,
+      use_default_location => true,
       proxy  => 'http://socket',
     }
     "
