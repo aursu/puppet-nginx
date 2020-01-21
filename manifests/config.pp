@@ -29,6 +29,7 @@ class nginx::config {
   $global_owner                   = $nginx::global_owner
   $global_group                   = $nginx::global_group
   $global_mode                    = $nginx::global_mode
+  $limit_req_zone                 = $nginx::limit_req_zone
   $log_dir                        = $nginx::log_dir
   $log_user                       = $nginx::log_user
   $log_group                      = $nginx::log_group
@@ -122,7 +123,6 @@ class nginx::config {
   $open_file_cache                = $nginx::open_file_cache
   $open_file_cache_valid          = $nginx::open_file_cache_valid
   $open_file_cache_min_uses       = $nginx::open_file_cache_min_uses
-  $limit_req_zone                 = $nginx::limit_req_zone
 
   $proxy_connection_upgrade       = $nginx::proxy_connection_upgrade
   $proxy_cache_lock               = $nginx::proxy_cache_lock

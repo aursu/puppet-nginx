@@ -47,6 +47,16 @@ class nginx (
   $global_owner                                              = $nginx::params::global_owner,
   $global_group                                              = $nginx::params::global_group,
   $global_mode                                               = $nginx::params::global_mode,
+  Optional[
+    Hash[
+      String,
+      Struct[{
+        size  => Nginx::Size,
+        key   => String,
+        rate  => Nginx::Rate
+      }]
+    ]
+  ]                 $limit_req_zone                          = undef,
   Stdlib::Absolutepath $log_dir                              = $nginx::params::log_dir,
   String[1] $log_user                                        = $nginx::params::log_user,
   String[1] $log_group                                       = $nginx::params::log_group,
@@ -158,16 +168,6 @@ class nginx (
   Optional[Nginx::FileCache] $open_file_cache                = undef,  # 'off'
   Nginx::Time $open_file_cache_valid                         = 60,
   Integer $open_file_cache_min_uses                          = 1,
-  Optional[
-    Hash[
-      String,
-      Struct[{
-        size  => Nginx::Size,
-        key   => String,
-        rate  => Nginx::Rate
-      }]
-    ]
-  ]                 $limit_req_zone                          = undef,
   Optional[Boolean] $proxy_connection_upgrade                = true,  # see http://nginx.org/en/docs/http/websocket.html
   Optional[Boolean] $proxy_cache_lock                        = undef, # 'off'
   Optional[String] $default_type                             = undef, # 'text/plain'

@@ -45,7 +45,7 @@ describe 'nginx' do
             it { is_expected.to contain_package('nginx') }
             it do
               is_expected.to contain_yumrepo('nginx-release').with(
-                'baseurl'   => "https://nginx.org/packages/#{facts[:operatingsystem] == 'CentOS' ? 'centos' : 'rhel'}/#{facts[:operatingsystemmajrelease]}/$basearch/",
+                'baseurl'   => "https://nginx.org/packages/#{%w[CentOS VirtuozzoLinux].include?(facts[:operatingsystem]) ? 'centos' : 'rhel'}/#{facts[:operatingsystemmajrelease]}/$basearch/",
                 'descr'     => 'nginx repo',
                 'enabled'   => '1',
                 'gpgcheck'  => '1',
@@ -69,7 +69,7 @@ describe 'nginx' do
             it { is_expected.to contain_package('nginx') }
             it do
               is_expected.to contain_yumrepo('nginx-release').with(
-                'baseurl'  => "https://nginx.org/packages/#{facts[:operatingsystem] == 'CentOS' ? 'centos' : 'rhel'}/#{facts[:operatingsystemmajrelease]}/$basearch/",
+                'baseurl'  => "https://nginx.org/packages/#{%w[CentOS VirtuozzoLinux].include?(facts[:operatingsystem]) ? 'centos' : 'rhel'}/#{facts[:operatingsystemmajrelease]}/$basearch/",
                 'descr'    => 'nginx repo',
                 'enabled'  => '1',
                 'gpgcheck' => '1',
@@ -86,7 +86,7 @@ describe 'nginx' do
 
             it do
               is_expected.to contain_yumrepo('nginx-release').with(
-                'baseurl' => "https://nginx.org/packages/mainline/#{facts[:operatingsystem] == 'CentOS' ? 'centos' : 'rhel'}/#{facts[:operatingsystemmajrelease]}/$basearch/"
+                'baseurl' => "https://nginx.org/packages/mainline/#{%w[CentOS VirtuozzoLinux].include?(facts[:operatingsystem]) ? 'centos' : 'rhel'}/#{facts[:operatingsystemmajrelease]}/$basearch/"
               )
             end
             it do
@@ -809,6 +809,26 @@ describe 'nginx' do
                 attr: 'fastcgi_buffer_size',
                 value: '16k',
                 match: 'fastcgi_buffer_size 16k;'
+              },
+              {
+                title: 'should set limit_req_zone',
+                attr: 'limit_req_zone',
+                value: {
+                  'myzone1' => {
+                    'key'  => '$binary_remote_addr',
+                    'size' => '10m',
+                    'rate' => '5r/s'
+                  },
+                  'myzone2' => {
+                    'key'  => '$binary_remote_addr',
+                    'size' => '10m',
+                    'rate' => '5r/s'
+                  }
+                },
+                match: [
+                  'limit_req_zone $binary_remote_addr zone=myzone1:10m rate=5r/s;',
+                  'limit_req_zone $binary_remote_addr zone=myzone2:10m rate=5r/s;'
+                ]
               }
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do

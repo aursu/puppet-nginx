@@ -83,3 +83,6 @@
     rewrite <%= rewrite_rule %>;
     <%- end -%>
 <% end -%>
+<% if @limit_zone -%>
+    limit_req zone=<%= @limit_zone %>;
+<% end -%>
