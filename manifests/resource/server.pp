@@ -99,6 +99,11 @@
 #   [*proxy_method*]               - If defined, overrides the HTTP method of the request to be passed to the backend.
 #   [*proxy_http_version*]         - Sets the proxy http version
 #   [*proxy_set_body*]             - If defined, sets the body passed to the backend.
+#   [*proxy_cookie_domain*]        - Sets a text that should be changed in the domain attribute of the "Set-Cookie" header
+#                                    fields of a proxied server response.
+#                                    Possible values:
+#                                    1) off
+#                                    2) Hash of pairs "domain => replacement"
 #   [*absolute_redirect*]          - Enables or disables the absolute redirect functionality of nginx
 #   [*auth_basic*]                 - This directive includes testing name and password with HTTP Basic Authentication.
 #   [*auth_basic_user_file*]       - This directive sets the htpasswd filename for the authentication realm.
@@ -229,6 +234,7 @@ define nginx::resource::server (
   Optional[Nginx::Size] $proxy_max_temp_file_size                                = undef,
   Optional[Nginx::Size] $proxy_busy_buffers_size                                 = undef,
   Optional[Boolean] $proxy_cache_revalidate                                      = undef,
+  Optional[Variant[Enum['off'],Hash[String, String, 1]]] $proxy_cookie_domain    = undef,
   Array $resolver                                                                = [],
   Optional[String] $fastcgi                                                      = undef,
   Optional[String] $fastcgi_index                                                = undef,
