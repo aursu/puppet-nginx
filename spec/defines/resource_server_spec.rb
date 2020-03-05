@@ -457,11 +457,11 @@ describe 'nginx::resource::server' do
               attr: 'proxy_cookie_domain',
               value: {
                 'www.$host' => '$host',
-                '~\.([a-z]+\.[a-z]+)$' => '$1',
+                '~\.([a-z]+\.[a-z]+)$' => '$1'
               },
               match: [
                 '    proxy_cookie_domain www.$host $host;',
-                '    proxy_cookie_domain ~\.([a-z]+\.[a-z]+)$ $1;',
+                '    proxy_cookie_domain ~\.([a-z]+\.[a-z]+)$ $1;'
               ]
             },
             {
