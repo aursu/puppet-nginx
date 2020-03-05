@@ -97,3 +97,12 @@ end
 <% unless @proxy_cache_revalidate.nil? -%>
     proxy_cache_revalidate <%= bool2config(@proxy_cache_revalidate) %>;
 <% end -%>
+<% unless @proxy_cookie_domain.nil? -%>
+<%   if @proxy_cookie_domain.is_a?(Hash) -%>
+<%-    @proxy_cookie_domain.each do |domain, replacement| -%>
+    proxy_cookie_domain <%= domain %> <%= replacement %>;
+<%     end -%>
+<%   else -%>
+    proxy_cookie_domain off;
+<%   end -%>
+<% end -%>

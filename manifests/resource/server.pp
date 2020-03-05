@@ -234,7 +234,13 @@ define nginx::resource::server (
   Optional[Nginx::Size] $proxy_max_temp_file_size                                = undef,
   Optional[Nginx::Size] $proxy_busy_buffers_size                                 = undef,
   Optional[Boolean] $proxy_cache_revalidate                                      = undef,
-  Optional[Variant[Enum['off'],Hash[String, String, 1]]] $proxy_cookie_domain    = undef,
+  Optional[
+    Variant[
+      Boolean,
+      Enum['off'],
+      Hash[String, String, 1]
+    ]
+  ] $proxy_cookie_domain                                                         = undef,
   Array $resolver                                                                = [],
   Optional[String] $fastcgi                                                      = undef,
   Optional[String] $fastcgi_index                                                = undef,

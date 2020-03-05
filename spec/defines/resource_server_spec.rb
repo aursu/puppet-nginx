@@ -441,6 +441,30 @@ describe 'nginx::resource::server' do
               match: %r{^\s*proxy_cache_revalidate on;$}
             },
             {
+              title: 'should set proxy_cookie_domain to off (false)',
+              attr: 'proxy_cookie_domain',
+              value: false,
+              match: %r{^\s*proxy_cookie_domain off;$}
+            },
+            {
+              title: 'should set proxy_cookie_domain to off',
+              attr: 'proxy_cookie_domain',
+              value: 'off',
+              match: %r{^\s*proxy_cookie_domain off;$}
+            },
+            {
+              title: 'should set proxy_cookie_domain',
+              attr: 'proxy_cookie_domain',
+              value: {
+                'www.$host' => '$host',
+                '~\.([a-z]+\.[a-z]+)$' => '$1',
+              },
+              match: [
+                '    proxy_cookie_domain www.$host $host;',
+                '    proxy_cookie_domain ~\.([a-z]+\.[a-z]+)$ $1;',
+              ]
+            },
+            {
               title: 'should set proxy_ignore_header',
               attr: 'proxy_ignore_header',
               value: [
