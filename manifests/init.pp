@@ -47,16 +47,8 @@ class nginx (
   $global_owner                                              = $nginx::params::global_owner,
   $global_group                                              = $nginx::params::global_group,
   $global_mode                                               = $nginx::params::global_mode,
-  Optional[
-    Hash[
-      String,
-      Struct[{
-        size  => Nginx::Size,
-        key   => String,
-        rate  => Nginx::Rate
-      }]
-    ]
-  ]                 $limit_req_zone                          = undef,
+  Optional[Hash[String, Nginx::LimitReqZone]]
+          $limit_req_zone                                    = undef,
   Stdlib::Absolutepath $log_dir                              = $nginx::params::log_dir,
   String[1] $log_user                                        = $nginx::params::log_user,
   String[1] $log_group                                       = $nginx::params::log_group,
