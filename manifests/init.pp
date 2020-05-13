@@ -188,7 +188,7 @@ class nginx (
   Optional[Nginx::Switch] $ssl_session_tickets               = undef, # 'on'
   Optional[Stdlib::Absolutepath] $ssl_session_ticket_key     = undef,
   Optional[Nginx::Size] $ssl_buffer_size                     = undef, # 16k
-  Optional[Stdlib::Absolutepath] $ssl_crl                    = undef, 
+  Optional[Stdlib::Absolutepath] $ssl_crl                    = undef,
   Optional[Stdlib::Absolutepath] $ssl_stapling_file          = undef,
   Optional[String] $ssl_stapling_responder                   = undef,
   Optional[Stdlib::Absolutepath] $ssl_trusted_certificate    = undef,
