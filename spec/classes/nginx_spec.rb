@@ -105,7 +105,7 @@ describe 'nginx' do
               is_expected.to contain_yumrepo('passenger').with(
                 'baseurl'       => "https://oss-binaries.phusionpassenger.com/yum/passenger/el/#{facts[:operatingsystemmajrelease]}/$basearch",
                 'gpgcheck'      => '0',
-                'repo_gpgcheck' => '1',
+                'repo_gpgcheck' => '0',
                 'gpgkey'        => 'https://packagecloud.io/phusion/passenger/gpgkey'
               )
             end
