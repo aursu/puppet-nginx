@@ -92,7 +92,7 @@ class nginx::package::redhat (
             descr         => 'passenger repo',
             enabled       => '1',
             gpgcheck      => '0',
-            repo_gpgcheck => '1',
+            repo_gpgcheck => '0',
             priority      => '1',
             gpgkey        => 'https://packagecloud.io/phusion/passenger/gpgkey',
             before        => Package['nginx'],
