@@ -1082,6 +1082,12 @@ describe 'nginx::resource::location' do
               ]
             },
             {
+              title: 'should set proxy_no_cache with a string',
+              attr: 'proxy_no_cache',
+              value: '$size_nocache',
+              match: %r{^\s+proxy_cache_bypass\s+\$size_nocache;}
+            },
+            {
               title: 'should set proxy_cache_lock with a string',
               attr: 'proxy_cache_lock',
               value: 'on',

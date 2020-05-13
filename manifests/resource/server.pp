@@ -97,6 +97,7 @@
 #   [*proxy_cache_valid*]          - This directive sets the time for caching different replies.
 #   [*proxy_cache_lock*]           - This directive sets the locking mechanism for pouplating cache.
 #   [*proxy_cache_bypass*]         - Defines conditions which the response will not be cached
+#   [*proxy_no_cache*]             - Defines conditions under which the response will not be saved to a cache
 #   [*proxy_method*]               - If defined, overrides the HTTP method of the request to be passed to the backend.
 #   [*proxy_http_version*]         - Sets the proxy http version
 #   [*proxy_set_body*]             - If defined, sets the body passed to the backend.
@@ -228,6 +229,7 @@ define nginx::resource::server (
   Optional[Variant[Array[String], String]] $proxy_cache_valid                    = undef,
   Optional[Enum['on', 'off']] $proxy_cache_lock                                  = undef,
   Optional[Variant[Array[String], String]] $proxy_cache_bypass                   = undef,
+  Optional[Variant[Array[String], String]] $proxy_no_cache                       = undef,
   Optional[String] $proxy_method                                                 = undef,
   Optional[String] $proxy_http_version                                           = undef,
   Optional[String] $proxy_set_body                                               = undef,
@@ -433,6 +435,7 @@ define nginx::resource::server (
       proxy_cache_lock            => $proxy_cache_lock,
       proxy_set_body              => $proxy_set_body,
       proxy_cache_bypass          => $proxy_cache_bypass,
+      proxy_no_cache              => $proxy_no_cache,
       proxy_buffering             => $proxy_buffering,
       proxy_request_buffering     => $proxy_request_buffering,
       proxy_busy_buffers_size     => $proxy_busy_buffers_size,

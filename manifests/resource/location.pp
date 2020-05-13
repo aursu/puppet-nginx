@@ -105,6 +105,7 @@
 #     different replies.
 #   [*proxy_cache_lock*]           - This directive sets the locking mechanism for pouplating cache.
 #   [*proxy_cache_bypass*]         - Defines conditions which the response will not be cached
+#   [*proxy_no_cache*]             - Defines conditions under which the response will not be saved to a cache
 #   [*proxy_method*]          - If defined, overrides the HTTP method of the
 #     request to be passed to the backend.
 #   [*proxy_http_version*]    - Sets the proxy http version
@@ -257,6 +258,7 @@ define nginx::resource::location (
   Optional[Enum['on', 'off']] $proxy_cache_lock                    = undef,
   Optional[Variant[Array, String]] $proxy_cache_valid              = undef,
   Optional[Variant[Array, String]] $proxy_cache_bypass             = undef,
+  Optional[Variant[Array, String]] $proxy_no_cache                 = undef,
   Optional[String] $proxy_method                                   = undef,
   Optional[String] $proxy_http_version                             = undef,
   Optional[String] $proxy_set_body                                 = undef,

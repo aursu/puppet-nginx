@@ -91,6 +91,11 @@ end
     proxy_cache_bypass <%= line %>;
   <% end -%>
 <% end -%>
+<% if @proxy_no_cache -%>
+  <%- Array(@proxy_no_cache).each do |line| -%>
+    proxy_no_cache <%= line %>;
+  <% end -%>
+<% end -%>
 <% unless @proxy_cache_lock.nil? -%>
     proxy_cache_lock <%= bool2config(@proxy_cache_lock) %>;
 <% end -%>
