@@ -22,6 +22,7 @@ class nginx::package::redhat (
   $package_ensure           = $nginx::package_ensure
   $package_flavor           = $nginx::package_flavor
   $passenger_package_ensure = $nginx::passenger_package_ensure
+  $passenger_package_name   = $nginx::passenger_package_name
   $manage_repo              = $nginx::manage_repo
   $purge_passenger_repo     = $nginx::purge_passenger_repo
 
@@ -104,7 +105,7 @@ class nginx::package::redhat (
             notify => Exec['yum-clean-b114182'],
           }
 
-          package { 'passenger':
+          package { $passenger_package_name:
             ensure  => $passenger_package_ensure,
             require => Yumrepo['passenger'],
           }

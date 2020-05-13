@@ -111,19 +111,32 @@ class nginx::config {
   $server_tokens                  = $nginx::server_tokens
   $spdy                           = $nginx::spdy
   $http2                          = $nginx::http2
+  $ssl_buffer_size                = $nginx::ssl_buffer_size
+  $ssl_ciphers                    = $nginx::ssl_ciphers
+  $ssl_crl                        = $nginx::ssl_crl
+  $ssl_dhparam                    = $nginx::ssl_dhparam
+  $ssl_ecdh_curve                 = $nginx::ssl_ecdh_curve
+  $ssl_session_cache              = $nginx::ssl_session_cache
+  $ssl_session_timeout            = $nginx::ssl_session_timeout
+  $ssl_session_tickets            = $nginx::ssl_session_tickets
+  $ssl_session_ticket_key         = $nginx::ssl_session_ticket_key
   $ssl_stapling                   = $nginx::ssl_stapling
+  $ssl_stapling_file              = $nginx::ssl_stapling_file
+  $ssl_stapling_responder         = $nginx::ssl_stapling_responder
+  $ssl_stapling_verify            = $nginx::ssl_stapling_verify
+  $ssl_trusted_certificate        = $nginx::ssl_trusted_certificate
+  $ssl_password_file              = $nginx::ssl_password_file
+  $ssl_prefer_server_ciphers      = $nginx::ssl_prefer_server_ciphers
+  $ssl_protocols                  = $nginx::ssl_protocols
+  $ssl_verify_depth               = $nginx::ssl_verify_depth
   $types_hash_bucket_size         = $nginx::types_hash_bucket_size
   $types_hash_max_size            = $nginx::types_hash_max_size
   $worker_connections             = $nginx::worker_connections
   $worker_processes               = $nginx::worker_processes
   $worker_rlimit_nofile           = $nginx::worker_rlimit_nofile
-  $ssl_prefer_server_ciphers      = $nginx::ssl_prefer_server_ciphers
-  $ssl_protocols                  = $nginx::ssl_protocols
-  $ssl_ciphers                    = $nginx::ssl_ciphers
   $open_file_cache                = $nginx::open_file_cache
   $open_file_cache_valid          = $nginx::open_file_cache_valid
   $open_file_cache_min_uses       = $nginx::open_file_cache_min_uses
-
   $proxy_connection_upgrade       = $nginx::proxy_connection_upgrade
   $proxy_cache_lock               = $nginx::proxy_cache_lock
   $default_type                   = $nginx::default_type
@@ -137,6 +150,7 @@ class nginx::config {
 
   $fastcgi_buffers                = $nginx::fastcgi_buffers
   $fastcgi_buffer_size            = $nginx::fastcgi_buffer_size
+  $include_modules_enabled        = $nginx::include_modules_enabled
 
   # Non-configurable settings
   $conf_template                  = 'nginx/conf.d/nginx.conf.erb'

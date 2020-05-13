@@ -25,6 +25,14 @@
 #   include nginx
 # }
 #
+# @param include_modules_enabled
+#   When set, nginx will include module configurations files installed in the
+#   /etc/nginx/modules-enabled directory.
+#
+# @param passenger_package_name
+#   The name of the package to install in order for the passenger module of
+#   nginx being usable.
+#
 # @param nginx_version
 #   The version of nginx installed (or being installed).
 #   Unfortunately, different versions of nginx may need configuring
@@ -73,6 +81,7 @@ class nginx (
   Boolean $super_user                                        = $nginx::params::super_user,
   $temp_dir                                                  = $nginx::params::temp_dir,
   Boolean $server_purge                                      = false,
+  Boolean $include_modules_enabled                           = $nginx::params::include_modules_enabled,
 
   # Primary Templates
   String $conf_template                                      = 'nginx/conf.d/nginx.conf.erb',
@@ -146,6 +155,7 @@ class nginx (
   Nginx::Switch $spdy                                        = false,
   Nginx::Switch $http2                                       = false,
   Nginx::Switch $ssl_stapling                                = false,
+  Optional[Nginx::Switch] $ssl_stapling_verify               = undef, # 'off',
   Stdlib::Absolutepath $snippets_dir                         = $nginx::params::snippets_dir,
   Boolean $manage_snippets_dir                               = false,
   Optional[Nginx::Size] $types_hash_bucket_size              = undef,  # 64
@@ -172,6 +182,18 @@ class nginx (
   Optional[Nginx::Time] $client_header_timeout               = undef, # 60s
   Optional[Nginx::Buffers] $fastcgi_buffers                  = undef, # '8 4k|8 8k'
   Optional[Nginx::Size] $fastcgi_buffer_size                 = undef, # '4k|8k'
+  Optional[String] $ssl_ecdh_curve                           = undef, # 'auto'
+  Optional[String] $ssl_session_cache                        = undef, # 'none'
+  Optional[Nginx::Time] $ssl_session_timeout                 = undef, # 5m
+  Optional[Nginx::Switch] $ssl_session_tickets               = undef, # 'on'
+  Optional[Stdlib::Absolutepath] $ssl_session_ticket_key     = undef,
+  Optional[Nginx::Size] $ssl_buffer_size                     = undef, # 16k
+  Optional[Stdlib::Absolutepath] $ssl_crl                    = undef, 
+  Optional[Stdlib::Absolutepath] $ssl_stapling_file          = undef,
+  Optional[String] $ssl_stapling_responder                   = undef,
+  Optional[Stdlib::Absolutepath] $ssl_trusted_certificate    = undef,
+  Optional[Integer] $ssl_verify_depth                        = undef, # 1
+  Optional[Stdlib::Absolutepath] $ssl_password_file          = undef,
 
   ### START Package Configuration ###
   $package_ensure                                            = present,
@@ -184,6 +206,7 @@ class nginx (
   Boolean $mime_types_preserve_defaults                      = false,
   Optional[String] $repo_release                             = undef,
   $passenger_package_ensure                                  = 'present',
+  String[1] $passenger_package_name                          = $nginx::params::passenger_package_name,
   Optional[Stdlib::HTTPUrl] $repo_source                     = undef,
   ### END Package Configuration ###
 

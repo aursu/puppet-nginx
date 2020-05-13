@@ -32,6 +32,7 @@
 #   [*proxy_send_timeout*]         - Override the default proxy send timeout value of 90 seconds
 #   [*proxy_redirect*]             - Override the default proxy_redirect value of off.
 #   [*proxy_buffering*]            - If defined, sets the proxy_buffering to the passed value.
+#   [*proxy_request_buffering*]    - If defined, sets the proxy_request_buffering to the passed value.
 #   [*proxy_max_temp_file_size*]   - Sets the maximum size of the temporary buffer file.
 #   [*proxy_busy_buffers_size*]    - Sets the total size of buffers that can be
 #     busy sending a response to the client while the response is not yet fully read.
@@ -185,7 +186,7 @@ define nginx::resource::server (
   Optional[Variant[String, Boolean]] $ssl_cert                                   = undef,
   Optional[String] $ssl_client_cert                                              = undef,
   String $ssl_verify_client                                                      = 'on',
-  Optional[String] $ssl_dhparam                                                  = $nginx::ssl_dhparam,
+  Optional[String] $ssl_dhparam                                                  = undef,
   Optional[String] $ssl_ecdh_curve                                               = undef,
   Boolean $ssl_redirect                                                          = false,
   Boolean $ssl_redirect_only                                                     = false,
@@ -194,10 +195,10 @@ define nginx::resource::server (
   Optional[String] $ssl_redirect_url                                             = undef,
   Optional[Variant[String, Boolean]] $ssl_key                                    = undef,
   Integer $ssl_port                                                              = 443,
-  Optional[Nginx::Switch] $ssl_prefer_server_ciphers                             = $nginx::ssl_prefer_server_ciphers,
-  String $ssl_protocols                                                          = $nginx::ssl_protocols,
-  $ssl_buffer_size                                                               = undef,
-  String $ssl_ciphers                                                            = $nginx::ssl_ciphers,
+  Optional[Nginx::Switch] $ssl_prefer_server_ciphers                             = undef,
+  Optional[String] $ssl_protocols                                                = undef,
+  Optional[Nginx::Size] $ssl_buffer_size                                         = undef,
+  Optional[String] $ssl_ciphers                                                  = undef,
   Optional[String] $ssl_cache                                                    = undef, # none
   Optional[String] $ssl_crl                                                      = undef,
   Optional[Nginx::Switch] $ssl_stapling                                          = undef, # off
@@ -231,6 +232,7 @@ define nginx::resource::server (
   Optional[String] $proxy_http_version                                           = undef,
   Optional[String] $proxy_set_body                                               = undef,
   Optional[Nginx::Switch] $proxy_buffering                                       = undef,
+  Optional[Nginx::Switch] $proxy_request_buffering                               = undef,
   Optional[Nginx::Size] $proxy_max_temp_file_size                                = undef,
   Optional[Nginx::Size] $proxy_busy_buffers_size                                 = undef,
   Optional[Boolean] $proxy_cache_revalidate                                      = undef,
@@ -432,6 +434,7 @@ define nginx::resource::server (
       proxy_set_body              => $proxy_set_body,
       proxy_cache_bypass          => $proxy_cache_bypass,
       proxy_buffering             => $proxy_buffering,
+      proxy_request_buffering     => $proxy_request_buffering,
       proxy_busy_buffers_size     => $proxy_busy_buffers_size,
       proxy_max_temp_file_size    => $proxy_max_temp_file_size,
       fastcgi                     => $fastcgi,
