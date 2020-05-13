@@ -164,9 +164,9 @@ http {
 <% if @ssl_ciphers -%>
   ssl_ciphers               <%= @ssl_ciphers %>;
 <% end -%>
-<% if @ssl_prefer_server_ciphers -%>
-  ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
-<% end -%>
+<%- unless @ssl_prefer_server_ciphers.nil? -%>
+ssl_prefer_server_ciphers <%= bool2config(@ssl_prefer_server_ciphers) %>;
+<%- end -%>
 <% if @ssl_crl -%>
   ssl_crl                   <%= @ssl_crl %>;
 <% end -%>
