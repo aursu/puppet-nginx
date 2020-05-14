@@ -49,9 +49,6 @@ end
 <% if @proxy_max_temp_file_size -%>
     proxy_max_temp_file_size <%= @proxy_max_temp_file_size %>;
 <% end -%>
-<% if @proxy_request_buffering -%>
-    proxy_request_buffering <%= @proxy_request_buffering %>;
-<% end -%>
 <% if @proxy_set_header.is_a?(Array) -%>
     <%- @proxy_set_header.each do |header| -%>
     proxy_set_header <%= header %>;
