@@ -45,6 +45,11 @@ describe 'nginx::resource::map' do
         end
 
         describe 'basic assumptions on stream mapfiles' do
+          let :pre_condition do
+            [
+              "class {'::nginx': stream => true, }"
+            ]
+          end
           let :params do
             default_params.merge(
               context: 'stream'

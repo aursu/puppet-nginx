@@ -1492,8 +1492,8 @@ describe 'nginx' do
             end
 
             it do
-              is_expected.to contain_file('/etc/nginx/nginx.conf').with_content(
-                %r{  gzip_static       on;}
+              is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
+                %r{gzip_static on;}
               )
             end
           end
