@@ -3,7 +3,7 @@ require 'spec_helper_acceptance'
 describe 'nginx class:' do
   case fact('osfamily')
   when 'RedHat'
-    pkg_cmd = 'yum info nginx | grep "^From repo"'
+    pkg_cmd = 'yum info passenger | grep "^From repo"'
     pkg_remove_cmd = 'yum -y remove nginx nginx-filesystem passenger'
     pkg_match = %r{passenger}
   when 'Debian'
@@ -52,14 +52,14 @@ describe 'nginx class:' do
 
     describe package('nginx') do
       it { is_expected.to be_installed }
-      it 'comes from the expected source' do
-        pkg_output = shell(pkg_cmd)
-        expect(pkg_output.stdout).to match pkg_match
-      end
     end
 
     describe package('passenger') do
       it { is_expected.to be_installed }
+      it 'comes from the expected source' do
+        pkg_output = shell(pkg_cmd)
+        expect(pkg_output.stdout).to match pkg_match
+      end
     end
 
     describe service('nginx') do
