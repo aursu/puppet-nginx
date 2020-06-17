@@ -118,6 +118,12 @@ class nginx (
   Optional[Nginx::Switch] $gzip_vary                         = undef,  # 'off'
   Optional[Nginx::ConfigSet] $http_cfg_prepend               = undef,
   Optional[Nginx::ConfigSet] $http_cfg_append                = undef,
+  Optional[
+      Variant[
+        Enum['always'],
+        Nginx::Switch
+      ]
+  ] $gzip_static                                             = undef,
   Optional[Variant[Array[String], String]] $http_raw_prepend = undef,
   Optional[Variant[Array[String], String]] $http_raw_append  = undef,
   Optional[Nginx::Switch] $http_tcp_nodelay                  = undef,  # 'on'

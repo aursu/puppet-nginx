@@ -1,0 +1,15 @@
+<%-
+def bool2config(b)
+    case b
+    when true
+        'on'
+    when false, nil
+        'off'
+    else
+        b.to_s
+    end
+end
+-%>
+<% unless @gzip_static.nil? -%>
+  gzip_static <%= bool2config(@gzip_static) %>;
+<% end -%>

@@ -113,6 +113,9 @@ server {
 <% if defined? @gzip_types -%>
   gzip_types <%= @gzip_types %>;
 <% end -%>
+<% unless @gzip_static.nil? -%>
+  gzip_static <%= bool2config(@gzip_static) %>;
+<% end -%>
 <%# make sure that allow comes before deny by forcing the allow key (if it -%>
 <%# exists) to be first in the output order.  The hash keys also need to be -%>
 <%# sorted so that the ordering is stable. -%>

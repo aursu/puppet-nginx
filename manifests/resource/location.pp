@@ -135,6 +135,7 @@
 #   [*add_header*]      - Hash: Adds headers to the location block.  If any are specified, locations will no longer inherit headers from the parent server context
 #   [*error_pages*]                - Hash: setup errors pages, hash key is the http code and hash value the page
 #   [*recursive_error_pages*]      - Enables or disables doing several redirects using the error_page directive.
+#   [*gzip_static*]     - Defines gzip_static, nginx default is off
 #
 # Actions:
 #
@@ -287,6 +288,12 @@ define nginx::resource::location (
   Nginx::ErrorLogSeverity $error_log_level                         = 'error',
   Optional[Hash] $error_pages                                      = undef,
   Optional[Nginx::Switch] $recursive_error_pages                   = undef, # 'off'
+  Optional[
+      Variant[
+        Enum['always'],
+        Nginx::Switch
+      ]
+  ] $gzip_static                                                   = undef,
 ) {
 
   if ! defined(Class['nginx']) {

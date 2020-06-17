@@ -144,6 +144,7 @@
 #   [*gzip_types*]                 - Defines gzip_types, nginx default is text/html
 #   [*send_timeout*]               - Sets a timeout for transmitting a response to the client. The timeout is set only between two
 #                                    successive write operations, not for the transmission of the whole response
+#   [*gzip_static*]                - Defines gzip_static, nginx default is off
 #   [*owner*]                      - Defines owner of the .conf file
 #   [*group*]                      - Defines group of the .conf file
 #   [*mode*]                       - Defines mode of the .conf file
@@ -309,6 +310,12 @@ define nginx::resource::server (
   $string_mappings                                                               = {},
   $geo_mappings                                                                  = {},
   Optional[String] $gzip_types                                                   = undef,
+  Optional[
+      Variant[
+        Enum['always'],
+        Nginx::Switch
+      ]
+  ] $gzip_static                                                                 = undef,
   String $owner                                                                  = $nginx::global_owner,
   String $group                                                                  = $nginx::global_group,
   String $mode                                                                   = $nginx::global_mode,
