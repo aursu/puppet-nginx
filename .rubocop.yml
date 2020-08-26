@@ -527,3 +527,6 @@ Style/FrozenStringLiteralComment:
 
 Style/SafeNavigation:
   Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false

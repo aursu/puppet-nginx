@@ -331,16 +331,19 @@ describe 'nginx' do
               mode: '0644'
             )
           end
-          it do
-            case facts[:osfamily]
-            when 'Debian'
+
+          case facts[:osfamily]
+          when 'Debian'
+            it do
               is_expected.to contain_file('/run/nginx').with(
                 ensure: 'directory',
                 owner: 'root',
                 group: 'root',
                 mode: '0644'
               )
-            else
+            end
+          else
+            it do
               is_expected.to contain_file('/var/nginx').with(
                 ensure: 'directory',
                 owner: 'root',
