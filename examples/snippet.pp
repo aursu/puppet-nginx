@@ -1,4 +1,3 @@
-
 class { 'nginx':
   snippets_dir        => '/etc/nginx/snippets',
 }
@@ -9,11 +8,11 @@ location @custom_451_error {
 }
 | SNIPPET
 
-nginx::resource::snippet { 'test_snippet':
+nginx::resource::snippet {'test_snippet':
   raw_content   => $snippet,
 }
 
-nginx::resource::server { 'test.local:8080':
+nginx::resource::server {'test.local:8080':
   ensure        => present,
   listen_port   => 8080,
   server_name   => ['test.local test'],
@@ -21,7 +20,7 @@ nginx::resource::server { 'test.local:8080':
   try_files     => [ 'non-existant', '@custom_451_error'],
 }
 
-nginx::resource::server { 'test.local:8081':
+nginx::resource::server {'test.local:8081':
   ensure        => present,
   listen_port   => 8081,
   server_name   => ['test.local test'],

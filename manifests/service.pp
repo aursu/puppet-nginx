@@ -21,7 +21,6 @@ class nginx::service(
   $service_flags   = $nginx::service_flags,
   $service_manage  = $nginx::service_manage,
 ) {
-
   assert_private()
 
   if $service_manage {
