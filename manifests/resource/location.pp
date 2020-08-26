@@ -243,7 +243,7 @@ define nginx::resource::location (
   Optional[Enum['any', 'all']] $location_satisfy                   = undef,
   Optional[Array] $location_allow                                  = undef,
   Optional[Array] $location_deny                                   = undef,
-  Optional[Boolean ] $stub_status                                  = undef,
+  Optional[Boolean] $stub_status                                  = undef,
   Optional[Variant[String, Array]] $raw_prepend                    = undef,
   Optional[Variant[String, Array]] $raw_append                     = undef,
   Optional[Hash] $location_custom_cfg                              = undef,
@@ -295,7 +295,6 @@ define nginx::resource::location (
       ]
   ] $gzip_static                                                   = undef,
 ) {
-
   if ! defined(Class['nginx']) {
     fail('You must include the nginx base class before using any defined resources')
   }

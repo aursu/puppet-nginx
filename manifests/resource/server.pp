@@ -329,7 +329,6 @@ define nginx::resource::server (
   Optional[Nginx::ReturnFormat] $return                                          = undef,
   Boolean $server_proxy_settings                                                 = false,
 ) {
-
   if ! defined(Class['nginx']) {
     fail('You must include the nginx base class before using any defined resources')
   }
@@ -415,7 +414,7 @@ define nginx::resource::server (
   # ssl redirect and no ssl -> false
   if (!$_ssl_redirect or $ssl) and $use_default_location {
     # Create the default location reference for the server
-    nginx::resource::location {"${name_sanitized}-default":
+    nginx::resource::location { "${name_sanitized}-default":
       ensure                      => $ensure,
       server                      => $name_sanitized,
       ssl                         => $ssl,
@@ -536,7 +535,7 @@ define nginx::resource::server (
   }
 
   unless $nginx::confd_only {
-    file{ "${name_sanitized}.conf symlink":
+    file { "${name_sanitized}.conf symlink":
       ensure  => $server_symlink_ensure,
       path    => "${server_enable_dir}/${name_sanitized}.conf",
       target  => $config_file,

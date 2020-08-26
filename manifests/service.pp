@@ -13,7 +13,7 @@
 # Sample Usage:
 #
 # This class file is not called directly
-class nginx::service(
+class nginx::service (
   $service_restart = $nginx::service_restart,
   $service_ensure  = $nginx::service_ensure,
   $service_enable  = $nginx::service_enable,

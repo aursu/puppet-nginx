@@ -56,7 +56,7 @@ class nginx::package::debian {
         apt::source { 'nginx':
           location => $mainline_repo_source,
           repos    => 'nginx',
-          key      => { 'id' => '573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62'},
+          key      => { 'id' => '573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62' },
           release  => $release,
         }
       }
@@ -68,7 +68,7 @@ class nginx::package::debian {
         apt::source { 'nginx':
           location => $passenger_repo_source,
           repos    => 'main',
-          key      => { 'id' => '16378A33A6EF16762922526E561F9B9CAC40B2F7'},
+          key      => { 'id' => '16378A33A6EF16762922526E561F9B9CAC40B2F7' },
         }
 
         package { $passenger_package_name:

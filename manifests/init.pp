@@ -245,7 +245,6 @@ class nginx (
 
   ### END Hiera Lookups ###
 ) inherits nginx::params {
-
   contain 'nginx::package'
   contain 'nginx::config'
   contain 'nginx::service'

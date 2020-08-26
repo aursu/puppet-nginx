@@ -96,7 +96,6 @@ define nginx::resource::upstream (
   Optional[Nginx::Time] $upstream_fail_timeout = undef, # 10s
   Optional[Integer] $upstream_max_fails        = undef, # 1
 ) {
-
   if ! defined(Class['nginx']) {
     fail('You must include the nginx base class before using any defined resources')
   }
@@ -138,7 +137,7 @@ define nginx::resource::upstream (
 
   if ! empty($members) {
     $members.each |$member,$values| {
-      $member_values = merge($member_defaults,$values,{'upstream' => $name,'context' => $context})
+      $member_values = merge($member_defaults,$values,{ 'upstream' => $name,'context' => $context })
 
       if $context == 'stream' and $member_values['route'] {
         fail('The parameter "route" is not available for upstreams with context "stream"')

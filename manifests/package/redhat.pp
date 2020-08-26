@@ -13,10 +13,10 @@
 # Sample Usage:
 #
 # This class file is not called directly
+#
 class nginx::package::redhat (
   Variant[Boolean, Enum['absent']] $sslverify = $nginx::yum_repo_sslverify,
-)
-{
+) {
   $package_name             = $nginx::package_name
   $package_source           = $nginx::package_source
   $package_ensure           = $nginx::package_ensure
