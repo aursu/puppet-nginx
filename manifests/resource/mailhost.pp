@@ -133,7 +133,7 @@ define nginx::resource::mailhost (
   File {
     owner => 'root',
     group => $root_group,
-    mode  => '0644',
+    mode  => $nginx::global_mode,
   }
 
   $config_dir  = "${nginx::conf_dir}/conf.mail.d"
@@ -153,9 +153,10 @@ define nginx::resource::mailhost (
   }
 
   concat { $config_file:
+    ensure  => $ensure,
     owner   => 'root',
     group   => $root_group,
-    mode    => '0644',
+    mode    => $nginx::global_mode,
     notify  => Class['::nginx::service'],
     require => File[$config_dir],
   }

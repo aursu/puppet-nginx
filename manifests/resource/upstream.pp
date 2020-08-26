@@ -118,7 +118,7 @@ define nginx::resource::upstream (
   Concat {
     owner => 'root',
     group => $nginx::root_group,
-    mode  => '0644',
+    mode  => $nginx::global_mode,
   }
 
   concat { "${conf_dir}/${name}-upstream.conf":
