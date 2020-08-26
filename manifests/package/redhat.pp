@@ -109,7 +109,6 @@ class nginx::package::redhat (
             ensure  => $passenger_package_ensure,
             require => Yumrepo['passenger'],
           }
-
         } else {
           fail("${facts['os']['name']} version ${facts['os']['release']['major']} is unsupported with \$package_source 'passenger'")
         }
@@ -147,5 +146,4 @@ class nginx::package::redhat (
     ensure => $package_ensure,
     name   => $package_name,
   }
-
 }
