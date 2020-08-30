@@ -243,7 +243,7 @@ define nginx::resource::location (
   Optional[Enum['any', 'all']] $location_satisfy                   = undef,
   Optional[Array] $location_allow                                  = undef,
   Optional[Array] $location_deny                                   = undef,
-  Optional[Boolean] $stub_status                                  = undef,
+  Optional[Boolean] $stub_status                                   = undef,
   Optional[Variant[String, Array]] $raw_prepend                    = undef,
   Optional[Variant[String, Array]] $raw_append                     = undef,
   Optional[Hash] $location_custom_cfg                              = undef,
@@ -330,7 +330,7 @@ define nginx::resource::location (
     $fastcgi_params == "${nginx::conf_dir}/fastcgi.conf"
   ) {
     file { $fastcgi_params:
-      ensure  => file,
+      ensure  => 'file',
       mode    => $nginx::global_mode,
       content => template('nginx/server/fastcgi.conf.erb'),
     }
@@ -338,7 +338,7 @@ define nginx::resource::location (
 
   if $ensure == 'present' and $uwsgi != undef and !defined(File[$uwsgi_params]) and $uwsgi_params == "${nginx::conf_dir}/uwsgi_params" {
     file { $uwsgi_params:
-      ensure  => file,
+      ensure  => 'file',
       mode    => $nginx::global_mode,
       content => template('nginx/server/uwsgi_params.erb'),
     }

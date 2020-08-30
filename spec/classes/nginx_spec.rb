@@ -105,8 +105,8 @@ describe 'nginx' do
               is_expected.to contain_yumrepo('passenger').with(
                 'baseurl'       => "https://oss-binaries.phusionpassenger.com/yum/passenger/el/#{facts[:operatingsystemmajrelease]}/$basearch",
                 'gpgcheck'      => '0',
-                'repo_gpgcheck' => '0',
-                'gpgkey'        => 'https://packagecloud.io/phusion/passenger/gpgkey'
+                'repo_gpgcheck' => '1',
+                'gpgkey'        => 'https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key.txt'
               )
             end
             it do
@@ -937,6 +937,15 @@ describe 'nginx' do
                 attr: 'ssl_password_file',
                 value: '/path/to/password_file',
                 match: '  ssl_password_file         /path/to/password_file;'
+              },
+              {
+                title: 'should contain debug_connection directives',
+                attr: 'debug_connections',
+                value: %w[127.0.0.1 unix:],
+                match: [
+                  '  debug_connection 127.0.0.1;',
+                  '  debug_connection unix:;'
+                ]
               }
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do

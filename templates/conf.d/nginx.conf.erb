@@ -57,6 +57,9 @@ events {
 <%- if @events_use -%>
   use <%= @events_use %>;
 <%- end -%>
+<%- @debug_connections.each do |address| -%>
+  debug_connection <%= address %>;
+<%- end -%>
 }
 
 http {

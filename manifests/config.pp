@@ -57,6 +57,7 @@ class nginx::config {
   $send_timeout                   = $nginx::send_timeout
   $lingering_timeout              = $nginx::lingering_timeout
   $events_use                     = $nginx::events_use
+  $debug_connections              = $nginx::debug_connections
   $fastcgi_cache_key              = $nginx::fastcgi_cache_key
   $fastcgi_cache_path             = $nginx::fastcgi_cache_path
   $fastcgi_cache_use_stale        = $nginx::fastcgi_cache_use_stale

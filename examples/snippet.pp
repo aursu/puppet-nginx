@@ -2,12 +2,14 @@ class { 'nginx':
   snippets_dir        => '/etc/nginx/snippets',
 }
 
+# https://github.com/relud/puppet-lint-strict_indent-check/issues/20
+# lint:ignore:strict_indent
 $snippet = @("SNIPPET"/L)
 location @custom_451_error {
   return 451;
 }
 | SNIPPET
-
+# lint:endignore
 nginx::resource::snippet { 'test_snippet':
   raw_content   => $snippet,
 }

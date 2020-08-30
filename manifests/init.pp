@@ -40,6 +40,10 @@
 #   already installed.  If the fact is unavailable, it defaults to '1.6.0'.
 #   You may need to set this manually to get a working and idempotent
 #   configuration.
+#
+# @param debug_connections
+#   Configures nginx `debug_connection` lines in the `events` section of the nginx config.
+#   See http://nginx.org/en/docs/ngx_core_module.html#debug_connection
 class nginx (
   ### START Nginx Configuration ###
   Optional[Variant[Stdlib::Absolutepath, Boolean]]
@@ -97,6 +101,7 @@ class nginx (
   Optional[Nginx::Time] $lingering_timeout                   = undef,  # 5s
   Optional[Nginx::Switch] $etag                              = undef,  # 'on'
   Optional[Nginx::ConnectionProcessing] $events_use          = undef,  # 'epoll'
+  Array[Nginx::DebugConnection] $debug_connections           = [],
   Optional[String] $fastcgi_cache_key                        = undef,  # undef
   Optional[Hash[String, Nginx::CachePath, 1]]
                     $fastcgi_cache_path                      = undef,  # undef
