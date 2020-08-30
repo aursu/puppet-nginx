@@ -10,8 +10,12 @@ describe 'Nginx::Time' do
   it { is_expected.to allow_value('1y') }
 
   it { is_expected.not_to allow_value(:undef) }
-  it { is_expected.not_to allow_value(1) }
-  it { is_expected.not_to allow_value(10) }
+
+  # A value without a suffix means seconds. It is recommended to always specify a suffix.
+  # http://nginx.org/en/docs/syntax.html
+  # it { is_expected.not_to allow_value(1) }
+  # it { is_expected.not_to allow_value(10) }
+
   it { is_expected.not_to allow_value('') }
   it { is_expected.not_to allow_value('10S') }
   it { is_expected.not_to allow_value('10.0s') }

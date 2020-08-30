@@ -10,5 +10,5 @@
 # A value without a suffix means seconds
 type Nginx::Time = Variant[
     Integer,
-    Pattern[/[1-9][0-9]*([smhdwMy]|ms)?/]
+    Pattern[/^[1-9][0-9]*([smhdwMy]|ms)?$/]
 ]

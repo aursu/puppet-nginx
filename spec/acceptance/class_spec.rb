@@ -3,7 +3,7 @@ require 'spec_helper_acceptance'
 describe 'nginx class:' do
   case fact('osfamily')
   when 'RedHat'
-    pkg_cmd = 'yum info passenger | grep "^From repo"'
+    pkg_cmd = 'yum info nginx | grep "^From repo"'
     pkg_remove_cmd = 'yum -y remove nginx nginx-filesystem passenger'
     pkg_match = case fact('operatingsystemmajrelease')
                 when '7' # https://blog.phusion.nl/2020/05/29/passenger-6-0-5/

@@ -551,6 +551,5 @@ define nginx::resource::server (
       server   => $name_sanitized,
       ssl      => $ssl,
       ssl_only => $ssl_only,
-      www_root => $www_root,
   } + $locations_defaults)
 }

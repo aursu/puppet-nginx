@@ -97,7 +97,7 @@ class nginx::package::redhat (
             descr         => 'passenger repo',
             enabled       => '1',
             gpgcheck      => '0',
-            repo_gpgcheck => '0',
+            repo_gpgcheck => '1',
             priority      => '1',
             gpgkey        => 'https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key.txt',
             before        => Package['nginx'],
