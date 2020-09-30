@@ -44,6 +44,12 @@
 # @param debug_connections
 #   Configures nginx `debug_connection` lines in the `events` section of the nginx config.
 #   See http://nginx.org/en/docs/ngx_core_module.html#debug_connection
+#
+# @param ignore_invalid_headers
+#   Controls whether header fields with invalid names should be ignored. Valid
+#   names are composed of English letters, digits, hyphens, and possibly
+#   underscores (as controlled by the underscores_in_headers directive).
+#
 class nginx (
   ### START Nginx Configuration ###
   Optional[Variant[Stdlib::Absolutepath, Boolean]]
@@ -191,6 +197,7 @@ class nginx (
   Optional[Boolean] $msie_padding                            = undef, # 'on'
   Optional[Boolean] $port_in_redirect                        = undef, # 'on'
   Optional[Nginx::Time] $client_header_timeout               = undef, # 60s
+  Optional[Nginx::Switch] $ignore_invalid_headers            = undef, # 'on'
   Optional[Nginx::Buffers] $fastcgi_buffers                  = undef, # '8 4k|8 8k'
   Optional[Nginx::Size] $fastcgi_buffer_size                 = undef, # '4k|8k'
   Optional[String] $ssl_ecdh_curve                           = undef, # 'auto'

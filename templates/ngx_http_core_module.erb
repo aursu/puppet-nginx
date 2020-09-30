@@ -10,6 +10,9 @@ def bool2config(b)
     end
 end
 -%>
+<% unless @ignore_invalid_headers.nil? -%>
+  ignore_invalid_headers <%= bool2config(@ignore_invalid_headers) %>;
+<% end -%>
 <% if @client_body_temp_path -%>
   client_body_temp_path <%= @client_body_temp_path %>;
 <% end -%>

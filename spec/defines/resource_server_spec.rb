@@ -447,6 +447,12 @@ describe 'nginx::resource::server' do
               match: '  recursive_error_pages on;'
             },
             {
+              title: 'should set ignore_invalid_headers',
+              attr: 'ignore_invalid_headers',
+              value: true,
+              match: '  ignore_invalid_headers on;'
+            },
+            {
               title: 'should set proxy_cache_revalidate',
               attr: 'proxy_cache_revalidate',
               value: true,
@@ -1174,6 +1180,12 @@ describe 'nginx::resource::server' do
               attr: 'recursive_error_pages',
               value: 'on',
               match: '  recursive_error_pages on;'
+            },
+            {
+              title: 'should set ignore_invalid_headers',
+              attr: 'ignore_invalid_headers',
+              value: true,
+              match: '  ignore_invalid_headers on;'
             },
             {
               title: 'should set proxy_cache_revalidate',

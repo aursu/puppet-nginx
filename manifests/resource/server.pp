@@ -113,6 +113,7 @@
 #   [*client_max_body_size*]       - This directive sets client_max_body_size.
 #   [*client_body_timeout*]        - Sets how long the server will wait for a client body. Default is 60s
 #   [*client_header_timeout*]      - Sets how long the server will wait for a client header. Default is 60s
+#   [*ignore_invalid_headers*]     - Controls whether header fields with invalid names should be ignored.
 #   [*raw_prepend*]                - A single string, or an array of strings to prepend to the server directive (after cfg prepend
 #   directives). NOTE: YOU are responsible for a semicolon on each line that requires one.
 #   [*raw_append*]                 - A single string, or an array of strings to append to the server directive (after cfg append
@@ -280,6 +281,7 @@ define nginx::resource::server (
   Optional[String] $auth_request                                                 = undef,
   Optional[String] $client_body_timeout                                          = undef,
   Optional[String] $client_header_timeout                                        = undef,
+  Optional[Nginx::Switch] $ignore_invalid_headers                                = undef, # 'on'
   Optional[Nginx::Size] $client_max_body_size                                    = undef,
   Optional[Nginx::Switch] $chunked_transfer_encoding                             = undef,
   Optional[Variant[Array[String], String]] $raw_prepend                          = undef,

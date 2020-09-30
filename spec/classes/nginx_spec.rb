@@ -775,6 +775,12 @@ describe 'nginx' do
                 match: '  recursive_error_pages on;'
               },
               {
+                title: 'should set ignore_invalid_headers',
+                attr: 'ignore_invalid_headers',
+                value: true,
+                match: '  ignore_invalid_headers on;'
+              },
+              {
                 title: 'should set send_timeout',
                 attr: 'send_timeout',
                 value: '300s',
