@@ -283,7 +283,7 @@ define nginx::resource::server (
   Optional[String] $client_header_timeout                                        = undef,
   Optional[Nginx::Switch] $ignore_invalid_headers                                = undef, # 'on'
   Optional[Nginx::Size] $client_max_body_size                                    = undef,
-  Optional[Nginx::Switch] $chunked_transfer_encoding                             = undef,
+  Optional[Nginx::Switch] $chunked_transfer_encoding                             = undef, # 'on'
   Optional[Variant[Array[String], String]] $raw_prepend                          = undef,
   Optional[Variant[Array[String], String]] $raw_append                           = undef,
   Optional[Variant[Array[String], String]] $location_raw_prepend                 = undef,

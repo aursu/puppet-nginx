@@ -271,6 +271,7 @@ define nginx::resource::location (
   Optional[String] $auth_basic                                     = undef,
   Optional[String] $auth_basic_user_file                           = undef,
   Optional[String] $auth_request                                   = undef,
+  Optional[Nginx::Switch] $chunked_transfer_encoding               = undef, # 'on'
   Array $rewrite_rules                                             = [],
   Integer[401,599] $priority                                       = 500,
   Boolean $mp4                                                     = false,

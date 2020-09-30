@@ -978,6 +978,12 @@ describe 'nginx::resource::location' do
               attr: 'uwsgi_request_buffering',
               value: true,
               match: %r{\s+uwsgi_request_buffering\s+on;}
+            },
+            {
+              title: 'should set chunked_transfer_encoding',
+              attr: 'chunked_transfer_encoding',
+              value: true,
+              match: %r{\s+chunked_transfer_encoding\s+on;}
             }
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
