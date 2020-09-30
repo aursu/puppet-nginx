@@ -148,6 +148,7 @@ class nginx::config {
   $msie_padding                   = $nginx::msie_padding
   $port_in_redirect               = $nginx::port_in_redirect
   $client_header_timeout          = $nginx::client_header_timeout
+  $ignore_invalid_headers         = $nginx::ignore_invalid_headers
 
   $fastcgi_buffers                = $nginx::fastcgi_buffers
   $fastcgi_buffer_size            = $nginx::fastcgi_buffer_size
