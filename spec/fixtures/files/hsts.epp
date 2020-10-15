@@ -1,0 +1,9 @@
+<% |
+  Integer $expire_time        = 15768000,
+  Boolean $include_subsomains = false,
+  Boolean $preload            = false,
+| -%>
+map $upstream_http_strict_transport_security $hsts {
+    default $upstream_http_strict_transport_security;
+    "" "max-age=<%= $expire_time %><% if $include_subsomains { %>; includeSubDomains<% } %><% if $preload { -%>; preload<% } %>";
+}
