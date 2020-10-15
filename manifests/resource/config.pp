@@ -7,7 +7,10 @@
 #        template => 'profile/gitlab/nginx/conf.d/gitlab-logging.conf.erb',
 #    }
 define nginx::resource::config (
-  String  $template,
+  Optional[String]
+          $content      = undef,
+  Optional[String]
+          $template     = undef,
   String  $filename     = $name,
   Hash    $options      = {},
   Stdlib::Unixpath
@@ -28,10 +31,21 @@ define nginx::resource::config (
   else {
     $configname = "${basename}.conf"
   }
+  $configpath = "${conf_dir}/conf.d/${configname}"
 
-  file { "${conf_dir}/conf.d/${configname}":
+  if $content {
+    $config_content = $content
+  }
+  elsif $template {
+    $config_content = epp($template, $options)
+  }
+  else {
+    fail("Either EPP template or direct content for configuration file ${configpath} must be provided")
+  }
+
+  file { $configpath:
     ensure  => file,
-    content => template($template),
+    content => $config_content,
     require => File["${conf_dir}/conf.d"],
     notify  => Service[$service_name],
   }
