@@ -1,6 +1,8 @@
 name: CI
 
-on: pull_request
+on:
+  push:
+    branches: [ optional-settings ]
 
 jobs:
   setup_matrix:
