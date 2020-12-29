@@ -1,6 +1,5 @@
-# Class: nginx
-#
-# This module manages NGINX.
+# @summary
+#   This module manages NGINX.
 #
 # Parameters:
 #
@@ -49,6 +48,9 @@
 #   Controls whether header fields with invalid names should be ignored. Valid
 #   names are composed of English letters, digits, hyphens, and possibly
 #   underscores (as controlled by the underscores_in_headers directive).
+#
+# @param service_config_check
+#  whether to en- or disable the config check via nginx -t on config changes
 #
 class nginx (
   ### START Nginx Configuration ###
@@ -235,6 +237,7 @@ class nginx (
   $service_restart                                           = undef,
   String $service_name                                       = 'nginx',
   $service_manage                                            = true,
+  Boolean $service_config_check                              = false,
   ### END Service Configuration ###
 
   ### START Hiera Lookups ###

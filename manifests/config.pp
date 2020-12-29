@@ -254,6 +254,7 @@ class nginx::config {
       group  => $sites_available_group,
       mode   => $sites_available_mode,
     }
+
     file { "${conf_dir}/sites-enabled":
       ensure => directory,
       owner  => $sites_available_owner,
@@ -266,6 +267,7 @@ class nginx::config {
         purge   => true,
         recurse => true,
       }
+
       File["${conf_dir}/sites-enabled"] {
         purge   => true,
         recurse => true,
@@ -297,6 +299,7 @@ class nginx::config {
   file { "${conf_dir}/nginx.conf":
     ensure  => file,
     content => template($conf_template),
+    tag     => 'nginx_config_file',
   }
 
   file { "${conf_dir}/conf.d/00-perf.conf":
@@ -317,6 +320,7 @@ class nginx::config {
   file { "${conf_dir}/mime.types":
     ensure  => file,
     content => epp($mime_template),
+    tag     => 'nginx_config_file',
   }
 
   file { "${temp_dir}/nginx.d":

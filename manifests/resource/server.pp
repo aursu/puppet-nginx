@@ -359,7 +359,7 @@ define nginx::resource::server (
       'absent' => absent,
       default  => 'file',
     },
-    notify => Class['::nginx::service'],
+    notify => Class['nginx::service'],
     owner  => $owner,
     group  => $group,
     mode   => $mode,
@@ -392,8 +392,9 @@ define nginx::resource::server (
     owner   => $owner,
     group   => $group,
     mode    => $mode,
-    notify  => Class['::nginx::service'],
+    notify  => Class['nginx::service'],
     require => File[$server_dir],
+    tag     => 'nginx_config_file',
   }
 
   # This deals with a situation where the listen directive for SSL doesn't match
@@ -542,7 +543,7 @@ define nginx::resource::server (
       path    => "${server_enable_dir}/${name_sanitized}.conf",
       target  => $config_file,
       require => [File[$server_dir], Concat[$config_file]],
-      notify  => Class['::nginx::service'],
+      notify  => Class['nginx::service'],
     }
   }
 
