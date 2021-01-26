@@ -1,18 +1,5 @@
-# Class: nginx::config
-#
-# This module manages NGINX bootstrap and configuration
-#
-# Parameters:
-#
-# There are no default parameters for this class.
-#
-# Actions:
-#
-# Requires:
-#
-# Sample Usage:
-#
-# This class file is not called directly
+# @summary Manage NGINX bootstrap and configuration
+# @api private
 class nginx::config {
   assert_private()
 
@@ -56,6 +43,8 @@ class nginx::config {
   $client_body_timeout            = $nginx::client_body_timeout
   $send_timeout                   = $nginx::send_timeout
   $lingering_timeout              = $nginx::lingering_timeout
+  $lingering_close                = $nginx::lingering_close
+  $lingering_time                 = $nginx::lingering_time
   $events_use                     = $nginx::events_use
   $debug_connections              = $nginx::debug_connections
   $fastcgi_cache_key              = $nginx::fastcgi_cache_key
@@ -218,6 +207,7 @@ class nginx::config {
 
   file { $run_dir:
     ensure => directory,
+    mode   => '0644',
   }
 
   if $nginx::manage_snippets_dir {

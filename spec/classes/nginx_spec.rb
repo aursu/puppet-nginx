@@ -208,7 +208,7 @@ describe 'nginx' do
 
             it { is_expected.to contain_package('nginx') }
             if facts[:lsbdistid] == 'Debian' && %w[9 10].include?(facts.dig(:os, 'release', 'major')) ||
-               facts[:lsbdistid] == 'Ubuntu' && %w[bionic].include?(facts[:lsbdistcodename])
+               facts[:lsbdistid] == 'Ubuntu' && %w[bionic focal].include?(facts[:lsbdistcodename])
               it { is_expected.to contain_package('libnginx-mod-http-passenger') }
             else
               it { is_expected.to contain_package('passenger') }
@@ -975,6 +975,66 @@ describe 'nginx' do
 
           describe 'conf.d/00-perf.conf template content' do
             [
+              {
+                title: 'should set types_hash_max_size',
+                attr: 'types_hash_max_size',
+                value: 10,
+                match: '  types_hash_max_size 10;'
+              },
+              {
+                title: 'should set types_hash_bucket_size',
+                attr: 'types_hash_bucket_size',
+                value: 10,
+                match: '  types_hash_bucket_size 10;'
+              },
+              {
+                title: 'should set server_names_hash_bucket_size',
+                attr: 'names_hash_bucket_size',
+                value: 10,
+                match: '  server_names_hash_bucket_size 10;'
+              },
+              {
+                title: 'should set server_names_hash_max_size',
+                attr: 'names_hash_max_size',
+                value: 10,
+                match: '  server_names_hash_max_size 10;'
+              },
+              {
+                title: 'should set keepalive_timeout',
+                attr: 'keepalive_timeout',
+                value: '123',
+                match: '  keepalive_timeout   123;'
+              },
+              {
+                title: 'should set keepalive_requests',
+                attr: 'keepalive_requests',
+                value: '345',
+                match: '  keepalive_requests  345;'
+              },
+              {
+                title: 'should set client_body_timeout',
+                attr: 'client_body_timeout',
+                value: '888',
+                match: '  client_body_timeout 888;'
+              },
+              {
+                title: 'should set lingering_close',
+                attr: 'lingering_close',
+                value: 'always',
+                match: '  lingering_close      always;'
+              },
+              {
+                title: 'should set lingering_time',
+                attr: 'lingering_time',
+                value: '30s',
+                match: '  lingering_time      30s;'
+              },
+              {
+                title: 'should set lingering_timeout',
+                attr: 'lingering_timeout',
+                value: '385',
+                match: '  lingering_timeout   385;'
+              },
               {
                 title: 'should set fastcgi_buffers',
                 attr: 'fastcgi_buffers',
