@@ -11,31 +11,35 @@ server_names_hash_bucket_size <%= @names_hash_bucket_size %>;
 server_names_hash_max_size <%= @names_hash_max_size %>;
 <% end -%>
 <% if @keepalive_timeout -%>
-keepalive_timeout <%= @keepalive_timeout %>; # timeout during which a keep-alive client connection
-                    # will stay open on the server side
+# timeout during which a keep-alive client connection
+# will stay open on the server side
+keepalive_timeout <%= @keepalive_timeout %>;
 <% end -%>
 <% if @keepalive_requests -%>
-keepalive_requests <%= @keepalive_requests %>; # maximum number of requests that can be served through
-                    # one keep-alive connection
+# maximum number of requests that can be served through
+# one keep-alive connection
+keepalive_requests <%= @keepalive_requests %>;
 <% end -%>
 <% if @client_header_timeout -%>
-client_header_timeout <%= @client_header_timeout %>; # If a client does not transmit the entire
-                        # header within this time, the 408 (Request Time-out)
-                        # error is returned to the client.
+# If a client does not transmit the entire
+# header within this time, the 408 (Request Time-out)
+# error is returned to the client.
+client_header_timeout <%= @client_header_timeout %>;
 <% end -%>
 <% if @client_body_timeout -%>
-client_body_timeout <%= @client_body_timeout %>; # if client does not transmit anything within this
-                    # time the 408 (Request Time-out) error is returned
-                    # to the client.
+# if client does not transmit anything within this
+# time the 408 (Request Time-out) error is returned
+# to the client.
+client_body_timeout <%= @client_body_timeout %>;
 <% end -%>
 <% if @lingering_timeout -%>
 lingering_timeout <%= @lingering_timeout %>;
 <% end -%>
 <% if @lingering_close -%>
-  lingering_close      <%= @lingering_close %>;
+  lingering_close <%= @lingering_close %>;
 <% end -%>
 <% if @lingering_time -%>
-  lingering_time      <%= @lingering_time %>;
+  lingering_time <%= @lingering_time %>;
 <% end -%>
 <% if @fastcgi_buffers -%>
 fastcgi_buffers <%= @fastcgi_buffers %>;
@@ -44,17 +48,19 @@ fastcgi_buffers <%= @fastcgi_buffers %>;
 fastcgi_buffer_size <%= @fastcgi_buffer_size %>;
 <% end -%>
 <% if @client_max_body_size -%>
-client_max_body_size <%= @client_max_body_size %>; # maximum allowed size of the client request body,
-                        # specified in the "Content-Length" request header
-                        # field. If the size in a request exceeds the
-                        # configured value, the 413 (Request Entity Too Large)
-                        # error is returned to the client
+# maximum allowed size of the client request body,
+# specified in the "Content-Length" request header
+# field. If the size in a request exceeds the
+# configured value, the 413 (Request Entity Too Large)
+# error is returned to the client
+client_max_body_size <%= @client_max_body_size %>;
 <% end -%>
 <% if @client_body_buffer_size -%>
-client_body_buffer_size <%= @client_body_buffer_size %>; # buffer size for reading client request body. In
-                            # case the request body is larger than the buffer,
-                            # the whole body or only its part is written to a
-                            # temporary file
+# buffer size for reading client request body. In
+# case the request body is larger than the buffer,
+# the whole body or only its part is written to a
+# temporary file
+client_body_buffer_size <%= @client_body_buffer_size %>;
 <% end -%>
 <% if @open_file_cache -%>
 # cache that can store open file descriptors, their sizes and modification
