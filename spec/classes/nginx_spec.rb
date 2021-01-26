@@ -979,61 +979,61 @@ describe 'nginx' do
                 title: 'should set types_hash_max_size',
                 attr: 'types_hash_max_size',
                 value: 10,
-                match: '  types_hash_max_size 10;'
+                match: 'types_hash_max_size 10;'
               },
               {
                 title: 'should set types_hash_bucket_size',
                 attr: 'types_hash_bucket_size',
                 value: 10,
-                match: '  types_hash_bucket_size 10;'
+                match: 'types_hash_bucket_size 10;'
               },
               {
                 title: 'should set server_names_hash_bucket_size',
                 attr: 'names_hash_bucket_size',
                 value: 10,
-                match: '  server_names_hash_bucket_size 10;'
+                match: 'server_names_hash_bucket_size 10;'
               },
               {
                 title: 'should set server_names_hash_max_size',
                 attr: 'names_hash_max_size',
                 value: 10,
-                match: '  server_names_hash_max_size 10;'
+                match: 'server_names_hash_max_size 10;'
               },
               {
                 title: 'should set keepalive_timeout',
                 attr: 'keepalive_timeout',
                 value: '123',
-                match: '  keepalive_timeout   123;'
+                match: 'keepalive_timeout 123;'
               },
               {
                 title: 'should set keepalive_requests',
                 attr: 'keepalive_requests',
-                value: '345',
-                match: '  keepalive_requests  345;'
+                value: 345,
+                match: 'keepalive_requests 345;'
               },
               {
                 title: 'should set client_body_timeout',
                 attr: 'client_body_timeout',
                 value: '888',
-                match: '  client_body_timeout 888;'
+                match: 'client_body_timeout 888;'
               },
               {
                 title: 'should set lingering_close',
                 attr: 'lingering_close',
                 value: 'always',
-                match: '  lingering_close      always;'
+                match: 'lingering_close always;'
               },
               {
                 title: 'should set lingering_time',
                 attr: 'lingering_time',
                 value: '30s',
-                match: '  lingering_time      30s;'
+                match: 'lingering_time 30s;'
               },
               {
                 title: 'should set lingering_timeout',
                 attr: 'lingering_timeout',
                 value: '385',
-                match: '  lingering_timeout   385;'
+                match: 'lingering_timeout 385;'
               },
               {
                 title: 'should set fastcgi_buffers',
