@@ -1,9 +1,21 @@
+<%-
+def bool2config(b)
+    case b
+    when true
+        'on'
+    when false, nil
+        'off'
+    else
+        b.to_s
+    end
+end
+-%>
 <% if defined? @www_root -%>
     root      <%= @www_root %>;
 <% end -%>
 <% if defined? @autoindex -%>
 
-    autoindex <%= @autoindex %>;
+    autoindex <%= bool2config(@autoindex) %>;
 <% end -%>
 <% if defined? @autoindex_exact_size -%>
     autoindex_exact_size <%= @autoindex_exact_size %>;

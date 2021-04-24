@@ -249,7 +249,7 @@ define nginx::resource::location (
   Variant[String[1],Array[String[1],1]] $server                    = undef,
   Optional[String] $www_root                                       = undef,
   Optional[String] $default_type                                   = undef, # 'text/plain'
-  Optional[String] $autoindex                                      = undef,
+  Optional[Nginx::Switch] $autoindex                               = undef,
   Optional[Array[String]] $index_files                             = [],
   Optional[Enum['on', 'off']] $autoindex_exact_size                = undef,
   Optional[Enum['html', 'xml', 'json', 'jsonp']] $autoindex_format = undef,
