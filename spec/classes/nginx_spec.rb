@@ -351,6 +351,38 @@ describe 'nginx' do
             end
           end
           it do
+            case facts[:osfamily]
+            when 'Debian'
+              is_expected.to contain_file('/run/nginx/client_body_temp').with(
+                ensure: 'directory',
+                group: 'root',
+                mode: '0700'
+              )
+            else
+              is_expected.to contain_file('/var/nginx/client_body_temp').with(
+                ensure: 'directory',
+                group: 'root',
+                mode: '0700'
+              )
+            end
+          end
+          it do
+            case facts[:osfamily]
+            when 'Debian'
+              is_expected.to contain_file('/run/nginx/proxy_temp').with(
+                ensure: 'directory',
+                group: 'root',
+                mode: '0700'
+              )
+            else
+              is_expected.to contain_file('/var/nginx/proxy_temp').with(
+                ensure: 'directory',
+                group: 'root',
+                mode: '0700'
+              )
+            end
+          end
+          it do
             is_expected.to contain_file('/etc/nginx/nginx.conf').with(
               ensure: 'file',
               owner: 'root',
