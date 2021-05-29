@@ -668,6 +668,12 @@ describe 'nginx::resource::location' do
                 %r{\s+error_log /var/log/nginx/error_log error;},
                 %r{\s+error_log /mnt/log0/server1.error_log error;}
               ]
+            },
+            {
+              title: 'should set log_not_found flag',
+              attr: 'log_not_found',
+              value: false,
+              match: %r{\s+log_not_found off;}
             }
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do

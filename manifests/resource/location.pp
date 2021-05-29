@@ -343,6 +343,7 @@ define nginx::resource::location (
   Optional[String] $format_log                                     = undef, # 'combined'
   Optional[Variant[String, Array[String]]] $error_log              = undef,
   Nginx::ErrorLogSeverity $error_log_level                         = 'error',
+  Optional[Nginx::Switch] $log_not_found                           = undef,
   Optional[Hash] $error_pages                                      = undef,
   Optional[Nginx::Switch] $recursive_error_pages                   = undef, # 'off'
   Optional[
