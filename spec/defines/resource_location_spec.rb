@@ -841,6 +841,18 @@ describe 'nginx::resource::location' do
               match: %r{\s+fastcgi_request_buffering\s+on;}
             },
             {
+              title: 'should set fastcgi_intercept_errors',
+              attr: 'fastcgi_intercept_errors',
+              value: 'on',
+              match: %r{\s+fastcgi_intercept_errors\s+on;}
+            },
+            {
+              title: 'should set fastcgi_intercept_errors when true',
+              attr: 'fastcgi_intercept_errors',
+              value: false,
+              match: %r{\s+fastcgi_intercept_errors\s+off;}
+            },
+            {
               title: 'should pass FastCGI headers',
               attr: 'fastcgi_pass_header',
               value: ['X-TestHeader1 value1', 'X-TestHeader2 value2'],

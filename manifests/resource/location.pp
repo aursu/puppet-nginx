@@ -78,6 +78,10 @@
 #   Sets a timeout for transmitting a request to the FastCGI server# @param fastcgi_buffering*]    - Enables or disables buffering of responses from the FastCGI server.
 # @param fastcgi_request_buffering
 #   Enables or disables buffering of a client request body.
+# @param fastcgi_intercept_errors
+#   Determines whether FastCGI server responses with codes greater than or equal
+#   to 300 should be passed to a client or be intercepted and redirected to nginx
+#   for processing with the error_page directive.
 # @param uwsgi
 #   location of uwsgi (host:port)
 # @param uwsgi_param
@@ -279,6 +283,7 @@ define nginx::resource::location (
   Optional[Nginx::Time] $fastcgi_send_timeout                      = undef,
   Optional[Nginx::Switch] $fastcgi_buffering                       = undef,
   Optional[Nginx::Switch] $fastcgi_request_buffering               = undef,
+  Optional[Nginx::Switch] $fastcgi_intercept_errors                = undef,
   Optional[String] $uwsgi                                          = undef,
   Optional[Hash] $uwsgi_param                                      = undef,
   String $uwsgi_params                                             = "${nginx::config::conf_dir}/uwsgi_params",

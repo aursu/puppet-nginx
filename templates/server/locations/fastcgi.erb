@@ -55,4 +55,7 @@ end
 <% unless @fastcgi_request_buffering.nil? -%>
     fastcgi_request_buffering <%= bool2config(@fastcgi_request_buffering) %>;
 <% end -%>
+<% unless @fastcgi_intercept_errors.nil? -%>
+    fastcgi_intercept_errors <%= bool2config(@fastcgi_intercept_errors) %>;
+<% end -%>
 <% end -%>
