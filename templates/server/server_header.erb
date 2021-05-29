@@ -182,6 +182,9 @@ server {
 <% if defined? @autoindex_localtime -%>
   autoindex_localtime <%= @autoindex_localtime %>;
 <% end -%>
+<% unless @reset_timedout_connection.nil? -%>
+reset_timedout_connection <%= bool2config(@reset_timedout_connection) %>;
+<% end -%>
 <% if defined? @log_by_lua -%>
   log_by_lua '<%= @log_by_lua %>';
 <% end -%>
@@ -193,7 +196,7 @@ server {
 <% end -%>
 <% if @access_log.is_a?(Array) -%>
   <%- @access_log.each do |log_item| -%>
-  access_log            <%= log_item %> <%= @format_log %>;
+  access_log            <%= log_item %><% if @format_log %> <%= @format_log%><% end %>;
   <%- end -%>
 <% elsif @access_log.is_a?(Hash) -%>
   <%- @access_log.each do |path, format| -%>
@@ -203,9 +206,9 @@ server {
 <% elsif @access_log == 'off' || @access_log == false -%>
   access_log            off;
 <% elsif @access_log == true || ! @access_log -%>
-  access_log            <%= scope['::nginx::config::log_dir'] %>/<%= @name_sanitized %>.access.log <%= @format_log %>;
+  access_log            <%= scope['::nginx::config::log_dir'] %>/<%= @name_sanitized %>.access.log<% if @format_log %> <%= @format_log%><% end %>;
 <% else -%>
-  access_log            <%= @access_log %> <%= @format_log %>;
+  access_log            <%= @access_log %><% if @format_log %> <%= @format_log%><% end %>;
 <% end -%>
 <% if @error_log.is_a?(Array) -%>
   <%- @error_log.each do |log_item| -%>

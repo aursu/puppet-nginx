@@ -28,6 +28,10 @@ worker_processes <%= @worker_processes %>;
 <% if @worker_rlimit_nofile -%>
 worker_rlimit_nofile <%= @worker_rlimit_nofile %>;
 <% end -%>
+<% if @pcre_jit -%>
+pcre_jit <%= @pcre_jit %>;
+<% end -%>
+
 <% if @pid -%>
 pid <%= @pid %>;
 <% end -%>
@@ -136,6 +140,10 @@ http {
 <% unless @http_tcp_nodelay.nil? -%>
   tcp_nodelay <%= bool2config(@http_tcp_nodelay) %>;
 <% end -%>
+<% unless @reset_timedout_connection.nil? -%>
+reset_timedout_connection <%= bool2config(@reset_timedout_connection) %>;
+<% end -%>
+
 <% unless @etag.nil? -%>
   etag <%= bool2config(@etag) %>;
 <% end -%>

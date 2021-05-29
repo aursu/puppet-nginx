@@ -478,6 +478,12 @@ describe 'nginx' do
                 match: 'worker_rlimit_nofile 10000;'
               },
               {
+                title: 'should set pcre_jit',
+                attr: 'pcre_jit',
+                value: 'on',
+                match: %r{^\s*pcre_jit\s+on;}
+              },
+              {
                 title: 'should set error_log',
                 attr: 'nginx_error_log',
                 value: '/path/to/error.log',
@@ -950,6 +956,12 @@ describe 'nginx' do
                   '  debug_connection 127.0.0.1;',
                   '  debug_connection unix:;'
                 ]
+              },
+              {
+                title: 'should set reset_timedout_connection',
+                attr: 'reset_timedout_connection',
+                value: 'on',
+                match: %r{^\s+reset_timedout_connection\s+on;}
               }
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do

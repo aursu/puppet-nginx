@@ -48,6 +48,9 @@
 # @param autoindex_localtime
 #   Specifies whether times in the directory listing should be output in the
 #   local time zone or UTC.
+# @param reset_timedout_connection
+#   Enables or disables resetting timed out connections and connections closed
+#   with the non-standard code 444.
 # @param proxy
 #   Proxy server(s) for the root location to connect to. Accepts a single
 #   value, can be used in conjunction with nginx::resource::upstream
@@ -298,7 +301,7 @@
 define nginx::resource::server (
   Enum['absent', 'present'] $ensure                                              = 'present',
   Optional[Variant[Array, String]] $listen_ip                                    = undef,
-  Integer $listen_port                                                           = 80,
+  Stdlib::Port $listen_port                                                      = 80,
   Optional[String] $listen_options                                               = undef,
   Boolean $listen_unix_socket_enable                                             = false,
   Variant[Array[Stdlib::Absolutepath], Stdlib::Absolutepath] $listen_unix_socket = '/var/run/nginx.sock',
@@ -308,7 +311,7 @@ define nginx::resource::server (
   Array $location_deny                                                           = [],
   Boolean $ipv6_enable                                                           = false,
   Variant[Array, String] $ipv6_listen_ip                                         = '::',
-  Integer $ipv6_listen_port                                                      = 80,
+  Stdlib::Port $ipv6_listen_port                                                 = $listen_port,
   Optional[String] $ipv6_listen_options                                          = undef,
   Hash $add_header                                                               = {},
   Hash $ssl_add_header                                                           = {},
@@ -392,6 +395,7 @@ define nginx::resource::server (
   Optional[Enum['on', 'off']] $autoindex_exact_size                              = undef,
   Optional[Enum['html', 'xml', 'json', 'jsonp']] $autoindex_format               = undef,
   Optional[Enum['on', 'off']] $autoindex_localtime                               = undef,
+  Optional[Nginx::Switch] $reset_timedout_connection                             = undef,
   Array[String] $server_name                                                     = [$name],
   Optional[String] $www_root                                                     = undef,
   Boolean $rewrite_www_to_non_www                                                = false,
@@ -428,7 +432,7 @@ define nginx::resource::server (
     Hash[String, String]
   ]] $access_log                                                                 = 'absent',
   Optional[Variant[Boolean, String, Array]] $error_log                           = false,
-  $format_log                                                                    = 'combined',
+  Optional[String] $format_log                                                   = $nginx::http_format_log,
   Optional[Hash] $passenger_cgi_param                                            = undef,
   Optional[Hash] $passenger_set_header                                           = undef,
   Optional[Hash] $passenger_env_var                                              = undef,
@@ -614,7 +618,7 @@ define nginx::resource::server (
     file { $fastcgi_params:
       ensure  => file,
       mode    => $nginx::global_mode,
-      content => template('nginx/server/fastcgi.conf.erb'),
+      content => template($nginx::fastcgi_conf_template),
     }
   }
 
@@ -622,7 +626,7 @@ define nginx::resource::server (
     file { $uwsgi_params:
       ensure  => file,
       mode    => $nginx::global_mode,
-      content => template('nginx/server/uwsgi_params.erb'),
+      content => template($nginx::uwsgi_params_template),
     }
   }
 
@@ -655,17 +659,13 @@ define nginx::resource::server (
     if $ssl_key {
       $ssl_key_real = $ssl_key.flatten
       $ssl_key_real.each | $key | {
-        File <| title == $key or path == $key |> {
-          before => Concat::Fragment["${name_sanitized}-ssl-header"],
-        }
+        File <| title == $key or path == $key |> -> Concat::Fragment["${name_sanitized}-ssl-header"]
       }
     }
     if $ssl_cert {
       $ssl_cert_real = $ssl_cert.flatten
       $ssl_cert_real.each | $cert | {
-        File <| title == $cert or path == $cert |> {
-          before => Concat::Fragment["${name_sanitized}-ssl-header"],
-        }
+        File <| title == $cert or path == $cert |> -> Concat::Fragment["${name_sanitized}-ssl-header"]
       }
     }
     concat::fragment { "${name_sanitized}-ssl-header":

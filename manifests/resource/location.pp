@@ -189,6 +189,9 @@
 #   Enables or disables doing several redirects using the error_page directive.
 # @param gzip_static
 #   Defines gzip_static, nginx default is off
+# @param reset_timedout_connection
+#   Enables or disables resetting timed out connections and connections closed
+#   with the non-standard code 444.
 #
 # @example Simple example
 #   nginx::resource::location { 'test2.local-bob':
@@ -343,6 +346,7 @@ define nginx::resource::location (
         Nginx::Switch
       ]
   ] $gzip_static                                                   = undef,
+  Optional[Nginx::Switch] $reset_timedout_connection               = undef,
 ) {
   if ! defined(Class['nginx']) {
     fail('You must include the nginx base class before using any defined resources')
@@ -381,7 +385,7 @@ define nginx::resource::location (
     file { $fastcgi_params:
       ensure  => 'file',
       mode    => $nginx::global_mode,
-      content => template('nginx/server/fastcgi.conf.erb'),
+      content => template($nginx::fastcgi_conf_template),
       tag     => 'nginx_config_file',
     }
   }
@@ -390,7 +394,7 @@ define nginx::resource::location (
     file { $uwsgi_params:
       ensure  => 'file',
       mode    => $nginx::global_mode,
-      content => template('nginx/server/uwsgi_params.erb'),
+      content => template($nginx::uwsgi_params_template),
       tag     => 'nginx_config_file',
     }
   }

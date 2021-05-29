@@ -45,6 +45,7 @@ class nginx::config {
   $lingering_timeout              = $nginx::lingering_timeout
   $lingering_close                = $nginx::lingering_close
   $lingering_time                 = $nginx::lingering_time
+  $reset_timedout_connection      = $nginx::reset_timedout_connection
   $events_use                     = $nginx::events_use
   $debug_connections              = $nginx::debug_connections
   $fastcgi_cache_key              = $nginx::fastcgi_cache_key
@@ -124,6 +125,7 @@ class nginx::config {
   $worker_connections             = $nginx::worker_connections
   $worker_processes               = $nginx::worker_processes
   $worker_rlimit_nofile           = $nginx::worker_rlimit_nofile
+  $pcre_jit                       = $nginx::pcre_jit
   $open_file_cache                = $nginx::open_file_cache
   $open_file_cache_valid          = $nginx::open_file_cache_valid
   $open_file_cache_min_uses       = $nginx::open_file_cache_min_uses

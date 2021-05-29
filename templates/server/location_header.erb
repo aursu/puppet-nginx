@@ -1,3 +1,15 @@
+<%-
+def bool2config(b)
+    case b
+    when true
+        'on'
+    when false, nil
+        'off'
+    else
+        b.to_s
+    end
+end
+-%>
 
   location <%= @location %> {
 <% if @internal -%>
@@ -85,4 +97,7 @@
 <% end -%>
 <% if @limit_zone -%>
     limit_req zone=<%= @limit_zone %>;
+<% end -%>
+<% unless @reset_timedout_connection.nil? -%>
+reset_timedout_connection <%= bool2config(@reset_timedout_connection) %>;
 <% end -%>

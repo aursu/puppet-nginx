@@ -39,6 +39,10 @@
 # @param service_config_check_command
 #  Command to execute to validate the generated configuration.
 #
+# @param reset_timedout_connection
+#   Enables or disables resetting timed out connections and connections closed
+#   with the non-standard code 444.
+#
 class nginx (
   ### START Nginx Configuration ###
   Optional[Variant[Stdlib::Absolutepath, Boolean]]
@@ -83,7 +87,9 @@ class nginx (
   Boolean $include_modules_enabled                           = $nginx::params::include_modules_enabled,
 
   # Primary Templates
-  String $conf_template                                      = 'nginx/conf.d/nginx.conf.erb',
+  String[1] $conf_template                                   = 'nginx/conf.d/nginx.conf.erb',
+  String[1] $fastcgi_conf_template                           = 'nginx/server/fastcgi.conf.erb',
+  String[1] $uwsgi_params_template                           = 'nginx/server/uwsgi_params.erb',
 
   ### START Nginx Configuration ###                                    # default:
   Optional[Nginx::Switch] $absolute_redirect                 = undef,  # 'on'
@@ -172,6 +178,7 @@ class nginx (
   Optional[Nginx::Switch] $ssl_prefer_server_ciphers         = true,
   Variant[Enum['auto'], Integer] $worker_processes           = 'auto', # 1
   Optional[Integer] $worker_rlimit_nofile                    = undef,  # undef
+  Optional[Nginx::Switch] $pcre_jit                          = undef,
   String $ssl_protocols                                      = 'TLSv1.1 TLSv1.2',
   String $ssl_ciphers                                        = 'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS', # lint:ignore:140chars
   Optional[Stdlib::Unixpath] $ssl_dhparam                    = undef,
@@ -203,6 +210,7 @@ class nginx (
   Optional[Stdlib::Absolutepath] $ssl_trusted_certificate    = undef,
   Optional[Integer] $ssl_verify_depth                        = undef, # 1
   Optional[Stdlib::Absolutepath] $ssl_password_file          = undef,
+  Optional[Nginx::Switch] $reset_timedout_connection         = undef,
 
   ### START Package Configuration ###
   $package_ensure                                            = present,
