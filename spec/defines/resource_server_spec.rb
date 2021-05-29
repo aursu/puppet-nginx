@@ -29,7 +29,7 @@ describe 'nginx::resource::server' do
 
       describe 'os-independent items' do
         describe 'basic assumptions' do
-          let(:params) { default_params.merge(use_default_location: true) }
+          let(:params) { default_params.merge(use_default_location: true, access_log: true, error_log: true) }
 
           it { is_expected.to contain_class('nginx') }
           it do
@@ -1659,7 +1659,9 @@ describe 'nginx::resource::server' do
                             listen_port: 80,
                             ssl_port: 80,
                             ssl_key: 'dummy.key',
-                            ssl_cert: 'dummy.cert')
+                            ssl_cert: 'dummy.cert',
+                            access_log: true,
+                            error_log: true)
             end
 
             it { is_expected.to contain_nginx__resource__location("#{title}-default").with_ssl_only(true) }
@@ -1678,7 +1680,9 @@ describe 'nginx::resource::server' do
                             ssl_key: 'dummy.key',
                             ssl_cert: 'dummy.cert',
                             ssl_client_cert: 'client.cert',
-                            ssl_verify_client: 'optional')
+                            ssl_verify_client: 'optional',
+                            access_log: true,
+                            error_log: true)
             end
 
             it { is_expected.to contain_nginx__resource__location("#{title}-default").with_ssl_only(true) }
@@ -1858,7 +1862,7 @@ describe 'nginx::resource::server' do
               super().merge(access_log: true)
             end
 
-            it { is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{access_log\s+/var/log/nginx/www\.rspec\.example\.com\.access\.log combined;}) }
+            it { is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{access_log\s+/var/log/nginx/www\.rspec\.example\.com\.access\.log;}) }
           end
 
           context 'should set format_log custom_format' do
@@ -1869,7 +1873,7 @@ describe 'nginx::resource::server' do
                             ssl_cert: 'dummy.cert')
             end
 
-            it { is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{access_log\s+/var/log/nginx/ssl-www\.rspec\.example\.com\.access\.log combined;}) }
+            it { is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{access_log\s+/var/log/nginx/ssl-www\.rspec\.example\.com\.access\.log;}) }
           end
 
           context 'should set format_log custom_format' do
