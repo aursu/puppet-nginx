@@ -183,7 +183,7 @@ server {
   autoindex_localtime <%= @autoindex_localtime %>;
 <% end -%>
 <% unless @reset_timedout_connection.nil? -%>
-reset_timedout_connection <%= bool2config(@reset_timedout_connection) %>;
+  reset_timedout_connection <%= bool2config(@reset_timedout_connection) %>;
 <% end -%>
 <% if defined? @log_by_lua -%>
   log_by_lua '<%= @log_by_lua %>';

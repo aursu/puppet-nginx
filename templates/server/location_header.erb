@@ -99,5 +99,5 @@ end
     limit_req zone=<%= @limit_zone %>;
 <% end -%>
 <% unless @reset_timedout_connection.nil? -%>
-reset_timedout_connection <%= bool2config(@reset_timedout_connection) %>;
+    reset_timedout_connection <%= bool2config(@reset_timedout_connection) %>;
 <% end -%>

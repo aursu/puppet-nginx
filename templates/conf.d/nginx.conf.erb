@@ -141,7 +141,7 @@ http {
   tcp_nodelay <%= bool2config(@http_tcp_nodelay) %>;
 <% end -%>
 <% unless @reset_timedout_connection.nil? -%>
-reset_timedout_connection <%= bool2config(@reset_timedout_connection) %>;
+  reset_timedout_connection <%= bool2config(@reset_timedout_connection) %>;
 <% end -%>
 
 <% unless @etag.nil? -%>
