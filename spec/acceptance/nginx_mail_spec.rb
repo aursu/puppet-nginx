@@ -5,6 +5,7 @@ describe 'nginx::resource::mailhost define:' do
     pp = "
     class { 'nginx':
       mail => true,
+      manage_repo => true,
     }
     nginx::resource::mailhost { 'domain1.example':
       ensure      => present,
