@@ -387,7 +387,7 @@ define nginx::resource::server (
   Optional[String] $uwsgi                                                        = undef,
   String $uwsgi_params                                                           = "${nginx::config::conf_dir}/uwsgi_params",
   Optional[String] $uwsgi_read_timeout                                           = undef,
-  Optional[Array[String]] $index_files                                           = [],
+  Array[String] $index_files                                                     = [],
   Optional[String] $autoindex                                                    = undef,
   Optional[String] $charset                                                      = undef, # 'off'
   Boolean $catch_all_server_name                                                 = false,
@@ -425,13 +425,13 @@ define nginx::resource::server (
   Optional[Hash] $server_cfg_ssl_prepend                                         = undef,
   Optional[Hash] $server_cfg_ssl_append                                          = undef,
   Optional[Array[String]] $include_files                                         = undef,
-  Optional[Variant[
+  Variant[
     Boolean,
     String,
     Array[String],
     Hash[String, String]
-  ]] $access_log                                                                 = 'absent',
-  Optional[Variant[Boolean, String, Array]] $error_log                           = false,
+  ] $access_log                                                                  = 'absent',
+  Variant[Boolean, String, Array]           $error_log                           = false,
   Optional[String] $format_log                                                   = $nginx::http_format_log,
   Optional[Hash] $passenger_cgi_param                                            = undef,
   Optional[Hash] $passenger_set_header                                           = undef,

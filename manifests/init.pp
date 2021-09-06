@@ -64,11 +64,11 @@ class nginx (
   String[1] $log_user                                        = $nginx::params::log_user,
   String[1] $log_group                                       = $nginx::params::log_group,
   Stdlib::Filemode $log_mode                                 = $nginx::params::log_mode,
-  Optional[Variant[
+  Variant[
     String,
     Array[String],
     Hash[String, String]
-  ]] $http_access_log                                        = "${log_dir}/${nginx::params::http_access_log_file}",
+  ] $http_access_log                                         = "${log_dir}/${nginx::params::http_access_log_file}",
   Optional[String] $http_format_log                          = undef, # 'combined'
   Variant[String, Array[String]] $nginx_error_log            = "${log_dir}/${nginx::params::nginx_error_log_file}",
   Nginx::ErrorLogSeverity $nginx_error_log_severity          = 'error',
@@ -175,7 +175,7 @@ class nginx (
   Optional[Nginx::Size] $types_hash_bucket_size              = undef,  # 64
   Optional[Nginx::Size] $types_hash_max_size                 = undef,  # 1024
   Integer $worker_connections                                = 1024,   # 512
-  Optional[Nginx::Switch] $ssl_prefer_server_ciphers         = true,
+  Nginx::Switch $ssl_prefer_server_ciphers                   = true,
   Variant[Enum['auto'], Integer] $worker_processes           = 'auto', # 1
   Optional[Integer] $worker_rlimit_nofile                    = undef,  # undef
   Optional[Nginx::Switch] $pcre_jit                          = undef,
@@ -186,7 +186,7 @@ class nginx (
   Optional[Nginx::FileCache] $open_file_cache                = undef,  # 'off'
   Nginx::Time $open_file_cache_valid                         = 60,
   Integer $open_file_cache_min_uses                          = 1,
-  Optional[Boolean] $proxy_connection_upgrade                = true,  # see http://nginx.org/en/docs/http/websocket.html
+  Boolean $proxy_connection_upgrade                          = true,  # see http://nginx.org/en/docs/http/websocket.html
   Optional[Boolean] $proxy_cache_lock                        = undef, # 'off'
   Optional[String] $default_type                             = undef, # 'text/plain'
   Optional[String] $charset_types                            = undef, # 'text/html text/xml text/plain text/vnd.wap.wml'
