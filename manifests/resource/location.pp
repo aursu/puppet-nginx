@@ -57,6 +57,10 @@
 #   Array of server headers to ignore
 # @param proxy_next_upstream
 #   Specify cases a request should be passed to the next server in the upstream.
+# @param proxy_intercept_errors
+#   Determines whether proxied responses with codes greater than or equal to 300
+#   should be passed to a client or be intercepted and redirected to nginx for
+#   processing with the error_page directive
 # @param fastcgi
 #   location of fastcgi (host:port)
 # @param fastcgi_param
@@ -271,6 +275,7 @@ define nginx::resource::location (
   Array $proxy_pass_header                                         = $nginx::proxy_pass_header,
   Array $proxy_ignore_header                                       = $nginx::proxy_ignore_header,
   Optional[String] $proxy_next_upstream                            = undef,
+  Optional[Nginx::Switch] $proxy_intercept_errors                  = undef,
   Optional[String] $fastcgi                                        = undef,
   Optional[String] $fastcgi_index                                  = undef,
   Optional[Hash] $fastcgi_param                                    = undef,

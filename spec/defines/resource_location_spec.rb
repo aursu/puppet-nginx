@@ -1253,6 +1253,12 @@ describe 'nginx::resource::location' do
               attr: 'proxy_busy_buffers_size',
               value: '16k',
               match: %r{\s+proxy_busy_buffers_size\s+16k;}
+            },
+            {
+              title: 'should set proxy_intercept_errors',
+              attr: 'proxy_intercept_errors',
+              value: true,
+              match: %r{\s+proxy_intercept_errors\s+on;}
             }
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do

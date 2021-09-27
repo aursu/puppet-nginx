@@ -111,3 +111,6 @@ end
     proxy_cookie_domain off;
 <%   end -%>
 <% end -%>
+<% unless @proxy_intercept_errors.nil? -%>
+    proxy_intercept_errors <%= bool2config(@proxy_intercept_errors) %>;
+<% end -%>
