@@ -1,9 +1,18 @@
 require 'spec_helper_acceptance'
 
 describe 'nginx class' do
+  epel_cleanup = case fact('osfamily')
+                 when 'RedHat'
+                   'yum -y remove epel-release'
+                 else
+                   nil
+                 end
+
   context 'default parameters' do
     # Using puppet_apply as a helper
     it 'works idempotently with no errors' do
+      shell(epel_cleanup) if epel_cleanup
+
       pp = 'include nginx'
 
       # Run it twice and test for idempotency
