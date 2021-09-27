@@ -1,7 +1,11 @@
 require 'spec_helper_acceptance'
 
 describe 'nginx::resource::mailhost define:' do
+  epel_cleanup = 'yum -y remove epel-release' if fact('osfamily') == 'RedHat'
+
   it 'runs successfully' do
+    shell(epel_cleanup) if epel_cleanup
+
     pp = "
     class { 'nginx':
       mail => true,
