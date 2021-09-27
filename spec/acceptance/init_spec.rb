@@ -1,12 +1,7 @@
 require 'spec_helper_acceptance'
 
 describe 'nginx class' do
-  epel_cleanup = case fact('osfamily')
-                 when 'RedHat'
-                   'yum -y remove epel-release'
-                 else
-                   nil
-                 end
+  epel_cleanup = 'yum -y remove epel-release' if fact('osfamily') == 'RedHat'
 
   context 'default parameters' do
     # Using puppet_apply as a helper
