@@ -32,7 +32,7 @@ describe 'nginx class' do
     end
 
     describe port(80) do
-      it { is_expected.to be_listening }
+      it { is_expected.not_to be_listening }
     end
   end
 
@@ -63,7 +63,7 @@ describe 'nginx class' do
     end
 
     describe port(80) do
-      it { is_expected.to be_listening }
+      it { is_expected.not_to be_listening }
     end
   end
 end
