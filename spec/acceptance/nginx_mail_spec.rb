@@ -22,6 +22,9 @@ describe 'nginx::resource::mailhost define:' do
       ssl_key     => '/etc/pki/tls/private/blah.key',
       xclient     => 'off',
     }
+    notify { 'nginx version':
+      message => \"fact: $::nginx_version, param: ${nginx::nginx_version}\",
+    }
     "
 
     apply_manifest(pp, catch_failures: true)
