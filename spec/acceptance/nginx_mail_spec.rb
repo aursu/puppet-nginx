@@ -30,7 +30,10 @@ describe 'nginx::resource::mailhost define:' do
   describe file('/etc/nginx/conf.mail.d/domain1.example.conf') do
     it { is_expected.to be_file }
     it { is_expected.to contain 'auth_http             localhost/cgi-bin/auth;' }
-    it { is_expected.to contain 'listen                *:465 ssl;' }
+    it 'debug listen *:465 ssl' do
+      shell('cat /etc/nginx/conf.mail.d/domain1.example.conf')
+      is_expected.to contain 'listen                *:465 ssl;'
+    end
   end
 
   describe port(587) do
