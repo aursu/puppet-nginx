@@ -244,8 +244,8 @@ describe 'nginx::resource::server' do
             {
               title: 'should set the client_body_timeout',
               attr: 'client_body_timeout',
-              value: 'value',
-              match: %r{^\s+client_body_timeout\s+value;}
+              value: '300',
+              match: %r{^\s+client_body_timeout\s+300;}
             },
             {
               title: 'should set the client_header_timeout',
@@ -1040,8 +1040,8 @@ describe 'nginx::resource::server' do
             {
               title: 'should set the client_body_timeout',
               attr: 'client_body_timeout',
-              value: 'value',
-              match: %r{^\s+client_body_timeout\s+value;}
+              value: '300',
+              match: %r{^\s+client_body_timeout\s+300;}
             },
             {
               title: 'should set the client_header_timeout',

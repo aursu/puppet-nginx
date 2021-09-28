@@ -10,16 +10,6 @@ server_names_hash_bucket_size <%= @names_hash_bucket_size %>;
 <% if @names_hash_max_size -%>
 server_names_hash_max_size <%= @names_hash_max_size %>;
 <% end -%>
-<% if @keepalive_timeout -%>
-# timeout during which a keep-alive client connection will stay open on the
-# server side
-keepalive_timeout <%= @keepalive_timeout %>;
-<% end -%>
-<% if @keepalive_requests -%>
-# maximum number of requests that can be served through one keep-alive
-# connection
-keepalive_requests <%= @keepalive_requests %>;
-<% end -%>
 <% if @client_header_timeout -%>
 # If a client does not transmit the entire header within this time, the
 # 408 (Request Time-out) error is returned to the client.

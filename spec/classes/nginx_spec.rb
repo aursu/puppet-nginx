@@ -962,6 +962,18 @@ describe 'nginx' do
                 attr: 'reset_timedout_connection',
                 value: 'on',
                 match: %r{^\s+reset_timedout_connection\s+on;}
+              },
+              {
+                title: 'should set keepalive_timeout',
+                attr: 'keepalive_timeout',
+                value: '123',
+                match: %r{^\s*keepalive_timeout 123;$}
+              },
+              {
+                title: 'should set keepalive_requests',
+                attr: 'keepalive_requests',
+                value: 345,
+                match: %r{^\s*keepalive_requests 345;$}
               }
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
@@ -1010,18 +1022,6 @@ describe 'nginx' do
                 attr: 'names_hash_max_size',
                 value: 10,
                 match: 'server_names_hash_max_size 10;'
-              },
-              {
-                title: 'should set keepalive_timeout',
-                attr: 'keepalive_timeout',
-                value: '123',
-                match: 'keepalive_timeout 123;'
-              },
-              {
-                title: 'should set keepalive_requests',
-                attr: 'keepalive_requests',
-                value: 345,
-                match: 'keepalive_requests 345;'
               },
               {
                 title: 'should set client_body_timeout',
