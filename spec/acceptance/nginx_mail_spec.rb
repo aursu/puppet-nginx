@@ -23,7 +23,7 @@ describe 'nginx::resource::mailhost define:' do
       xclient     => 'off',
     }
     notify { 'nginx version':
-      message => \"fact: $::nginx_version, param: ${nginx::nginx_version}\",
+      message => \"fact: $facts['nginx_version'], param: ${nginx::nginx_version}\",
     }
     "
 
