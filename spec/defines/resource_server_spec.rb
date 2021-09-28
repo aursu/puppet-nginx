@@ -250,8 +250,8 @@ describe 'nginx::resource::server' do
             {
               title: 'should set the client_header_timeout',
               attr: 'client_header_timeout',
-              value: 'value',
-              match: %r{^\s+client_header_timeout\s+value;}
+              value: '300s',
+              match: %r{^\s+client_header_timeout\s+300s;}
             },
             {
               title: 'should set the gzip_types',
@@ -1046,8 +1046,8 @@ describe 'nginx::resource::server' do
             {
               title: 'should set the client_header_timeout',
               attr: 'client_header_timeout',
-              value: 'value',
-              match: %r{^\s+client_header_timeout\s+value;}
+              value: '300s',
+              match: %r{^\s+client_header_timeout\s+300s;}
             },
             {
               title: 'should set the gzip_types',
