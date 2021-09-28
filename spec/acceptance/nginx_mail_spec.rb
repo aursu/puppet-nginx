@@ -22,20 +22,16 @@ describe 'nginx::resource::mailhost define:' do
       ssl_key     => '/etc/pki/tls/private/blah.key',
       xclient     => 'off',
     }
-    notify { 'nginx version':
-      message => \"fact: $facts['nginx_version'], param: ${nginx::nginx_version}\",
-    }
     "
 
+    apply_manifest(pp, catch_failures: true)
     apply_manifest(pp, catch_failures: true)
   end
 
   describe file('/etc/nginx/conf.mail.d/domain1.example.conf') do
     it { is_expected.to be_file }
     it { is_expected.to contain 'auth_http             localhost/cgi-bin/auth;' }
-    it 'debug listen *:465 ssl' do
-      shell('cat /etc/nginx/conf.mail.d/domain1.example.conf')
-      is_expected.to contain 'listen                *:465 ssl;'
+    it { is_expected.to contain 'listen                *:465 ssl;' }
     end
   end
 
