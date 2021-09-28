@@ -25,7 +25,7 @@ describe 'nginx::resource::mailhost define:' do
     "
 
     apply_manifest(pp, catch_failures: true)
-    apply_manifest(pp, catch_changes: true)
+    apply_manifest(pp, catch_failures: true)
   end
 
   describe file('/etc/nginx/conf.mail.d/domain1.example.conf') do
