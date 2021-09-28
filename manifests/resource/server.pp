@@ -207,6 +207,8 @@
 #   This allows you to specify a custom auth endpoint
 # @param client_max_body_size
 #   This directive sets client_max_body_size.
+# @param client_body_buffer_size
+#   Sets buffer size for reading client request body.
 # @param client_body_timeout
 #   Sets how long the server will wait for a client body. Default is 60s
 # @param client_header_timeout
@@ -411,10 +413,14 @@ define nginx::resource::server (
   Optional[String] $auth_basic                                                   = undef,
   Optional[String] $auth_basic_user_file                                         = undef,
   Optional[String] $auth_request                                                 = undef,
-  Optional[String] $client_body_timeout                                          = undef,
-  Optional[String] $client_header_timeout                                        = undef,
+  Optional[Nginx::Time] $client_body_timeout                                     = undef,
+  Optional[Nginx::Time] $client_header_timeout                                   = undef,
+  Optional[Nginx::Time] $keepalive_time                                          = undef, # 1h
+  Optional[Nginx::Time] $keepalive_timeout                                       = undef, # 75s
+  Optional[Integer] $keepalive_requests                                          = undef, # 1000
   Optional[Nginx::Switch] $ignore_invalid_headers                                = undef, # 'on'
   Optional[Nginx::Size] $client_max_body_size                                    = undef,
+  Optional[Nginx::Size] $client_body_buffer_size                                 = undef, # 8k|16k
   Optional[Nginx::Switch] $chunked_transfer_encoding                             = undef, # 'on'
   Optional[Variant[Array[String], String]] $raw_prepend                          = undef,
   Optional[Variant[Array[String], String]] $raw_append                           = undef,

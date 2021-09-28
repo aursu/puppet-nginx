@@ -503,6 +503,24 @@ describe 'nginx::resource::server' do
               attr: 'reset_timedout_connection',
               value: 'on',
               match: %r{^\s+reset_timedout_connection\s+on;}
+            },
+            {
+              title: 'should set client_body_buffer_size',
+              attr: 'client_body_buffer_size',
+              value: '16k',
+              match: %r{^\s*client_body_buffer_size 16k;$}
+            },
+            {
+              title: 'should set keepalive_timeout',
+              attr: 'keepalive_timeout',
+              value: '123',
+              match: %r{^\s*keepalive_timeout 123;$}
+            },
+            {
+              title: 'should set keepalive_requests',
+              attr: 'keepalive_requests',
+              value: 345,
+              match: %r{^\s*keepalive_requests 345;$}
             }
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
@@ -1214,6 +1232,24 @@ describe 'nginx::resource::server' do
               attr: 'autoindex_exact_size',
               value: 'on',
               match: '  autoindex_exact_size on;'
+            },
+            {
+              title: 'should set client_body_buffer_size',
+              attr: 'client_body_buffer_size',
+              value: '16k',
+              match: %r{^\s*client_body_buffer_size 16k;$}
+            },
+            {
+              title: 'should set keepalive_timeout',
+              attr: 'keepalive_timeout',
+              value: '123',
+              match: %r{^\s*keepalive_timeout 123;$}
+            },
+            {
+              title: 'should set keepalive_requests',
+              attr: 'keepalive_requests',
+              value: 345,
+              match: %r{^\s*keepalive_requests 345;$}
             }
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
