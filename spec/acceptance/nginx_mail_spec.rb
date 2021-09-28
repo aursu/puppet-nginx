@@ -32,7 +32,6 @@ describe 'nginx::resource::mailhost define:' do
     it { is_expected.to be_file }
     it { is_expected.to contain 'auth_http             localhost/cgi-bin/auth;' }
     it { is_expected.to contain 'listen                *:465 ssl;' }
-    end
   end
 
   describe port(587) do
