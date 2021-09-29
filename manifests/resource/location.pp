@@ -325,7 +325,7 @@ define nginx::resource::location (
   Optional[String] $proxy_http_version                             = undef,
   Optional[String] $proxy_set_body                                 = undef,
   Optional[Nginx::Switch] $proxy_buffering                         = undef,
-  Optional[Enum['on', 'off']] $proxy_request_buffering             = undef,
+  Optional[Nginx::Switch] $proxy_request_buffering                 = undef,
   Optional[Nginx::Size] $proxy_max_temp_file_size                  = undef,
   Optional[Nginx::Size] $proxy_busy_buffers_size                   = undef,
   Optional[Enum['on', 'off']] $absolute_redirect                   = undef,

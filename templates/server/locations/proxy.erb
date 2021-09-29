@@ -40,8 +40,8 @@ end
 <% if @proxy_buffers -%>
     proxy_buffers <%= @proxy_buffers %>;
 <% end -%>
-<% if @proxy_request_buffering -%>
-    proxy_request_buffering <%= @proxy_request_buffering %>;
+<% unless @proxy_request_buffering.nil? -%>
+    proxy_request_buffering <%= bool2config(@proxy_request_buffering) %>;
 <% end -%>
 <% if @proxy_busy_buffers_size -%>
     proxy_busy_buffers_size <%= @proxy_busy_buffers_size %>;
