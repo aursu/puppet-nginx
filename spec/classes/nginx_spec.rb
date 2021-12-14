@@ -976,7 +976,7 @@ describe 'nginx' do
                   end
 
                   # if we have a _path attribute make sure we create the path
-                  if param[:attr].end_with?('_path')
+                  if param[:attr].end_with?('_cache_path')
                     if param[:value]
                       param[:value].keys.each do |path|
                         is_expected.to contain_file(path).with_ensure('directory')
@@ -1186,6 +1186,12 @@ describe 'nginx' do
                 attr: 'proxy_buffers',
                 value: '8 16k',
                 match: %r{^\s*proxy_buffers 8 16k;}
+              },
+              {
+                title: 'should set proxy_cache_path from hash',
+                attr: 'proxy_cache_path',
+                value: { '/var/cache/nginx/shared' => { 'levels' => '1:2', 'keys_zone' => 'shared:16m', 'use_temp_path' => false, 'inactive' => '60m', 'max_size' => '10g' } },
+                match: %r{\s+proxy_cache_path\s+/var/cache/nginx/shared  keys_zone=shared:16m levels=1:2 use_temp_path=off inactive=60m max_size=10g;}
               }
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
