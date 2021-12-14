@@ -7,19 +7,9 @@ describe 'nginx::resource::mailhost define:' do
     shell(epel_cleanup) if epel_cleanup
 
     pp = "
-    if fact('os.family') == 'RedHat' {
-      package { 'nginx-mod-mail':
-        ensure => installed,
-      }
-    }
-
     class { 'nginx':
       mail => true,
       manage_repo => true,
-      dynamic_modules => fact('os.family') ? {
-        'RedHat' => ['/usr/lib64/nginx/modules/ngx_mail_module.so'],
-        default  => [],
-      }
     }
     nginx::resource::mailhost { 'domain1.example':
       ensure      => present,
@@ -55,19 +45,9 @@ describe 'nginx::resource::mailhost define:' do
   context 'when configured for nginx 1.14' do
     it 'runs successfully' do
       pp = "
-    if fact('os.family') == 'RedHat' {
-      package { 'nginx-mod-mail':
-        ensure => installed,
-      }
-    }
-
     class { 'nginx':
-      mail            => true,
-      nginx_version   => '1.14.0',
-      dynamic_modules => fact('os.family') ? {
-        'RedHat' => ['/usr/lib64/nginx/modules/ngx_mail_module.so'],
-        default  => [],
-      }
+      mail          => true,
+      nginx_version => '1.14.0',
     }
     nginx::resource::mailhost { 'domain1.example':
       ensure      => present,
