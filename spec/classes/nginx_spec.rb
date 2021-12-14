@@ -330,26 +330,6 @@ describe 'nginx' do
             )
           end
 
-          case facts[:osfamily]
-          when 'Debian'
-            it do
-              is_expected.to contain_file('/run/nginx').with(
-                ensure: 'directory',
-                owner: 'root',
-                group: 'root',
-                mode: '0644'
-              )
-            end
-          else
-            it do
-              is_expected.to contain_file('/var/nginx').with(
-                ensure: 'directory',
-                owner: 'root',
-                group: 'root',
-                mode: '0644'
-              )
-            end
-          end
           it do
             is_expected.to contain_file('/etc/nginx/nginx.conf').with(
               ensure: 'file',
@@ -644,6 +624,12 @@ describe 'nginx' do
                 attr: 'gzip',
                 value: 'off',
                 notmatch: %r{gzip}
+              },
+              {
+                title: 'should set proxy_cache_path from hash',
+                attr: 'proxy_cache_path',
+                value: { '/var/cache/nginx/shared' => { 'levels' => '1:2', 'keys_zone' => 'shared:16m', 'use_temp_path' => false, 'inactive' => '60m', 'max_size' => '10g' } },
+                match: %r{\s+proxy_cache_path\s+/var/cache/nginx/shared  keys_zone=shared:16m levels=1:2 use_temp_path=off inactive=60m max_size=10g;}
               },
               {
                 title: 'should contain http_raw_prepend directives',
@@ -987,6 +973,15 @@ describe 'nginx' do
                   else
                     lines = catalogue.resource('file', '/etc/nginx/nginx.conf').send(:parameters)[:content].split("\n")
                     expect(lines & Array(param[:match])).to eq(Array(param[:match]))
+                  end
+
+                  # if we have a _path attribute make sure we create the path
+                  if param[:attr].end_with?('_path')
+                    if param[:value]
+                      param[:value].keys.each do |path|
+                        is_expected.to contain_file(path).with_ensure('directory')
+                      end
+                    end
                   end
 
                   Array(param[:notmatch]).each do |item|

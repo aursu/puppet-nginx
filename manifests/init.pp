@@ -43,10 +43,15 @@
 #   Enables or disables resetting timed out connections and connections closed
 #   with the non-standard code 444.
 #
+# @param nginx_snippets
+#   Specifies a hash from which to generate `nginx::resource::snippet` resources.
+#
+# @param nginx_snippets_defaults
+#   Can be used to define default values for the parameter `nginx_snippets`.
+#
 class nginx (
   ### START Nginx Configuration ###
-  Optional[Variant[Stdlib::Absolutepath, Boolean]]
-          $client_body_temp_path                             = undef, # 'client_body_temp'
+  Optional[Stdlib::Absolutepath] $client_body_temp_path      = undef, # 'client_body_temp'
   Optional[Boolean] $recursive_error_pages                   = undef, # off
   Boolean $confd_only                                        = false,
   Boolean $confd_purge                                       = false,
@@ -73,11 +78,9 @@ class nginx (
   Variant[String, Array[String]] $nginx_error_log            = "${log_dir}/${nginx::params::nginx_error_log_file}",
   Nginx::ErrorLogSeverity $nginx_error_log_severity          = 'error',
   $pid                                                       = $nginx::params::pid,
-  Optional[Stdlib::Absolutepath]
-          $proxy_temp_path                                   = undef,  # 'proxy_temp'
+  Optional[Stdlib::Absolutepath] $proxy_temp_path            = undef,  # 'proxy_temp'
   Optional[String] $proxy_cache_key                          = undef,  # $scheme$proxy_host$request_uri
   $root_group                                                = $nginx::params::root_group,
-  $run_dir                                                   = $nginx::params::run_dir,
   $sites_available_owner                                     = $nginx::params::sites_available_owner,
   $sites_available_group                                     = $nginx::params::sites_available_group,
   $sites_available_mode                                      = $nginx::params::sites_available_mode,
@@ -106,7 +109,7 @@ class nginx (
   Optional[Nginx::ConnectionProcessing] $events_use          = undef,  # 'epoll'
   Array[Nginx::DebugConnection] $debug_connections           = [],
   Optional[String] $fastcgi_cache_key                        = undef,  # undef
-  Optional[Hash[String, Nginx::CachePath, 1]]
+  Optional[Hash[Stdlib::Unixpath, Nginx::CachePath, 1]]
                     $fastcgi_cache_path                      = undef,  # undef
   Optional[Variant[Nginx::CacheUseStale, Array[Nginx::CacheUseStale]]]
                     $fastcgi_cache_use_stale                 = undef,  # 'off'
@@ -150,7 +153,7 @@ class nginx (
   Optional[Nginx::Buffers] $proxy_buffers                    = undef,  # '8 4k|8 8k'
   Optional[Nginx::Size] $proxy_buffer_size                   = undef,  # '4k|8k'
   Optional[String] $proxy_cache                              = undef,  # off
-  Optional[Hash[String, Nginx::CachePath, 1]]
+  Optional[Hash[Stdlib::Unixpath, Nginx::CachePath, 1]]
                     $proxy_cache_path                        = undef,  # undef
   Optional[Nginx::Time] $proxy_connect_timeout               = undef,  # 60s
   Optional[Nginx::Size] $proxy_headers_hash_bucket_size      = undef,  # 64
@@ -244,6 +247,8 @@ class nginx (
   Hash $geo_mappings_defaults                             = {},
   Hash $string_mappings                                   = {},
   Hash $string_mappings_defaults                          = {},
+  Hash $nginx_snippets                                    = {},
+  Hash $nginx_snippets_defaults                           = {},
   Hash $nginx_locations                                   = {},
   Hash $nginx_locations_defaults                          = {},
   Hash $nginx_mailhosts                                   = {},
@@ -264,6 +269,7 @@ class nginx (
   contain 'nginx::service'
 
   create_resources( 'nginx::resource::geo', $geo_mappings, $geo_mappings_defaults )
+  create_resources( 'nginx::resource::snippet', $nginx_snippets, $nginx_snippets_defaults )
   create_resources( 'nginx::resource::location', $nginx_locations, $nginx_locations_defaults )
   create_resources( 'nginx::resource::mailhost', $nginx_mailhosts, $nginx_mailhosts_defaults )
   create_resources( 'nginx::resource::map', $string_mappings, $string_mappings_defaults )
