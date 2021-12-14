@@ -466,6 +466,8 @@ define nginx::resource::server (
   Hash $locations                                                                = {},
   Hash $locations_defaults                                                       = {},
   Optional[Array[String]] $set_real_ip_from                                      = undef,
+  Optional[String] $real_ip_header                                               = undef,
+  Optional[Nginx::Switch] $real_ip_recursive                                     = undef,
   Optional[Nginx::ReturnFormat] $return                                          = undef,
   Boolean $server_proxy_settings                                                 = false,
 ) {

@@ -1863,7 +1863,7 @@ describe 'nginx::resource::server' do
             end
           end
 
-          context 'when set_real_ip_from is set' do
+          context 'when ngx_http_realip_module is in use' do
             let :params do
               super().merge(set_real_ip_from: ['192.168.1.1', '127.0.0.1'],
                             ssl: true,
@@ -1878,6 +1878,34 @@ describe 'nginx::resource::server' do
             it {
               is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{\s+set_real_ip_from\s+192.168.1.1;\n\s+set_real_ip_from\s+127.0.0.1;})
             }
+
+            context 'when real_ip_header is set' do
+              let :params do
+                super().merge(real_ip_header: 'X-Forwarded-For')
+              end
+
+              it {
+                is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{\s+real_ip_header\s+X-Forwarded-For;})
+              }
+
+              it {
+                is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{\s+real_ip_header\s+X-Forwarded-For;})
+              }
+            end
+
+            context 'when real_ip_header is set' do
+              let :params do
+                super().merge(real_ip_recursive: true)
+              end
+
+              it {
+                is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{\s+real_ip_recursive\s+on;})
+              }
+
+              it {
+                is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{\s+real_ip_recursive\s+on;})
+              }
+            end
           end
 
           context 'should set format_log custom_format' do
