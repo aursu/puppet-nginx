@@ -1220,6 +1220,12 @@ describe 'nginx::resource::server' do
               match: %r{^\s*proxy_cache_revalidate on;$}
             },
             {
+              title: 'should set proxy_pass_request_headers',
+              attr: 'proxy_pass_request_headers',
+              value: false,
+              match: %r{^\s*proxy_pass_request_headers off;$}
+            },
+            {
               title: 'should set proxy_ignore_header',
               attr: 'proxy_ignore_header',
               value: [

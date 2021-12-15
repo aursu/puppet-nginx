@@ -372,7 +372,7 @@ define nginx::resource::server (
   Optional[Nginx::Switch] $proxy_request_buffering                               = undef,
   Optional[Nginx::Size] $proxy_max_temp_file_size                                = undef,
   Optional[Nginx::Size] $proxy_busy_buffers_size                                 = undef,
-  Optional[Boolean] $proxy_cache_revalidate                                      = undef,
+  Optional[Nginx::Switch] $proxy_cache_revalidate                                = undef,
   Optional[
     Variant[
       Boolean,
@@ -380,6 +380,7 @@ define nginx::resource::server (
       Hash[String, String, 1]
     ]
   ] $proxy_cookie_domain                                                         = undef,
+  Optional[Nginx::Switch] $proxy_pass_request_headers                            = undef,
   Array $resolver                                                                = [],
   Optional[String] $fastcgi                                                      = undef,
   Optional[String] $fastcgi_index                                                = undef,
