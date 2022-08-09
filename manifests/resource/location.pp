@@ -40,6 +40,9 @@
 # @param proxy_redirect
 #   sets the text, which must be changed in response-header "Location" and
 #   "Refresh" in the response of the proxied server.
+# @param proxy_cookie_path
+#   Sets a text that should be changed in the path attribute of the
+#   "Set-Cookie" header fields of a proxied server response.
 # @param proxy_read_timeout
 #   Override the default the proxy read timeout value of 90 seconds
 # @param proxy_connect_timeout
@@ -271,7 +274,13 @@ define nginx::resource::location (
       String,
       Array[String]
     ]
-  ] $proxy_redirect                                                = undef, # default
+  ] $proxy_redirect                                                = undef,
+  Optional[
+    Variant[
+      String,
+      Array[String]
+    ]
+  ] $proxy_cookie_path                                             = undef, # 'off'
   Optional[Nginx::Time] $proxy_read_timeout                        = undef,
   Optional[Nginx::Time] $proxy_connect_timeout                     = undef,
   Optional[Nginx::Time] $proxy_send_timeout                        = undef,

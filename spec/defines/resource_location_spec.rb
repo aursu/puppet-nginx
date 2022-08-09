@@ -1102,6 +1102,15 @@ describe 'nginx::resource::location' do
               ]
             },
             {
+              title: 'should set proxy_cookie_path when array of strings',
+              attr: 'proxy_cookie_path',
+              value: %w[value1 value2],
+              match: [
+                %r{^\s+proxy_cookie_path\s+value1;},
+                %r{^\s+proxy_cookie_path\s+value2;}
+              ]
+            },
+            {
               title: 'should set proxy_cache',
               attr: 'proxy_cache',
               value: 'value',

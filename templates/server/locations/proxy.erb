@@ -24,6 +24,11 @@ end
     proxy_redirect <%= line %>;
     <%- end -%>
 <% end -%>
+<% if @proxy_cookie_path -%>
+    <%- Array(@proxy_cookie_path).each do |line| -%>
+    proxy_cookie_path <%= line %>;
+    <%- end -%>
+<% end -%>
 <% if @proxy_http_version -%>
     proxy_http_version <%= @proxy_http_version %>;
 <% end -%>
