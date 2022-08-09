@@ -20,7 +20,9 @@ end
     proxy_send_timeout <%= @proxy_send_timeout %>;
 <% end -%>
 <% if @proxy_redirect -%>
-    proxy_redirect <%= @proxy_redirect %>;
+    <%- Array(@proxy_redirect).each do |line| -%>
+    proxy_redirect <%= line %>;
+    <%- end -%>
 <% end -%>
 <% if @proxy_http_version -%>
     proxy_http_version <%= @proxy_http_version %>;

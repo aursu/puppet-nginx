@@ -1093,6 +1093,15 @@ describe 'nginx::resource::location' do
               notmatch: %r{proxy_redirect\b}
             },
             {
+              title: 'should set proxy_redirect when array of strings',
+              attr: 'proxy_redirect',
+              value: %w[value1 value2],
+              match: [
+                %r{^\s+proxy_redirect\s+value1;},
+                %r{^\s+proxy_redirect\s+value2;}
+              ]
+            },
+            {
               title: 'should set proxy_cache',
               attr: 'proxy_cache',
               value: 'value',

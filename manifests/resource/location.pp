@@ -266,7 +266,12 @@ define nginx::resource::location (
   Optional[Enum['html', 'xml', 'json', 'jsonp']] $autoindex_format = undef,
   Optional[Enum['on', 'off']] $autoindex_localtime                 = undef,
   Optional[String] $proxy                                          = undef,
-  Optional[String] $proxy_redirect                                 = undef, # default
+  Optional[
+    Variant[
+      String,
+      Array[String]
+    ]
+  ] $proxy_redirect                                                = undef, # default
   Optional[Nginx::Time] $proxy_read_timeout                        = undef,
   Optional[Nginx::Time] $proxy_connect_timeout                     = undef,
   Optional[Nginx::Time] $proxy_send_timeout                        = undef,
