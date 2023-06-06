@@ -22,6 +22,8 @@ class nginx::config {
   $log_mode                       = $nginx::log_mode
   $http_access_log                = $nginx::http_access_log
   $http_format_log                = $nginx::http_format_log
+  $stream_access_log              = $nginx::stream_access_log
+  $stream_custom_format_log       = $nginx::stream_custom_format_log
   $nginx_error_log                = $nginx::nginx_error_log
   $nginx_error_log_severity       = $nginx::nginx_error_log_severity
   $pid                            = $nginx::pid
@@ -69,9 +71,12 @@ class nginx::config {
   $keepalive_timeout              = $nginx::keepalive_timeout
   $keepalive_requests             = $nginx::keepalive_requests
   $log_format                     = $nginx::log_format
+  $stream_log_format              = $nginx::stream_log_format
   $mail                           = $nginx::mail
   $mime_types_path                = $nginx::mime_types_path
   $stream                         = $nginx::stream
+  $map_hash_bucket_size           = $nginx::map_hash_bucket_size
+  $map_hash_max_size              = $nginx::map_hash_max_size
   $mime_types                     = $nginx::mime_types_preserve_defaults ? {
     true    => merge($nginx::params::mime_types,$nginx::mime_types),
     default => $nginx::mime_types,
@@ -221,7 +226,13 @@ class nginx::config {
   }
 
   if $client_body_temp_path {
-    file { $client_body_temp_path:
+    if $client_body_temp_path.is_a(String) {
+      $_client_body_temp_path = [$client_body_temp_path]
+    } else {
+      $_client_body_temp_path = $client_body_temp_path
+    }
+
+    file { $_client_body_temp_path[0]:
       ensure => directory,
       owner  => $daemon_user,
       mode   => '0700',
@@ -229,7 +240,14 @@ class nginx::config {
   }
 
   if $proxy_temp_path {
-    file { $proxy_temp_path:
+    if $proxy_temp_path.is_a(String) {
+      $_proxy_temp_path = [$proxy_temp_path]
+    }
+    else {
+      $_proxy_temp_path = $proxy_temp_path
+    }
+
+    file { $_proxy_temp_path[0]:
       ensure => directory,
       owner  => $daemon_user,
       mode   => '0700',

@@ -1,6 +1,10 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'nginx class:' do
+  test_passenger = true
+
   case fact('osfamily')
   when 'RedHat'
     pkg_cmd = 'yum info nginx | grep "^From repo"'
@@ -9,19 +13,21 @@ describe 'nginx class:' do
                 when '7' # https://blog.phusion.nl/2020/05/29/passenger-6-0-5/
                   %r{epel}
                 else
-                  %r{passenger}
+                  test_passenger = false
                 end
   when 'Debian'
     pkg_cmd = 'dpkg -s nginx | grep ^Maintainer'
     pkg_remove_cmd = 'apt-get -y purge nginx nginx-common'
     pkg_match = case fact('operatingsystemmajrelease')
-                when '9', '10'
+                when '10', '11'
                   %r{Debian Nginx Maintainers}
-                when '18.04', '20.04'
+                when '18.04', '20.04', '22.04'
                   %r{Ubuntu Developers}
                 else
                   %r{Phusion}
                 end
+  else
+    test_passenger = false
   end
 
   context 'default parameters' do
@@ -42,7 +48,7 @@ describe 'nginx class:' do
     end
   end
 
-  context 'nginx with package_source passenger', if: pkg_cmd do
+  context 'nginx with package_source passenger', if: test_passenger do
     it 'runs successfully' do
       shell(pkg_remove_cmd)
       pp = <<-EOS
@@ -57,6 +63,11 @@ describe 'nginx class:' do
 
     describe package('nginx') do
       it { is_expected.to be_installed }
+
+      it 'comes from the expected source' do
+        pkg_output = shell(pkg_cmd)
+        expect(pkg_output.stdout).to match pkg_match
+      end
     end
 
     describe package('passenger') do
@@ -73,7 +84,7 @@ describe 'nginx class:' do
     end
   end
 
-  context 'reset to default parameters', if: pkg_cmd do
+  context 'reset to default parameters', if: pkg_remove_cmd do
     it 'runs successfully' do
       shell(pkg_remove_cmd)
       pp = "class { 'nginx': }"

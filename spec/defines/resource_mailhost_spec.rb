@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'nginx::resource::mailhost' do
@@ -21,17 +23,19 @@ describe 'nginx::resource::mailhost' do
 
           it { is_expected.to contain_class('nginx') }
           it { is_expected.to contain_concat("/etc/nginx/conf.mail.d/#{title}.conf").that_requires('File[/etc/nginx/conf.mail.d]') }
+
           it do
             is_expected.to contain_concat("/etc/nginx/conf.mail.d/#{title}.conf").with('owner' => 'root',
                                                                                        'group' => 'root',
-                                                                                       'mode' => '0644')
+                                                                                       'mode'  => '0644')
           end
+
           it { is_expected.to contain_concat__fragment("#{title}-header") }
           it { is_expected.not_to contain_concat__fragment("#{title}-ssl") }
         end
 
         describe 'absent assumption' do
-          let(:params) { default_params.merge('ensure'.to_sym => 'absent') }
+          let(:params) { default_params.merge(ensure: 'absent') }
 
           it { is_expected.to contain_class('nginx') }
           it { is_expected.to contain_concat("/etc/nginx/conf.mail.d/#{title}.conf").with('ensure' => 'absent') }
@@ -104,6 +108,18 @@ describe 'nginx::resource::mailhost' do
               attr: 'xclient',
               value: 'off',
               match: '  xclient               off;'
+            },
+            {
+              title: 'should set proxy_protocol',
+              attr: 'proxy_protocol',
+              value: 'off',
+              match: '  proxy_protocol        off;'
+            },
+            {
+              title: 'should set proxy_smtp_auth',
+              attr: 'proxy_smtp_auth',
+              value: 'off',
+              match: '  proxy_smtp_auth       off;'
             },
             {
               title: 'should set auth_http',
@@ -190,6 +206,7 @@ describe 'nginx::resource::mailhost' do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
 
               it { is_expected.to contain_concat__fragment("#{title}-header") }
+
               it param[:title] do
                 matches = Array(param[:match])
 
@@ -237,6 +254,7 @@ describe 'nginx::resource::mailhost' do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
 
               it { is_expected.to contain_concat__fragment("#{title}-header") }
+
               it param[:title] do
                 matches = Array(param[:match])
 
@@ -277,6 +295,7 @@ describe 'nginx::resource::mailhost' do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
 
               it { is_expected.to contain_concat__fragment("#{title}-header") }
+
               it param[:title] do
                 matches = Array(param[:match])
 
@@ -317,6 +336,7 @@ describe 'nginx::resource::mailhost' do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
 
               it { is_expected.to contain_concat__fragment("#{title}-header") }
+
               it param[:title] do
                 matches = Array(param[:match])
 
@@ -472,6 +492,7 @@ describe 'nginx::resource::mailhost' do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
 
               it { is_expected.to contain_concat__fragment("#{title}-header") }
+
               it param[:title] do
                 matches = Array(param[:match])
 
@@ -543,6 +564,18 @@ describe 'nginx::resource::mailhost' do
               match: '  xclient               off;'
             },
             {
+              title: 'should set proxy_protocol',
+              attr: 'proxy_protocol',
+              value: 'off',
+              match: '  proxy_protocol        off;'
+            },
+            {
+              title: 'should set proxy_smtp_auth',
+              attr: 'proxy_smtp_auth',
+              value: 'off',
+              match: '  proxy_smtp_auth       off;'
+            },
+            {
               title: 'should set auth_http',
               attr: 'auth_http',
               value: 'test-auth_http',
@@ -595,6 +628,7 @@ describe 'nginx::resource::mailhost' do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
 
               it { is_expected.to contain_concat__fragment("#{title}-ssl") }
+
               it param[:title] do
                 matches = Array(param[:match])
 
@@ -633,6 +667,7 @@ describe 'nginx::resource::mailhost' do
                 expect(content).to include('listen                *:587 ssl;')
               end
             end
+
             context 'when version comes from parameter' do
               let(:pre_condition) { ['class { "nginx": nginx_version => "1.16.0", mail => true}'] }
 

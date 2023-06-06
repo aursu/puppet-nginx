@@ -150,6 +150,11 @@
 #   This directive sets the time for caching different replies.
 # @param proxy_cache_lock
 #   This directive sets the locking mechanism for pouplating cache.
+# @param proxy_cache_background_update
+#   Allows starting a background subrequest to update an expired cache item
+# @param proxy_cache_convert_head
+#    Enables or disables the conversion of the “HEAD” method to “GET” for caching.
+#    When the conversion is disabled, the cache key should be configured to include the $request_method.
 # @param proxy_cache_bypass
 #   Defines conditions which the response will not be cached
 # @param proxy_no_cache
@@ -265,9 +270,9 @@ define nginx::resource::location (
   Optional[String] $default_type                                   = undef, # 'text/plain'
   Optional[Nginx::Switch] $autoindex                               = undef,
   Array[String] $index_files                                       = [],
-  Optional[Enum['on', 'off']] $autoindex_exact_size                = undef,
+  Optional[Nginx::Switch] $autoindex_exact_size                    = undef,
   Optional[Enum['html', 'xml', 'json', 'jsonp']] $autoindex_format = undef,
-  Optional[Enum['on', 'off']] $autoindex_localtime                 = undef,
+  Optional[Nginx::Switch] $autoindex_localtime                     = undef,
   Optional[String] $proxy                                          = undef,
   Optional[
     Variant[
@@ -331,7 +336,9 @@ define nginx::resource::location (
   Optional[String] $proxy_cache                                    = undef,
   Optional[String] $proxy_cache_key                                = undef,
   Optional[String] $proxy_cache_use_stale                          = undef,
-  Optional[Enum['on', 'off']] $proxy_cache_lock                    = undef,
+  Optional[Nginx::Switch] $proxy_cache_lock                        = undef,
+  Optional[Nginx::Switch] $proxy_cache_background_update           = undef,
+  Optional[Nginx::Switch] $proxy_cache_convert_head                = undef,
   Optional[Variant[Array, String]] $proxy_cache_valid              = undef,
   Optional[Variant[Array, String]] $proxy_cache_bypass             = undef,
   Optional[Variant[Array, String]] $proxy_no_cache                 = undef,
@@ -342,7 +349,7 @@ define nginx::resource::location (
   Optional[Nginx::Switch] $proxy_request_buffering                 = undef,
   Optional[Nginx::Size] $proxy_max_temp_file_size                  = undef,
   Optional[Nginx::Size] $proxy_busy_buffers_size                   = undef,
-  Optional[Enum['on', 'off']] $absolute_redirect                   = undef,
+  Optional[Nginx::Switch] $absolute_redirect                       = undef,
   Optional[String] $auth_basic                                     = undef,
   Optional[String] $auth_basic_user_file                           = undef,
   Optional[String] $auth_request                                   = undef,

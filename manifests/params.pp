@@ -112,25 +112,14 @@ class nginx::params {
       }
     }
     'Debian': {
-      if ($facts['os']['name'] == 'Ubuntu' and $facts['os']['release']['major'] == '16.04') {
-        $_module_os_overrides = {
-          'manage_repo' => true,
-          'daemon_user' => 'www-data',
-          'log_user'    => 'root',
-          'log_group'   => 'adm',
-          'log_mode'    => '0755',
-        }
-        # The following was designed/tested on Ubuntu 18 and Debian 9/10 but probably works on newer versions as well
-      } else {
-        $_module_os_overrides = {
-          'manage_repo'             => true,
-          'daemon_user'             => 'www-data',
-          'log_user'                => 'root',
-          'log_group'               => 'adm',
-          'log_mode'                => '0755',
-          'passenger_package_name'  => 'libnginx-mod-http-passenger',
-          'include_modules_enabled' => true,
-        }
+      $_module_os_overrides = {
+        'manage_repo'             => true,
+        'daemon_user'             => 'www-data',
+        'log_user'                => 'root',
+        'log_group'               => 'adm',
+        'log_mode'                => '0755',
+        'passenger_package_name'  => 'libnginx-mod-http-passenger',
+        'include_modules_enabled' => true,
       }
     }
     'DragonFly', 'FreeBSD': {
@@ -148,7 +137,7 @@ class nginx::params {
       }
     }
     'RedHat': {
-      if ($facts['os']['name'] in ['RedHat', 'CentOS', 'Oracle', 'virtuozzolinux'] and $facts['os']['release']['major'] in ['6', '7']) {
+      if ($facts['os']['name'] in ['RedHat', 'CentOS', 'Oracle', 'virtuozzolinux', 'Rocky', 'AlmaLinux'] and $facts['os']['release']['major'] in ['6', '7', '8', '9']) {
         $_module_os_overrides = {
           'manage_repo' => true,
           'log_group'   => 'nginx',
@@ -213,24 +202,16 @@ class nginx::params {
   $log_user                = $_module_parameters['log_user']
   $log_group               = $_module_parameters['log_group']
   $log_mode                = $_module_parameters['log_mode']
-  $temp_dir                = '/tmp'
   $pid                     = $_module_parameters['pid']
   $include_modules_enabled = $_module_parameters['include_modules_enabled']
 
   $daemon_user             = $_module_parameters['daemon_user']
-  $global_owner            = 'root'
   $global_group            = $_module_parameters['root_group']
-  $global_mode             = '0644'
-  $http_access_log_file    = 'access.log'
   $manage_repo             = $_module_parameters['manage_repo']
   $mime_types              = $_module_parameters['mime_types']
-  $nginx_error_log_file    = 'error.log'
   $root_group              = $_module_parameters['root_group']
   $package_name            = $_module_parameters['package_name']
   $passenger_package_name  = $_module_parameters['passenger_package_name']
-  $sites_available_owner   = 'root'
   $sites_available_group   = $_module_parameters['root_group']
-  $sites_available_mode    = '0644'
-  $super_user              = true
   ### END Referenced Variables
 }

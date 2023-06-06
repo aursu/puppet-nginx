@@ -104,7 +104,11 @@ http {
 <% end -%>
 <% if @log_format -%>
 <% @log_format.sort_by{|k,v| k}.each do |key,value| -%>
-  log_format <%= key %> '<%= value %>';
+  <%- if value.is_a?(Hash) -%>
+  log_format <%= key %> <%= "escape=#{value['escape']} " if value['escape'] %><%= value['format'].inspect %>;
+  <%- else -%>
+  log_format <%= key %> <%= value.inspect %>;
+  <%- end -%>
 <% end -%>
 <% end -%>
 <% if @absolute_redirect -%>
@@ -148,6 +152,12 @@ http {
   etag <%= bool2config(@etag) %>;
 <% end -%>
 <%= scope.function_template(["nginx/ngx_http_core_module.erb"]) %>
+<% if @map_hash_bucket_size -%>
+  map_hash_bucket_size <%= @map_hash_bucket_size %>;
+<% end -%>
+<% if @map_hash_max_size -%>
+  map_hash_max_size <%= @map_hash_max_size %>;
+<% end -%>
 <% if @ssl_dhparam -%>
   ssl_dhparam               <%= @ssl_dhparam %>;
 <% end -%>
@@ -232,5 +242,15 @@ stream {
   <% unless @confd_only -%>
   include <%= @conf_dir %>/streams-enabled/*;
   <% end -%>
+<% unless @stream_log_format.empty? -%>
+
+<% @stream_log_format.sort.each do |key,value| -%>
+  log_format <%= key %> '<%= value %>';
+<% end -%>
+<% end -%>
+
+<%- Array(@stream_access_log).each do |log_item| -%>
+  access_log <%= log_item %><% if @stream_custom_format_log %> <%= @stream_custom_format_log%><% end %>;
+<% end -%>
 }
 <% end -%>

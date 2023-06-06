@@ -21,6 +21,12 @@ class nginx::package::redhat (
     default          => 'rhel'
   }
 
+  $want_module_hotfixes = if versioncmp(fact('os.release.full'), '8.0') >= 0 {
+    '1'
+  } else {
+    'absent'
+  }
+
   if $manage_repo {
     exec { 'yum-clean-b114182':
       command     => 'yum clean all',
@@ -31,15 +37,16 @@ class nginx::package::redhat (
     case $package_source {
       'nginx', 'nginx-stable': {
         yumrepo { 'nginx-release':
-          baseurl   => "https://nginx.org/packages/${_os}/${facts['os']['release']['major']}/\$basearch/",
-          descr     => 'nginx repo',
-          enabled   => '1',
-          gpgcheck  => '1',
-          priority  => '1',
-          gpgkey    => 'https://nginx.org/keys/nginx_signing.key',
-          sslverify => $sslverify,
-          before    => Package['nginx'],
-          notify    => Exec['yum-clean-b114182'],
+          baseurl         => "https://nginx.org/packages/${_os}/${facts['os']['release']['major']}/\$basearch/",
+          descr           => 'nginx repo',
+          enabled         => '1',
+          gpgcheck        => '1',
+          priority        => '1',
+          gpgkey          => 'https://nginx.org/keys/nginx_signing.key',
+          sslverify       => $sslverify,
+          before          => Package['nginx'],
+          notify          => Exec['yum-clean-b114182'],
+          module_hotfixes => $want_module_hotfixes,
         }
 
         if $purge_passenger_repo {
@@ -52,15 +59,16 @@ class nginx::package::redhat (
       }
       'nginx-mainline': {
         yumrepo { 'nginx-release':
-          baseurl   => "https://nginx.org/packages/mainline/${_os}/${facts['os']['release']['major']}/\$basearch/",
-          descr     => 'nginx repo',
-          enabled   => '1',
-          gpgcheck  => '1',
-          priority  => '1',
-          gpgkey    => 'https://nginx.org/keys/nginx_signing.key',
-          sslverify => $sslverify,
-          before    => Package['nginx'],
-          notify    => Exec['yum-clean-b114182'],
+          baseurl         => "https://nginx.org/packages/mainline/${_os}/${facts['os']['release']['major']}/\$basearch/",
+          descr           => 'nginx repo',
+          enabled         => '1',
+          gpgcheck        => '1',
+          priority        => '1',
+          gpgkey          => 'https://nginx.org/keys/nginx_signing.key',
+          sslverify       => $sslverify,
+          before          => Package['nginx'],
+          notify          => Exec['yum-clean-b114182'],
+          module_hotfixes => $want_module_hotfixes,
         }
 
         if $purge_passenger_repo {
@@ -72,22 +80,23 @@ class nginx::package::redhat (
         }
       }
       'passenger': {
-        if ($facts['os']['name'] in ['RedHat', 'CentOS', 'VirtuozzoLinux']) and ($facts['os']['release']['major'] in ['6', '7']) {
+        if ($facts['os']['name'] in ['RedHat', 'CentOS', 'VirtuozzoLinux', 'Rocky', 'AlmaLinux']) and ($facts['os']['release']['major'] in ['6', '7', '8', '9']) {
           # 2019-11: Passenger changed their gpg key from: `https://packagecloud.io/phusion/passenger/gpgkey`
           # to: `https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key.txt`
           # Find the latest key by opening: https://oss-binaries.phusionpassenger.com/yum/definitions/el-passenger.repo
 
           # Also note: Since 6.0.5 there are no nginx packages in the phusion EL7 repository, and nginx packages are expected to come from epel instead
           yumrepo { 'passenger':
-            baseurl       => "https://oss-binaries.phusionpassenger.com/yum/passenger/el/${facts['os']['release']['major']}/\$basearch",
-            descr         => 'passenger repo',
-            enabled       => '1',
-            gpgcheck      => '0',
-            repo_gpgcheck => '1',
-            priority      => '1',
-            gpgkey        => 'https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key.txt',
-            before        => Package['nginx'],
-            notify        => Exec['yum-clean-b114182'],
+            baseurl         => "https://oss-binaries.phusionpassenger.com/yum/passenger/el/${facts['os']['release']['major']}/\$basearch",
+            descr           => 'passenger repo',
+            enabled         => '1',
+            gpgcheck        => '0',
+            repo_gpgcheck   => '1',
+            priority        => '1',
+            gpgkey          => 'https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key.txt',
+            before          => Package['nginx'],
+            notify          => Exec['yum-clean-b114182'],
+            module_hotfixes => $want_module_hotfixes,
           }
 
           yumrepo { 'nginx-release':
@@ -117,6 +126,7 @@ class nginx::package::redhat (
           sslverify           => $sslverify,
           before              => Package['nginx'],
           notify              => Exec['yum-clean-b114182'],
+          module_hotfixes     => $want_module_hotfixes,
         }
 
         if $purge_passenger_repo {

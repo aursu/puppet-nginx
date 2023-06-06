@@ -16,8 +16,8 @@ end
 <% unless @ignore_invalid_headers.nil? -%>
   ignore_invalid_headers <%= bool2config(@ignore_invalid_headers) %>;
 <% end -%>
-<% if @client_body_temp_path -%>
-  client_body_temp_path <%= @client_body_temp_path %>;
+<% if @_client_body_temp_path -%>
+  client_body_temp_path   <%= @_client_body_temp_path.join(' ') %>;
 <% end -%>
 <% if @send_timeout -%>
   send_timeout <%= @send_timeout %>;

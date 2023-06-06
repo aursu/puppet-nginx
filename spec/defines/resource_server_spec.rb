@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'nginx::resource::server' do
@@ -32,19 +34,22 @@ describe 'nginx::resource::server' do
           let(:params) { default_params.merge(use_default_location: true, access_log: true, error_log: true) }
 
           it { is_expected.to contain_class('nginx') }
+
           it do
             is_expected.to contain_concat("/etc/nginx/sites-available/#{title}.conf").with('owner' => 'root',
                                                                                            'group' => 'root',
                                                                                            'mode' => '0644')
           end
+
           it { is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{access_log\s+/var/log/nginx/www\.rspec\.example\.com\.access\.log;}) }
           it { is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{error_log\s+/var/log/nginx/www\.rspec\.example\.com\.error\.log}) }
           it { is_expected.to contain_concat__fragment("#{title}-footer") }
           it { is_expected.to contain_nginx__resource__location("#{title}-default") }
           it { is_expected.not_to contain_file('/etc/nginx/fastcgi.conf') }
+
           it do
             is_expected.to contain_file("#{title}.conf symlink").with('ensure' => 'link',
-                                                                      'path'   => "/etc/nginx/sites-enabled/#{title}.conf",
+                                                                      'path' => "/etc/nginx/sites-enabled/#{title}.conf",
                                                                       'target' => "/etc/nginx/sites-available/#{title}.conf")
           end
         end
@@ -54,6 +59,7 @@ describe 'nginx::resource::server' do
           let(:params) { default_params }
 
           it { is_expected.to contain_class('nginx') }
+
           it do
             is_expected.to contain_concat("/etc/nginx/conf.d/#{title}.conf").with('owner' => 'root',
                                                                                   'group' => 'root',
@@ -527,6 +533,7 @@ describe 'nginx::resource::server' do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
 
               it { is_expected.to contain_concat__fragment("#{title}-header") }
+
               it param[:title] do
                 matches = Array(param[:match])
 
@@ -584,6 +591,7 @@ describe 'nginx::resource::server' do
                 let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
 
                 it { is_expected.to contain_concat__fragment("#{title}-header") }
+
                 it param[:title] do
                   matches = Array(param[:match])
 
@@ -642,6 +650,7 @@ describe 'nginx::resource::server' do
                 let(:params) { default_params.merge(param[:attr].to_sym => param[:value], ssl: true, ssl_cert: '/tmp/dummy.crt', ssl_key: '/tmp/dummy.key', listen_port: 443) }
 
                 it { is_expected.to contain_concat__fragment("#{title}-ssl-header") }
+
                 it param[:title] do
                   matches = Array(param[:match])
 
@@ -707,6 +716,7 @@ describe 'nginx::resource::server' do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
 
               it { is_expected.to contain_concat__fragment("#{title}-footer") }
+
               it param[:title] do
                 matches = Array(param[:match])
 
@@ -741,6 +751,7 @@ describe 'nginx::resource::server' do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
 
               it { is_expected.to contain_concat__fragment("#{title}-footer") }
+
               it param[:title] do
                 matches = Array(param[:match])
 
@@ -775,6 +786,7 @@ describe 'nginx::resource::server' do
 
               it { is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{  ssl on;}) }
             end
+
             context 'with fact nginx_version=1.14.1' do
               let(:facts) { facts.merge(nginx_version: '1.14.1') }
 
@@ -1261,12 +1273,13 @@ describe 'nginx::resource::server' do
             context "when #{param[:attr]} is #{param[:value]}" do
               let :params do
                 default_params.merge(param[:attr].to_sym => param[:value],
-                                     :ssl                => true,
-                                     :ssl_key            => 'dummy.key',
-                                     :ssl_cert           => 'dummy.crt')
+                                     :ssl => true,
+                                     :ssl_key => 'dummy.key',
+                                     :ssl_cert => 'dummy.crt')
               end
 
               it { is_expected.to contain_concat__fragment("#{title}-ssl-header") }
+
               it param[:title] do
                 matches = Array(param[:match])
 
@@ -1346,6 +1359,7 @@ describe 'nginx::resource::server' do
               end
 
               it { is_expected.to contain_concat__fragment("#{title}-ssl-footer") }
+
               it param[:title] do
                 matches = Array(param[:match])
 
