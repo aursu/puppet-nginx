@@ -32,6 +32,13 @@ describe 'nginx::resource::mailhost define:' do
     it 'runs successfully' do
       pp = "
       if $facts['os']['family'] == 'RedHat' {
+        if $facts['os']['release']['major'] == '7' {
+          package { 'epel-release':
+            ensure => installed,
+            before => Package['nginx-mod-mail'],
+          }
+        }
+
         package { 'nginx-mod-mail':
           ensure => installed,
         }
@@ -84,6 +91,13 @@ describe 'nginx::resource::mailhost define:' do
       it 'runs successfully' do
         pp = "
       if $facts['os']['family'] == 'RedHat' {
+        if $facts['os']['release']['major'] == '7' {
+          package { 'epel-release':
+            ensure => installed,
+            before => Package['nginx-mod-mail'],
+          }
+        }
+
         package { 'nginx-mod-mail':
           ensure => installed,
         }
