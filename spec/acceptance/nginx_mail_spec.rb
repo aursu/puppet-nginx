@@ -26,13 +26,12 @@ describe 'nginx::resource::mailhost define:' do
     }
     "
     apply_manifest(pp, catch_failures: true)
-    apply_manifest(pp, catch_failures: true)
   end
 
   context 'actualy test the mail module', if: has_recent_mail_module do
     it 'runs successfully' do
       pp = "
-      if fact('os.family') == 'RedHat' {
+      if $facts['os']['family'] == 'RedHat' {
         package { 'nginx-mod-mail':
           ensure => installed,
         }
@@ -40,7 +39,7 @@ describe 'nginx::resource::mailhost define:' do
 
       class { 'nginx':
         mail            => true,
-        dynamic_modules => fact('os.family') ? {
+        dynamic_modules => $facts['os']['family'] ? {
           'RedHat' => ['/usr/lib64/nginx/modules/ngx_mail_module.so'],
           default  => [],
         }
@@ -84,7 +83,7 @@ describe 'nginx::resource::mailhost define:' do
     context 'when configured for nginx 1.14' do
       it 'runs successfully' do
         pp = "
-      if fact('os.family') == 'RedHat' {
+      if $facts['os']['family'] == 'RedHat' {
         package { 'nginx-mod-mail':
           ensure => installed,
         }
@@ -93,7 +92,7 @@ describe 'nginx::resource::mailhost define:' do
       class { 'nginx':
         mail            => true,
         nginx_version   => '1.14.0',
-        dynamic_modules => fact('os.family') ? {
+        dynamic_modules => $facts['os']['family'] ? {
           'RedHat' => ['/usr/lib64/nginx/modules/ngx_mail_module.so'],
           default  => [],
         }
