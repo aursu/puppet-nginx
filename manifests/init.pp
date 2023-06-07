@@ -60,7 +60,7 @@ class nginx (
   String[1] $daemon_user                                     = $nginx::params::daemon_user,
   Optional[String[1]] $daemon_group                          = undef,
   Array[String] $dynamic_modules                             = [],
-  String[1] $global_owner                                    = $nginx::params::global_owner,
+  String[1] $global_owner                                    = 'root',
   String[1] $global_group                                    = $nginx::params::global_group,
   Stdlib::Filemode $global_mode                              = '0644',
   Optional[Hash[String, Nginx::LimitReqZone]] $limit_req_zone = undef,

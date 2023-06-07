@@ -815,12 +815,6 @@ describe 'nginx' do
                 notmatch: %r{mail}
               },
               {
-                title: 'should set client_body_temp_path',
-                attr: 'client_body_temp_path',
-                value: '/path/to/body_temp',
-                match: '  client_body_temp_path /path/to/body_temp;'
-              },
-              {
                 title: 'should set recursive_error_pages',
                 attr: 'recursive_error_pages',
                 value: true,
@@ -831,17 +825,6 @@ describe 'nginx' do
                 attr: 'ignore_invalid_headers',
                 value: true,
                 match: '  ignore_invalid_headers on;'
-              },
-              {
-                title: 'should set client_body_temp_path with subdirectory hierarchy',
-                attr: 'client_body_temp_path',
-                value: [
-                  '/path/to/body_temp',
-                  1,
-                  2,
-                  3
-                ],
-                match: '  client_body_temp_path   /path/to/body_temp 1 2 3;'
               },
               {
                 title: 'should set send_timeout',
@@ -1031,7 +1014,24 @@ describe 'nginx' do
                 attr: 'keepalive_requests',
                 value: 345,
                 match: %r{^\s*keepalive_requests 345;$}
-              }
+              },
+              {
+                title: 'should set client_body_temp_path',
+                attr: 'client_body_temp_path',
+                value: '/path/to/body_temp',
+                match: %r{^\s*client_body_temp_path /path/to/body_temp;$}
+              },
+              {
+                title: 'should set client_body_temp_path with subdirectory hierarchy',
+                attr: 'client_body_temp_path',
+                value: [
+                  '/path/to/body_temp',
+                  1,
+                  2,
+                  3
+                ],
+                match: %r{^\s*client_body_temp_path /path/to/body_temp 1 2 3;$}
+              },
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) { { param[:attr].to_sym => param[:value] } }
@@ -1219,7 +1219,7 @@ describe 'nginx' do
                   2,
                   3
                 ],
-                match: '  proxy_temp_path         /path/to/proxy_temp 1 2 3;'
+                match: %r{^\s*proxy_temp_path /path/to/proxy_temp 1 2 3;}
               },
               {
                 title: 'should set proxy_busy_buffers_size',
