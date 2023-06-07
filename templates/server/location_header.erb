@@ -92,9 +92,7 @@ end
     rewrite <%= rewrite_rule %>;
     <%- end -%>
 <% end -%>
-<% if @limit_zone -%>
-    limit_req zone=<%= @limit_zone %>;
-<% end -%>
+<%= scope.function_template(['nginx/server/locations/limit_req.erb']) %>
 <% unless @reset_timedout_connection.nil? -%>
     reset_timedout_connection <%= bool2config(@reset_timedout_connection) %>;
 <% end -%>

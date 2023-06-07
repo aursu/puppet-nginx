@@ -527,6 +527,54 @@ describe 'nginx::resource::server' do
               attr: 'keepalive_requests',
               value: 345,
               match: %r{^\s*keepalive_requests 345;$}
+            },
+            {
+              title: 'should set limit_req from Hash',
+              attr: 'limit_req',
+              value: { zone: 'one', burst: 5, nodelay: true },
+              match: '    limit_req zone=one burst=5 nodelay;'
+            },
+            {
+              title: 'should set limit_req from Hash with delay',
+              attr: 'limit_req',
+              value: { zone: 'ip', burst: 12, delay: 8 },
+              match: '    limit_req zone=ip burst=12 delay=8;'
+            },
+            {
+              title: 'should set limit_req burst only',
+              attr: 'limit_req',
+              value: { zone: 'mylimit', burst: 20 },
+              match: '    limit_req zone=mylimit burst=20;'
+            },
+            {
+              title: 'should set limit_req from Array',
+              attr: 'limit_req',
+              value: [
+                { zone: 'perip', burst: 5, nodelay: true },
+                { zone: 'perserver', burst: 10 },
+              ],
+              match: [
+                '    limit_req zone=perip burst=5 nodelay;',
+                '    limit_req zone=perserver burst=10;'
+              ]
+            },
+            {
+              title: 'should set limit_req_log_level',
+              attr: 'limit_req_log_level',
+              value: 'notice',
+              match: '    limit_req_log_level notice;'
+            },
+            {
+              title: 'should set limit_req_status',
+              attr: 'limit_req_status',
+              value: '503',
+              match: '    limit_req_status 503;'
+            },
+            {
+              title: 'should set limit_req_status as integer',
+              attr: 'limit_req_status',
+              value: 500,
+              match: '    limit_req_status 500;'
             }
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
@@ -1268,6 +1316,54 @@ describe 'nginx::resource::server' do
               attr: 'keepalive_requests',
               value: 345,
               match: %r{^\s*keepalive_requests 345;$}
+            },
+            {
+              title: 'should set limit_req from Hash',
+              attr: 'limit_req',
+              value: { zone: 'one', burst: 5, nodelay: true },
+              match: '    limit_req zone=one burst=5 nodelay;'
+            },
+            {
+              title: 'should set limit_req from Hash with delay',
+              attr: 'limit_req',
+              value: { zone: 'ip', burst: 12, delay: 8 },
+              match: '    limit_req zone=ip burst=12 delay=8;'
+            },
+            {
+              title: 'should set limit_req burst only',
+              attr: 'limit_req',
+              value: { zone: 'mylimit', burst: 20 },
+              match: '    limit_req zone=mylimit burst=20;'
+            },
+            {
+              title: 'should set limit_req from Array',
+              attr: 'limit_req',
+              value: [
+                { zone: 'perip', burst: 5, nodelay: true },
+                { zone: 'perserver', burst: 10 },
+              ],
+              match: [
+                '    limit_req zone=perip burst=5 nodelay;',
+                '    limit_req zone=perserver burst=10;'
+              ]
+            },
+            {
+              title: 'should set limit_req_log_level',
+              attr: 'limit_req_log_level',
+              value: 'notice',
+              match: '    limit_req_log_level notice;'
+            },
+            {
+              title: 'should set limit_req_status',
+              attr: 'limit_req_status',
+              value: '503',
+              match: '    limit_req_status 503;'
+            },
+            {
+              title: 'should set limit_req_status as integer',
+              attr: 'limit_req_status',
+              value: 500,
+              match: '    limit_req_status 500;'
             }
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do

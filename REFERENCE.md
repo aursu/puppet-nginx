@@ -40,12 +40,15 @@
 * [`Nginx::ConfigSet`](#Nginx--ConfigSet)
 * [`Nginx::ConnectionProcessing`](#Nginx--ConnectionProcessing)
 * [`Nginx::DebugConnection`](#Nginx--DebugConnection)
+* [`Nginx::ErrorCode`](#Nginx--ErrorCode)
 * [`Nginx::ErrorLogSeverity`](#Nginx--ErrorLogSeverity)
 * [`Nginx::FileCache`](#Nginx--FileCache)
 * [`Nginx::GzipProxied`](#Nginx--GzipProxied): custom type for gzip_proxied
 * [`Nginx::LimitReqZone`](#Nginx--LimitReqZone)
 * [`Nginx::LogFormat`](#Nginx--LogFormat)
+* [`Nginx::LogLevel`](#Nginx--LogLevel): https://nginx.org/en/docs/http/ngx_http_limit_req_module.html#limit_req_log_level
 * [`Nginx::Rate`](#Nginx--Rate)
+* [`Nginx::RateLimit`](#Nginx--RateLimit)
 * [`Nginx::ReturnFormat`](#Nginx--ReturnFormat)
 * [`Nginx::SSLCache`](#Nginx--SSLCache)
 * [`Nginx::Size`](#Nginx--Size)
@@ -2097,6 +2100,9 @@ The following parameters are available in the `nginx::resource::location` define
 * [`raw_prepend`](#-nginx--resource--location--raw_prepend)
 * [`raw_append`](#-nginx--resource--location--raw_append)
 * [`limit_zone`](#-nginx--resource--location--limit_zone)
+* [`limit_req`](#-nginx--resource--location--limit_req)
+* [`limit_req_log_level`](#-nginx--resource--location--limit_req_log_level)
+* [`limit_req_status`](#-nginx--resource--location--limit_req_status)
 * [`location_custom_cfg`](#-nginx--resource--location--location_custom_cfg)
 * [`location_cfg_prepend`](#-nginx--resource--location--location_cfg_prepend)
 * [`location_custom_cfg_prepend`](#-nginx--resource--location--location_custom_cfg_prepend)
@@ -2571,6 +2577,39 @@ previously defined limit_req_zone in the main nginx configuration
 
 Default value: `undef`
 
+##### <a name="-nginx--resource--location--limit_req"></a>`limit_req`
+
+Data type:
+
+```puppet
+Variant[
+    Nginx::RateLimit,
+    Array[Nginx::RateLimit]
+  ]
+```
+
+Sets the shared memory zone and the maximum burst size of requests.
+See: https://nginx.org/en/docs/http/ngx_http_limit_req_module.html#limit_req
+
+Default value: `[]`
+
+##### <a name="-nginx--resource--location--limit_req_log_level"></a>`limit_req_log_level`
+
+Data type: `Optional[Nginx::LogLevel]`
+
+Sets the desired logging level for cases when the server refuses to process
+requests due to rate exceeding, or delays request processing.
+
+Default value: `undef`
+
+##### <a name="-nginx--resource--location--limit_req_status"></a>`limit_req_status`
+
+Data type: `Optional[Nginx::ErrorCode]`
+
+Sets the status code to return in response to rejected requests.
+
+Default value: `undef`
+
 ##### <a name="-nginx--resource--location--location_custom_cfg"></a>`location_custom_cfg`
 
 Data type: `Optional[Hash]`
@@ -2867,10 +2906,10 @@ Data type:
 
 ```puppet
 Optional[
-      Variant[
-        Enum['always'],
-        Nginx::Switch
-      ]
+    Variant[
+      Enum['always'],
+      Nginx::Switch
+    ]
   ]
 ```
 
@@ -2965,9 +3004,9 @@ Data type:
 
 ```puppet
 Optional[Variant[
-    String,
-    Array[String],
-    Hash[String, String]
+      String,
+      Array[String],
+      Hash[String, String]
   ]]
 ```
 
@@ -3746,6 +3785,9 @@ The following parameters are available in the `nginx::resource::server` defined 
 * [`error_pages`](#-nginx--resource--server--error_pages)
 * [`locations`](#-nginx--resource--server--locations)
 * [`locations_defaults`](#-nginx--resource--server--locations_defaults)
+* [`limit_req`](#-nginx--resource--server--limit_req)
+* [`limit_req_log_level`](#-nginx--resource--server--limit_req_log_level)
+* [`limit_req_status`](#-nginx--resource--server--limit_req_status)
 * [`ssl_listen_option`](#-nginx--resource--server--ssl_listen_option)
 * [`ssl_redirect_only`](#-nginx--resource--server--ssl_redirect_only)
 * [`ssl_redirect_host`](#-nginx--resource--server--ssl_redirect_host)
@@ -4824,6 +4866,39 @@ Hash of location default settings
 
 Default value: `{}`
 
+##### <a name="-nginx--resource--server--limit_req"></a>`limit_req`
+
+Data type:
+
+```puppet
+Variant[
+    Nginx::RateLimit,
+    Array[Nginx::RateLimit]
+  ]
+```
+
+Sets the shared memory zone and the maximum burst size of requests.
+See: https://nginx.org/en/docs/http/ngx_http_limit_req_module.html#limit_req
+
+Default value: `[]`
+
+##### <a name="-nginx--resource--server--limit_req_log_level"></a>`limit_req_log_level`
+
+Data type: `Optional[Nginx::LogLevel]`
+
+Sets the desired logging level for cases when the server refuses to process
+requests due to rate exceeding, or delays request processing.
+
+Default value: `undef`
+
+##### <a name="-nginx--resource--server--limit_req_status"></a>`limit_req_status`
+
+Data type: `Optional[Nginx::ErrorCode]`
+
+Sets the status code to return in response to rejected requests.
+
+Default value: `undef`
+
 ##### <a name="-nginx--resource--server--ssl_listen_option"></a>`ssl_listen_option`
 
 Data type: `Boolean`
@@ -5888,6 +5963,12 @@ The Nginx::DebugConnection data type.
 
 Alias of `Variant[Stdlib::Host, Stdlib::IP::Address, Enum['unix:']]`
 
+### <a name="Nginx--ErrorCode"></a>`Nginx::ErrorCode`
+
+The Nginx::ErrorCode data type.
+
+Alias of `Variant[Integer[400, 599], Pattern[/^[45][0-9]{2}$/]]`
+
 ### <a name="Nginx--ErrorLogSeverity"></a>`Nginx::ErrorLogSeverity`
 
 The Nginx::ErrorLogSeverity data type.
@@ -5904,7 +5985,7 @@ Alias of
 Variant[Enum['off'], Struct[{
       max                 => Integer,
       Optional[inactive]  => Nginx::Time
-    }]]
+  }]]
 ```
 
 ### <a name="Nginx--GzipProxied"></a>`Nginx::GzipProxied`
@@ -5924,9 +6005,9 @@ Alias of
 
 ```puppet
 Struct[{
-  size  => Nginx::Size,
-  key   => String,
-  rate  => Nginx::Rate
+    size  => Nginx::Size,
+    key   => String,
+    rate  => Nginx::Rate
 }]
 ```
 
@@ -5938,16 +6019,40 @@ Alias of
 
 ```puppet
 Variant[String[1], Struct[{
-    Optional[escape] => Enum['default', 'json', 'none'],
-    format           => String[1],
+      Optional[escape] => Enum['default', 'json', 'none'],
+      format           => String[1],
   }]]
 ```
+
+### <a name="Nginx--LogLevel"></a>`Nginx::LogLevel`
+
+https://nginx.org/en/docs/http/ngx_http_limit_req_module.html#limit_req_log_level
+
+Alias of `Enum['info', 'notice', 'warn', 'error']`
 
 ### <a name="Nginx--Rate"></a>`Nginx::Rate`
 
 The Nginx::Rate data type.
 
 Alias of `Variant[Integer, Pattern[/[1-9][0-9]*(r\/[sm])?/]]`
+
+### <a name="Nginx--RateLimit"></a>`Nginx::RateLimit`
+
+The Nginx::RateLimit data type.
+
+Alias of
+
+```puppet
+Variant[Struct[{
+      zone                => String,
+      Optional[burst]     => Integer,
+      Optional[delay]     => Integer,
+  }], Struct[{
+      zone                => String,
+      Optional[burst]     => Integer,
+      Optional[nodelay]   => Boolean,
+  }]]
+```
 
 ### <a name="Nginx--ReturnFormat"></a>`Nginx::ReturnFormat`
 

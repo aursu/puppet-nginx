@@ -1,0 +1,11 @@
+<% if @limit_req_list && @limit_req_list.size > 0 -%>
+<%- @limit_req_list.each do |limit_req| -%>
+    limit_req zone=<%= limit_req['zone'] %><% if limit_req['burst'] -%> burst=<%= limit_req['burst'] %><% end -%><% if limit_req['nodelay'] -%> nodelay<% elsif limit_req['delay'] -%> delay=<%= limit_req['delay'] %><% end -%>;
+<%- end -%>
+<% end -%>
+<% if @limit_req_log_level -%>
+    limit_req_log_level <%= @limit_req_log_level %>;
+<% end -%>
+<% if @limit_req_status -%>
+    limit_req_status <%= @limit_req_status %>;
+<% end -%>
