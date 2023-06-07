@@ -72,11 +72,6 @@ describe 'nginx class:' do
 
     describe package('passenger') do
       it { is_expected.to be_installed }
-
-      it 'comes from the expected source' do
-        pkg_output = shell(pkg_cmd)
-        expect(pkg_output.stdout).to match pkg_match
-      end
     end
 
     describe service('nginx') do

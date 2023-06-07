@@ -3,12 +3,12 @@
 require 'spec_helper_acceptance'
 
 describe 'nginx class' do
-  epel_cleanup = 'yum -y remove epel-release nginx nginx-filesystem' if fact('osfamily') == 'RedHat'
+  # epel_cleanup = 'yum -y remove epel-release nginx nginx-filesystem' if fact('osfamily') == 'RedHat'
 
   context 'default parameters' do
     # Using puppet_apply as a helper
     it 'works idempotently with no errors' do
-      shell(epel_cleanup) if epel_cleanup
+      # shell(epel_cleanup) if epel_cleanup
 
       pp = "
       include nginx
