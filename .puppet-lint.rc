@@ -1,6 +1,6 @@
 --no-documentation-check
 --no-140chars-check
---no-strict_indent
---fail-on-warnings
+--no-strict_indent-check
 --no-parameter_documentation-check
 --no-parameter_types-check
+--no-autoloader_layout-check
