@@ -13,3 +13,8 @@ bundle exec rake validate lint check
 ```
 bundle exec rake spec
 ```
+
+### How to run rubocop
+```
+bundle exec rake rubocop
+```

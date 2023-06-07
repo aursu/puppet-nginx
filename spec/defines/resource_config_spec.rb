@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'nginx::resource::config' do
   let(:title) { 'namevar' }
   let(:params) do
     {
-      template: Dir.pwd + '/spec/fixtures/files/hsts.epp'
+      template: "#{Dir.pwd}/spec/fixtures/files/hsts.epp"
     }
   end
   let(:pre_condition) { ['include ::nginx'] }

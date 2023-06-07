@@ -17,6 +17,7 @@ RSpec/RepeatedExampleGroupBody:
     - 'spec/acceptance/nginx_mail_spec.rb'
     - 'spec/acceptance/nginx_server_spec.rb'
     - 'spec/defines/resource_mailhost_spec.rb'
+    - 'spec/acceptance/class_spec.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.

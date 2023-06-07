@@ -1861,6 +1861,7 @@ describe 'nginx::resource::server' do
             it 'has correctly ordered entries in SSL config' do
               is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{\s+add_header\s+"header1" "test value 1";\n\s+add_header\s+"header2" "test value 2" tv2;\n\s+add_header\s+"header3"  'test value 3' tv3;\n})
             end
+
             it 'has correctly ordered entries in non-SSL config' do
               is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{\s+add_header\s+"header1" "test value 1";\n\s+add_header\s+"header2" "test value 2" tv2;\n\s+add_header\s+"header3"  'test value 3' tv3;\n})
             end
@@ -1877,6 +1878,7 @@ describe 'nginx::resource::server' do
             it 'has correctly ordered entries in SSL config' do
               is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{\s+add_header\s+"header1" "test value 1";\n\s+add_header\s+"header2" "test value 2" tv2;\n\s+add_header\s+"header3"  'test value 3' tv3;\n})
             end
+
             it 'has not entries in non-SSL config' do
               is_expected.to contain_concat__fragment("#{title}-header")
               is_expected.not_to contain_concat__fragment("#{title}-header").with_content(%r{add_header})
@@ -1913,7 +1915,7 @@ describe 'nginx::resource::server' do
               }
             end
 
-            context 'when real_ip_header is set' do
+            context 'when real_ip_recursive is enabled' do
               let :params do
                 super().merge(real_ip_recursive: true)
               end
@@ -1928,7 +1930,7 @@ describe 'nginx::resource::server' do
             end
           end
 
-          context 'should set format_log custom_format' do
+          context 'should set format_log custom format' do
             let :params do
               super().merge(
                 format_log: 'custom',
@@ -1941,7 +1943,7 @@ describe 'nginx::resource::server' do
             }
           end
 
-          context 'should set format_log custom_format' do
+          context 'should set access_log to default location <domain.tld>.access.log' do
             let :params do
               super().merge(access_log: true)
             end
@@ -1949,7 +1951,7 @@ describe 'nginx::resource::server' do
             it { is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{access_log\s+/var/log/nginx/www\.rspec\.example\.com\.access\.log;}) }
           end
 
-          context 'should set format_log custom_format' do
+          context 'should set access_log with ssl- prefix when SSL enabled' do
             let :params do
               super().merge(access_log: true,
                             ssl: true,
@@ -1960,7 +1962,7 @@ describe 'nginx::resource::server' do
             it { is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{access_log\s+/var/log/nginx/ssl-www\.rspec\.example\.com\.access\.log;}) }
           end
 
-          context 'should set format_log custom_format' do
+          context 'should set error_log to default location <domain.tld>.access.log' do
             let :params do
               default_params.merge(error_log: true)
             end
@@ -1968,7 +1970,7 @@ describe 'nginx::resource::server' do
             it { is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{error_log\s+/var/log/nginx/www\.rspec\.example\.com\.error\.log}) }
           end
 
-          context 'should set format_log custom_format' do
+          context 'should set error_log with ssl- prefix when SSL enabled' do
             let :params do
               super().merge(error_log: true,
                             ssl: true,

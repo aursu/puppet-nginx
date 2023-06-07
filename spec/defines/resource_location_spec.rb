@@ -695,9 +695,10 @@ describe 'nginx::resource::location' do
             context "when #{param[:attr]} is #{param[:value]}" do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
 
-              it { is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)) }
+              it { is_expected.to contain_concat__fragment("server1-500-#{Digest::MD5.hexdigest(params[:location].to_s)}") }
+
               it param[:title] do
-                fragment = 'server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)
+                fragment = "server1-500-#{Digest::MD5.hexdigest(params[:location].to_s)}"
                 matches  = Array(param[:match])
 
                 if matches.all? { |m| m.is_a? Regexp }
@@ -708,7 +709,7 @@ describe 'nginx::resource::location' do
                 end
 
                 Array(param[:notmatch]).each do |item|
-                  is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)).without_content(item)
+                  is_expected.to contain_concat__fragment("server1-500-#{Digest::MD5.hexdigest(params[:location].to_s)}").without_content(item)
                 end
               end
             end
@@ -718,12 +719,11 @@ describe 'nginx::resource::location' do
             let(:params) { base_params }
 
             it {
-              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)).
-                without_content(%r{access_log})
+              is_expected.to contain_concat__fragment("server1-500-#{Digest::MD5.hexdigest(params[:location].to_s)}").without_content(%r{access_log})
             }
+
             it {
-              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)).
-                without_content(%r{error_log})
+              is_expected.to contain_concat__fragment("server1-500-#{Digest::MD5.hexdigest(params[:location].to_s)}").without_content(%r{error_log})
             }
           end
 
@@ -731,8 +731,7 @@ describe 'nginx::resource::location' do
             let(:params) { base_params.merge(access_log: 'off') }
 
             it {
-              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)).
-                with_content(%r{access_log off;})
+              is_expected.to contain_concat__fragment("server1-500-#{Digest::MD5.hexdigest(params[:location].to_s)}").with_content(%r{access_log off;})
             }
           end
         end
@@ -1507,7 +1506,7 @@ describe 'nginx::resource::location' do
             end
 
             it do
-              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)).with_content(%r{\s*error_page\s+503 /foo.html;})
+              is_expected.to contain_concat__fragment("server1-500-#{Digest::MD5.hexdigest(params[:location].to_s)}").with_content(%r{\s*error_page\s+503 /foo.html;})
             end
           end
 
@@ -1521,7 +1520,7 @@ describe 'nginx::resource::location' do
             end
 
             it do
-              is_expected.to contain_concat__fragment('server1-500-' + Digest::MD5.hexdigest(params[:location].to_s)).with_content(%r{\s*recursive_error_pages\s+on;})
+              is_expected.to contain_concat__fragment("server1-500-#{Digest::MD5.hexdigest(params[:location].to_s)}").with_content(%r{\s*recursive_error_pages\s+on;})
             end
           end
         end

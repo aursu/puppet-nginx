@@ -140,11 +140,13 @@ describe 'nginx' do
                 'baseurl' => "https://openresty.org/package/#{os_path}/$releasever/$basearch"
               )
             end
+
             it do
               is_expected.to contain_yumrepo('passenger').with(
                 'ensure' => 'absent'
               )
             end
+
             it { is_expected.to contain_yumrepo('openresty').that_comes_before('Package[nginx]') }
             it { is_expected.to contain_yumrepo('passenger').that_comes_before('Package[nginx]') }
           end
@@ -323,16 +325,17 @@ describe 'nginx' do
             is_expected.to contain_file(fname).without_content(item)
           end
 
-          if paths.include?(param[:attr])
-            if param[:value].is_a?(Array)
-              is_expected.to contain_file(param[:value][0]).with_ensure('directory')
-            elsif param[:value].is_a?(Hash)
-              param[:value].each_key do |path|
-                is_expected.to contain_file(path).with_ensure('directory')
-              end
-            else
-              is_expected.to contain_file(param[:value]).with_ensure('directory')
+          return unless paths.include?(param[:attr])
+
+          case param[:value]
+          when Array
+            is_expected.to contain_file(param[:value][0]).with_ensure('directory')
+          when Hash
+            param[:value].each_key do |path|
+              is_expected.to contain_file(path).with_ensure('directory')
             end
+          else
+            is_expected.to contain_file(param[:value]).with_ensure('directory')
           end
         end
 
@@ -1624,6 +1627,7 @@ describe 'nginx' do
                 %r{gzip on;}
               )
             end
+
             it do
               is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
                 %r{gzip_disable msie6;}
