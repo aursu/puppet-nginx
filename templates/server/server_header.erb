@@ -232,6 +232,7 @@ server {
 <% elsif @return -%>
   return <%= @return %>;
 <% end -%>
+<%= scope.function_template(['nginx/server/locations/limit_req.erb']) %>
 <% if @ssl_redirect -%>
 
   location / {

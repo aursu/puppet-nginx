@@ -117,6 +117,14 @@
 # @param limit_zone
 #   Apply a limit_req_zone to the location. Expects a string indicating a
 #   previously defined limit_req_zone in the main nginx configuration
+# @param limit_req
+#   Sets the shared memory zone and the maximum burst size of requests.
+#   See: https://nginx.org/en/docs/http/ngx_http_limit_req_module.html#limit_req
+# @param limit_req_log_level
+#   Sets the desired logging level for cases when the server refuses to process
+#   requests due to rate exceeding, or delays request processing.
+# @param limit_req_status
+#   Sets the status code to return in response to rejected requests.
 # @param location_custom_cfg
 #   Expects a hash with custom directives, cannot be used with other location
 #   types (proxy, fastcgi, root, or stub_status)
@@ -320,6 +328,12 @@ define nginx::resource::location (
   Boolean $ssl_only                                                = false,
   Optional[String] $location_alias                                 = undef,
   Optional[String[1]] $limit_zone                                  = undef,
+  Variant[
+    Nginx::RateLimit,
+    Array[Nginx::RateLimit]
+  ] $limit_req                                                     = [],
+  Optional[Nginx::LogLevel] $limit_req_log_level                   = undef,
+  Optional[Nginx::ErrorCode] $limit_req_status                     = undef,
   Optional[Enum['any', 'all']] $location_satisfy                   = undef,
   Optional[Array] $location_allow                                  = undef,
   Optional[Array] $location_deny                                   = undef,
@@ -362,9 +376,9 @@ define nginx::resource::location (
   Optional[String] $return                                         = undef,
   Hash $add_header                                                 = {},
   Optional[Variant[
-    String,
-    Array[String],
-    Hash[String, String]
+      String,
+      Array[String],
+      Hash[String, String]
   ]] $access_log                                                   = undef,
   Optional[String] $format_log                                     = undef, # 'combined'
   Optional[Variant[String, Array[String]]] $error_log              = undef,
@@ -373,10 +387,10 @@ define nginx::resource::location (
   Optional[Hash] $error_pages                                      = undef,
   Optional[Nginx::Switch] $recursive_error_pages                   = undef, # 'off'
   Optional[
-      Variant[
-        Enum['always'],
-        Nginx::Switch
-      ]
+    Variant[
+      Enum['always'],
+      Nginx::Switch
+    ]
   ] $gzip_static                                                   = undef,
   Optional[Nginx::Switch] $reset_timedout_connection               = undef,
 ) {
@@ -386,17 +400,17 @@ define nginx::resource::location (
 
   $root_group = $nginx::root_group
 
-  File {
-    owner  => 'root',
-    group  => $root_group,
-    mode   => $nginx::global_mode,
-    notify => Class['nginx::service'],
-  }
-
   # # Shared Variables
   $ensure_real = $ensure ? {
     'absent' => absent,
     default  => file,
+  }
+
+  if $limit_zone {
+    $limit_req_list = [{ zone => $limit_zone }] + [$limit_req].flatten
+  }
+  else {
+    $limit_req_list = [$limit_req].flatten
   }
 
   # Use proxy, fastcgi or uwsgi template if $proxy is defined, otherwise use directory template.
@@ -416,18 +430,24 @@ define nginx::resource::location (
   ) {
     file { $fastcgi_params:
       ensure  => 'file',
+      owner   => 'root',
+      group   => $root_group,
       mode    => $nginx::global_mode,
       content => template($nginx::fastcgi_conf_template),
       tag     => 'nginx_config_file',
+      notify  => Class['nginx::service'],
     }
   }
 
   if $ensure == 'present' and $uwsgi != undef and !defined(File[$uwsgi_params]) and $uwsgi_params == "${nginx::conf_dir}/uwsgi_params" {
     file { $uwsgi_params:
       ensure  => 'file',
+      owner   => 'root',
+      group   => $root_group,
       mode    => $nginx::global_mode,
       content => template($nginx::uwsgi_params_template),
       tag     => 'nginx_config_file',
+      notify  => Class['nginx::service'],
     }
   }
 

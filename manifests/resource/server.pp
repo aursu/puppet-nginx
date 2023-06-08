@@ -293,6 +293,14 @@
 #   Hash of location resources used by this server
 # @param locations_defaults
 #   Hash of location default settings
+# @param limit_req
+#   Sets the shared memory zone and the maximum burst size of requests.
+#   See: https://nginx.org/en/docs/http/ngx_http_limit_req_module.html#limit_req
+# @param limit_req_log_level
+#   Sets the desired logging level for cases when the server refuses to process
+#   requests due to rate exceeding, or delays request processing.
+# @param limit_req_status
+#   Sets the status code to return in response to rejected requests.
 #
 # @example simple server
 #   nginx::resource::server { 'test2.local':
@@ -476,6 +484,12 @@ define nginx::resource::server (
   Optional[Nginx::Switch] $real_ip_recursive                                     = undef,
   Optional[Nginx::ReturnFormat] $return                                          = undef,
   Boolean $server_proxy_settings                                                 = false,
+  Variant[
+    Nginx::RateLimit,
+    Array[Nginx::RateLimit]
+  ] $limit_req                                                     = [],
+  Optional[Nginx::LogLevel] $limit_req_log_level                   = undef,
+  Optional[Nginx::ErrorCode] $limit_req_status                     = undef,
 ) {
   if ! defined(Class['nginx']) {
     fail('You must include the nginx base class before using any defined resources')
@@ -500,16 +514,7 @@ define nginx::resource::server (
   $name_sanitized = regsubst($name, ' ', '_', 'G')
   $config_file = "${server_dir}/${name_sanitized}.conf"
 
-  File {
-    ensure => $ensure ? {
-      'absent' => absent,
-      default  => 'file',
-    },
-    notify => Class['nginx::service'],
-    owner  => $owner,
-    group  => $group,
-    mode   => $mode,
-  }
+  $limit_req_list = [$limit_req].flatten
 
   # Add IPv6 Logic Check - Nginx service will not start if ipv6 is enabled
   # and support does not exist for it in the kernel.
@@ -633,16 +638,22 @@ define nginx::resource::server (
   if $fastcgi != undef and !defined(File[$fastcgi_params]) and $fastcgi_params == "${nginx::conf_dir}/fastcgi.conf" {
     file { $fastcgi_params:
       ensure  => file,
+      owner   => $owner,
+      group   => $group,
       mode    => $nginx::global_mode,
       content => template($nginx::fastcgi_conf_template),
+      notify  => Class['nginx::service'],
     }
   }
 
   if $uwsgi != undef and !defined(File[$uwsgi_params]) and $uwsgi_params == "${nginx::conf_dir}/uwsgi_params" {
     file { $uwsgi_params:
       ensure  => file,
+      owner   => $owner,
+      group   => $group,
       mode    => $nginx::global_mode,
       content => template($nginx::uwsgi_params_template),
+      notify  => Class['nginx::service'],
     }
   }
 
@@ -699,6 +710,9 @@ define nginx::resource::server (
   unless $nginx::confd_only {
     file { "${name_sanitized}.conf symlink":
       ensure  => $server_symlink_ensure,
+      owner   => $owner,
+      group   => $group,
+      mode    => $mode,
       path    => "${server_enable_dir}/${name_sanitized}.conf",
       target  => $config_file,
       require => [File[$server_dir], Concat[$config_file]],
