@@ -27,9 +27,14 @@ class nginx::package::redhat (
     'absent'
   }
 
+  $reload_command = $facts['os']['release']['major'] ? {
+    '7'     => 'yum clean all',
+    default => 'dnf clean all',
+  }
+
   if $manage_repo {
     exec { 'yum-clean-b114182':
-      command     => 'yum clean all',
+      command     => $reload_command,
       path        => '/bin:/usr/bin',
       refreshonly => true,
     }
