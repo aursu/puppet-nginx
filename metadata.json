@@ -1,12 +1,12 @@
 {
-  "name": "puppet-nginx",
+  "name": "aursu-nginx",
   "version": "4.4.2",
   "author": "Vox Pupuli",
   "summary": "Puppet NGINX management module",
   "license": "MIT",
-  "source": "https://github.com/voxpupuli/puppet-nginx.git",
-  "project_page": "http://github.com/voxpupuli/puppet-nginx",
-  "issues_url": "https://github.com/voxpupuli/puppet-nginx/issues",
+  "source": "https://github.com/aursu/puppet-nginx.git",
+  "project_page": "http://github.com/aursu/puppet-nginx",
+  "issues_url": "https://github.com/aursu/puppet-nginx/issues",
   "dependencies": [
     {
       "name": "puppetlabs/concat",
