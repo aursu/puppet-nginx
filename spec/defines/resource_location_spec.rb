@@ -1370,7 +1370,13 @@ describe 'nginx::resource::location' do
               attr: 'proxy_intercept_errors',
               value: true,
               match: %r{\s+proxy_intercept_errors\s+on;}
-            }
+            },
+            {
+              title: 'should set the trusted CA certificates file for proxied HTTPS server',
+              attr: 'proxy_ssl_trusted_certificate',
+              value: '/tmp/trusted_certificate',
+              match: %r{\s+proxy_ssl_trusted_certificate\s+/tmp/trusted_certificate;}
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let(:default_params) { { location: 'location', proxy: 'proxy_value', server: 'server1' } }

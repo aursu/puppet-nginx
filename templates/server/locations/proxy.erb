@@ -130,3 +130,6 @@ end
 <% unless @proxy_intercept_errors.nil? -%>
     proxy_intercept_errors <%= bool2config(@proxy_intercept_errors) %>;
 <% end -%>
+<% if @proxy_ssl_trusted_certificate -%>
+    proxy_ssl_trusted_certificate <%= @proxy_ssl_trusted_certificate %>;
+<% end -%>

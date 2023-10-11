@@ -499,6 +499,12 @@ describe 'nginx::resource::server' do
               match: %r{^\s*proxy_ignore_headers Set-Cookie;$}
             },
             {
+              title: 'should set the trusted CA certificates file for proxied HTTPS server',
+              attr: 'proxy_ssl_trusted_certificate',
+              value: '/tmp/trusted_certificate',
+              match: %r{\s+proxy_ssl_trusted_certificate\s+/tmp/trusted_certificate;}
+            },
+            {
               title: 'should set autoindex_exact_size',
               attr: 'autoindex_exact_size',
               value: 'on',

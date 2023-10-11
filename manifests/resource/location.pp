@@ -183,6 +183,9 @@
 # @param proxy_busy_buffers_size
 #   Sets the total size of buffers that can be busy sending a response to the
 #   client while the response is not yet fully read.
+# @param proxy_ssl_trusted_certificate
+#   Specifies a file with trusted CA certificates in the PEM format used to
+#   verify the certificate of the proxied HTTPS server.
 # @param absolute_redirect
 #   Enables or disables the absolute redirect functionality of nginx
 # @param auth_basic
@@ -363,6 +366,7 @@ define nginx::resource::location (
   Optional[Nginx::Switch] $proxy_request_buffering                 = undef,
   Optional[Nginx::Size] $proxy_max_temp_file_size                  = undef,
   Optional[Nginx::Size] $proxy_busy_buffers_size                   = undef,
+  Optional[Stdlib::Absolutepath] $proxy_ssl_trusted_certificate    = undef,
   Optional[Nginx::Switch] $absolute_redirect                       = undef,
   Optional[String] $auth_basic                                     = undef,
   Optional[String] $auth_basic_user_file                           = undef,

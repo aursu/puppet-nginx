@@ -67,6 +67,9 @@
 # @param proxy_busy_buffers_size
 #   Sets the total size of buffers that can be busy sending a response to the
 #   client while the response is not yet fully read.
+# @param proxy_ssl_trusted_certificate
+#   Specifies a file with trusted CA certificates in the PEM format used to
+#   verify the certificate of the proxied HTTPS server.
 # @param resolver
 #   Configures name servers used to resolve names of upstream servers into addresses.
 # @param fastcgi
@@ -394,6 +397,7 @@ define nginx::resource::server (
     ]
   ] $proxy_cookie_domain                                                         = undef,
   Optional[Nginx::Switch] $proxy_pass_request_headers                            = undef,
+  Optional[Stdlib::Absolutepath] $proxy_ssl_trusted_certificate                  = undef,
   Array $resolver                                                                = [],
   Optional[String] $fastcgi                                                      = undef,
   Optional[String] $fastcgi_index                                                = undef,

@@ -2126,6 +2126,7 @@ The following parameters are available in the `nginx::resource::location` define
 * [`proxy_request_buffering`](#-nginx--resource--location--proxy_request_buffering)
 * [`proxy_max_temp_file_size`](#-nginx--resource--location--proxy_max_temp_file_size)
 * [`proxy_busy_buffers_size`](#-nginx--resource--location--proxy_busy_buffers_size)
+* [`proxy_ssl_trusted_certificate`](#-nginx--resource--location--proxy_ssl_trusted_certificate)
 * [`absolute_redirect`](#-nginx--resource--location--absolute_redirect)
 * [`auth_basic`](#-nginx--resource--location--auth_basic)
 * [`auth_basic_user_file`](#-nginx--resource--location--auth_basic_user_file)
@@ -2803,6 +2804,15 @@ Data type: `Optional[Nginx::Size]`
 
 Sets the total size of buffers that can be busy sending a response to the
 client while the response is not yet fully read.
+
+Default value: `undef`
+
+##### <a name="-nginx--resource--location--proxy_ssl_trusted_certificate"></a>`proxy_ssl_trusted_certificate`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Specifies a file with trusted CA certificates in the PEM format used to
+verify the certificate of the proxied HTTPS server.
 
 Default value: `undef`
 
@@ -3694,6 +3704,7 @@ The following parameters are available in the `nginx::resource::server` defined 
 * [`proxy_request_buffering`](#-nginx--resource--server--proxy_request_buffering)
 * [`proxy_max_temp_file_size`](#-nginx--resource--server--proxy_max_temp_file_size)
 * [`proxy_busy_buffers_size`](#-nginx--resource--server--proxy_busy_buffers_size)
+* [`proxy_ssl_trusted_certificate`](#-nginx--resource--server--proxy_ssl_trusted_certificate)
 * [`resolver`](#-nginx--resource--server--resolver)
 * [`fastcgi`](#-nginx--resource--server--fastcgi)
 * [`fastcgi_param`](#-nginx--resource--server--fastcgi_param)
@@ -4063,6 +4074,15 @@ Data type: `Optional[Nginx::Size]`
 
 Sets the total size of buffers that can be busy sending a response to the
 client while the response is not yet fully read.
+
+Default value: `undef`
+
+##### <a name="-nginx--resource--server--proxy_ssl_trusted_certificate"></a>`proxy_ssl_trusted_certificate`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Specifies a file with trusted CA certificates in the PEM format used to
+verify the certificate of the proxied HTTPS server.
 
 Default value: `undef`
 
