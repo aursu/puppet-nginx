@@ -107,7 +107,8 @@ class nginx (
   Optional[Nginx::Time] $client_body_timeout                 = undef,  # 60s
   Optional[Nginx::Time] $send_timeout                        = undef,  # 60s
   Optional[Nginx::Time] $lingering_timeout                   = undef,  # 5s
-  Optional[Enum['on', 'off', 'always']] $lingering_close       = undef,
+  Optional[Variant[Nginx::Switch, Enum['always']]]
+  $lingering_close                                           = undef,
   Optional[String[1]] $lingering_time                        = undef,
   Optional[Nginx::Switch] $etag                              = undef,  # 'on'
   Optional[Nginx::ConnectionProcessing] $events_use          = undef,  # 'epoll'

@@ -1,3 +1,15 @@
+<%-
+def bool2config(b)
+    case b
+    when true
+        'on'
+    when false, nil
+        'off'
+    else
+        b.to_s
+    end
+end
+-%>
 <% if @types_hash_max_size -%>
 types_hash_max_size <%= @types_hash_max_size %>;
 <% end -%>
@@ -23,8 +35,8 @@ client_body_timeout <%= @client_body_timeout %>;
 <% if @lingering_timeout -%>
 lingering_timeout <%= @lingering_timeout %>;
 <% end -%>
-<% if @lingering_close -%>
-lingering_close <%= @lingering_close %>;
+<% unless @lingering_close.nil? -%>
+lingering_close <%= bool2config(@lingering_close) %>;
 <% end -%>
 <% if @lingering_time -%>
 lingering_time <%= @lingering_time %>;
