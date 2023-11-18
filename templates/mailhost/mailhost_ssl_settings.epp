@@ -7,7 +7,7 @@
   Optional[String]  $ssl_ecdh_curve,
   Optional[String]  $ssl_key,
   Optional[String]  $ssl_password_file,
-  Enum['on', 'off'] $ssl_prefer_server_ciphers,
+  Nginx::Switch     $ssl_prefer_server_ciphers,
   String            $ssl_protocols,
   Optional[String]  $ssl_session_cache,
   Optional[String]  $ssl_session_ticket_key,
@@ -39,7 +39,7 @@
 <%- if $ssl_password_file { -%>
   ssl_password_file          <%= $ssl_password_file %>;
 <%- } -%>
-  ssl_prefer_server_ciphers  <%= $ssl_prefer_server_ciphers %>;
+  ssl_prefer_server_ciphers  <%= nginx::switch($ssl_prefer_server_ciphers) %>;
   ssl_protocols              <%= $ssl_protocols %>;
 <%- if $ssl_session_cache { -%>
   ssl_session_cache          <%= $ssl_session_cache %>;

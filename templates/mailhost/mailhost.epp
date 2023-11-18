@@ -10,7 +10,7 @@
   String                    $mailhost_prepend,
   String[1]                 $mailhost_ssl_settings,
   String[1]                 $nginx_version,
-  Enum['on', 'off', 'only'] $starttls,
+  Variant[Nginx::Switch, Enum['only']] $starttls,
 | -%>
 # MANAGED BY PUPPET
 server {
@@ -26,9 +26,9 @@ server {
 <%- if versioncmp($nginx_version, '1.15.0') < 0 { -%>
   ssl                   off;
 <% } %>
-  starttls              <%= $starttls %>;
+  starttls              <%= nginx::switch($starttls) %>;
 
-<% if $starttls != 'off' { %>
+<% if nginx::switch($starttls) != 'off' { %>
 <%= $mailhost_ssl_settings -%>
 <%- } -%>
 <%= $mailhost_append -%>

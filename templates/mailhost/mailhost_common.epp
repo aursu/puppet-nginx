@@ -9,20 +9,20 @@
   Optional[Enum['imap', 'pop3', 'sieve', 'smtp']]
                     $protocol,
   String            $proxy_pass_error_message,
-  Enum['on', 'off'] $proxy_protocol,
-  Enum['on', 'off'] $proxy_smtp_auth,
+  Nginx::Switch     $proxy_protocol,
+  Nginx::Switch     $proxy_smtp_auth,
   Array             $server_name,
   Optional[String]  $smtp_auth,
   Optional[Array]   $smtp_capabilities,
-  Enum['on', 'off'] $xclient,
+  Nginx::Switch     $xclient,
 | -%>
   server_name           <%= $server_name.join(" ") %>;
 <%- if $protocol { -%>
   protocol              <%= $protocol %>;
 <%- } -%>
-  xclient               <%= $xclient %>;
-  proxy_protocol        <%= $proxy_protocol %>;
-  proxy_smtp_auth       <%= $proxy_smtp_auth %>;
+  xclient               <%= nginx::switch($xclient) %>;
+  proxy_protocol        <%= nginx::switch($proxy_protocol) %>;
+  proxy_smtp_auth       <%= nginx::switch($proxy_smtp_auth) %>;
 <%- if $auth_http { -%>
   auth_http             <%= $auth_http %>;
 <%- } -%>
