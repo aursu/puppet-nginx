@@ -1,14 +1,15 @@
 # MANAGED BY MODULESYNC
 # https://voxpupuli.org/docs/updating-files-managed-with-modulesync/
 
-FROM ruby:2.7
+ARG rocky=8.8.20230518
+FROM aursu/rockylinux:${rocky}-ruby31-puppet
 
 WORKDIR /opt/puppet
 
 # https://github.com/puppetlabs/puppet/blob/06ad255754a38f22fb3a22c7c4f1e2ce453d01cb/lib/puppet/provider/service/runit.rb#L39
 RUN mkdir -p /etc/sv
 
-ARG PUPPET_GEM_VERSION="~> 6.0"
+ARG PUPPET_GEM_VERSION="~> 7.0"
 ARG PARALLEL_TEST_PROCESSORS=4
 
 # Cache gems

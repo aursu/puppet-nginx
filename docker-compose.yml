@@ -1,0 +1,7 @@
+version: "3"
+services:
+  rocky8base:
+    build:
+      context: .
+      args:
+        rocky: $RL8
