@@ -15,4 +15,5 @@ type Nginx::Package_source = Enum[
   'nginx-stable',
   'nginx-mainline',
   'passenger',
+  'openresty',
 ]
