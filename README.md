@@ -1,6 +1,11 @@
 # NGINX module for Puppet
 
-[![Build Status](https://travis-ci.org/aursu/puppet-nginx.svg?branch=optional-settings)](https://travis-ci.org/aursu/puppet-nginx)
+[![Build Status](https://github.com/voxpupuli/puppet-nginx/workflows/CI/badge.svg)](https://github.com/voxpupuli/puppet-nginx/actions?query=workflow%3ACI)
+[![Code Coverage](https://coveralls.io/repos/github/voxpupuli/puppet-nginx/badge.svg?branch=master)](https://coveralls.io/github/voxpupuli/puppet-nginx)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/nginx.svg)](https://forge.puppetlabs.com/puppet/nginx)
+[![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/nginx.svg)](https://forge.puppetlabs.com/puppet/nginx)
+[![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/nginx.svg)](https://forge.puppetlabs.com/puppet/nginx)
+[![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/nginx.svg)](https://forge.puppetlabs.com/puppet/nginx)
 
 This module was migrated from James Fryman <james@frymanet.com> to Vox Pupuli.
 

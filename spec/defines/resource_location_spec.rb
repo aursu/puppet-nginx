@@ -110,6 +110,15 @@ describe 'nginx::resource::location' do
               match: '    limit_req zone=myzone1;'
             },
             {
+              title: 'should set multiple limit_zone',
+              attr: 'limit_zone',
+              value: %w[myzone1 myzone2],
+              match: [
+                '    limit_req zone=myzone1;',
+                '    limit_req zone=myzone2;'
+              ]
+            },
+            {
               title: 'should set limit_req from Hash',
               attr: 'limit_req',
               value: { zone: 'one', burst: 5, nodelay: true },
@@ -1509,6 +1518,18 @@ describe 'nginx::resource::location' do
             let(:params) { { ssl: false, server: 'server1', www_root: '/' } }
 
             it { is_expected.not_to contain_concat__fragment("server1-800-#{Digest::MD5.hexdigest('rspec-test')}-ssl") }
+          end
+
+          context 'www_root and proxy are set' do
+            let :params do
+              {
+                server: 'server1',
+                www_root: '/',
+                proxy: 'http://localhost:8000/uri/'
+              }
+            end
+
+            it { expect { is_expected.to contain_class('nginx::resource::location') }.to raise_error(Puppet::Error, %r{Cannot define both directory and proxy in server1:rspec-test}) }
           end
 
           context 'when server name is sanitized' do

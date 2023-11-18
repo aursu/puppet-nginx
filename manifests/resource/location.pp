@@ -115,8 +115,9 @@
 #   (after custom_cfg directives). NOTE: YOU are responsible for a semicolon on
 #   each line that requires one.
 # @param limit_zone
-#   Apply a limit_req_zone to the location. Expects a string indicating a
-#   previously defined limit_req_zone in the main nginx configuration
+#   Apply a limit_req_zone to the location. Expects a string or array of
+#   strings indicating a previously defined limit_req_zone in the main nginx
+#   configuration
 # @param limit_req
 #   Sets the shared memory zone and the maximum burst size of requests.
 #   See: https://nginx.org/en/docs/http/ngx_http_limit_req_module.html#limit_req
@@ -330,7 +331,7 @@ define nginx::resource::location (
   Boolean $ssl                                                     = false,
   Boolean $ssl_only                                                = false,
   Optional[String] $location_alias                                 = undef,
-  Optional[String[1]] $limit_zone                                  = undef,
+  Optional[Variant[String[1], Array[String[1], 1]]] $limit_zone    = undef,
   Variant[
     Nginx::RateLimit,
     Array[Nginx::RateLimit]
@@ -411,7 +412,8 @@ define nginx::resource::location (
   }
 
   if $limit_zone {
-    $limit_req_list = [{ zone => $limit_zone }] + [$limit_req].flatten
+    # $limit_req_list = [{ zone => $limit_zone }] + [$limit_req].flatten
+    $limit_req_list = map(flatten($limit_zone)) |$value| {{ zone => $value } } + [$limit_req].flatten
   }
   else {
     $limit_req_list = [$limit_req].flatten

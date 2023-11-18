@@ -1,6 +1,6 @@
 {
   "name": "aursu-nginx",
-  "version": "4.4.3",
+  "version": "5.0.1",
   "author": "Vox Pupuli",
   "summary": "Puppet NGINX management module",
   "license": "MIT",
@@ -27,19 +27,21 @@
     {
       "operatingsystem": "Rocky",
       "operatingsystemrelease": [
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "7"
+        "7",
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "18.04",
         "20.04",
         "22.04"
       ]

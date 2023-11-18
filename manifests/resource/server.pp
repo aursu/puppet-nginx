@@ -597,6 +597,8 @@ define nginx::resource::server (
       proxy_pass_header             => $proxy_pass_header,
       proxy_ignore_header           => $proxy_ignore_header,
       proxy_cache_lock              => $proxy_cache_lock,
+      proxy_cache_background_update => $proxy_cache_background_update,
+      proxy_cache_convert_head      => $proxy_cache_convert_head,
       proxy_set_body                => $proxy_set_body,
       proxy_cache_bypass            => $proxy_cache_bypass,
       proxy_no_cache                => $proxy_no_cache,
@@ -628,8 +630,6 @@ define nginx::resource::server (
       raw_prepend                   => $location_raw_prepend,
       raw_append                    => $location_raw_append,
       notify                        => Class['nginx::service'],
-      proxy_cache_background_update => $proxy_cache_background_update,
-      proxy_cache_convert_head      => $proxy_cache_convert_head,
     }
     $root = undef
   } else {

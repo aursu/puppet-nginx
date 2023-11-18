@@ -78,7 +78,7 @@ class nginx::config {
   $map_hash_bucket_size           = $nginx::map_hash_bucket_size
   $map_hash_max_size              = $nginx::map_hash_max_size
   $mime_types                     = $nginx::mime_types_preserve_defaults ? {
-    true    => merge($nginx::params::mime_types,$nginx::mime_types),
+    true    => $nginx::params::mime_types + $nginx::mime_types,
     default => $nginx::mime_types,
   }
   $multi_accept                   = $nginx::multi_accept
@@ -226,11 +226,7 @@ class nginx::config {
   }
 
   if $client_body_temp_path {
-    if $client_body_temp_path.is_a(String) {
-      $_client_body_temp_path = [$client_body_temp_path]
-    } else {
-      $_client_body_temp_path = $client_body_temp_path
-    }
+    $_client_body_temp_path = flatten($client_body_temp_path)
 
     file { $_client_body_temp_path[0]:
       ensure => directory,
@@ -240,12 +236,7 @@ class nginx::config {
   }
 
   if $proxy_temp_path {
-    if $proxy_temp_path.is_a(String) {
-      $_proxy_temp_path = [$proxy_temp_path]
-    }
-    else {
-      $_proxy_temp_path = $proxy_temp_path
-    }
+    $_proxy_temp_path = flatten($proxy_temp_path)
 
     file { $_proxy_temp_path[0]:
       ensure => directory,

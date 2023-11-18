@@ -9,6 +9,6 @@
 # y	years, 365 days
 # A value without a suffix means seconds
 type Nginx::Time = Variant[
-    Integer,
-    Pattern[/^[1-9][0-9]*([smhdwMy]|ms)?$/]
+  Integer[0],
+  Pattern[/^(?!$)((\d+y *)?(\d+M *)?(\d+w *)?(\d+d *)?(\d+h *)?(\d+m *)?(\d+s *)?(\d+ms)?|\d+)$/],
 ]

@@ -1042,7 +1042,7 @@ describe 'nginx' do
                 it { is_expected.to contain_file('/etc/nginx/nginx.conf').with_mode('0644') }
 
                 it param[:title] do
-                  check_config_file('/etc/nginx/nginx.conf', param, %w[client_body_temp_path])
+                  check_config_file('/etc/nginx/nginx.conf', param, %w[client_body_temp_path proxy_temp_path])
                 end
               end
             end
@@ -1647,6 +1647,22 @@ describe 'nginx' do
               is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
                 %r{gzip_buffers 32 4k;}
               )
+            end
+          end
+
+          context 'when gzip is non-default (on) set gzip_proxied' do
+            let(:params) { { gzip: 'on' } }
+
+            context 'set gzip_proxied to a single value' do
+              let(:params) { super().merge({ gzip_proxied: 'any' }) }
+
+              it { is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(%r{gzip_proxied any;}) }
+            end
+
+            context 'set gzip_proxied to multiple values' do
+              let(:params) { super().merge({ gzip_proxied: %w[no-cache expired] }) }
+
+              it { is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(%r{gzip_proxied no-cache expired;}) }
             end
           end
 

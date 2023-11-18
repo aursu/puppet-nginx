@@ -51,11 +51,12 @@
 #
 class nginx (
   ### START Nginx Configuration ###
-  Optional[Variant[Stdlib::Absolutepath, Tuple[Stdlib::Absolutepath, Integer, 1, 4]]] $client_body_temp_path      = undef, # 'client_body_temp'
+  Optional[Variant[Stdlib::Absolutepath, Tuple[Stdlib::Absolutepath, Integer, 1, 4]]]
+  $client_body_temp_path                                     = undef, # 'client_body_temp'
   Optional[Boolean] $recursive_error_pages                   = undef, # off
   Boolean $confd_only                                        = false,
   Boolean $confd_purge                                       = false,
-  Stdlib::Unixpath $conf_dir                                 = $nginx::params::conf_dir,
+  Stdlib::Absolutepath $conf_dir                             = $nginx::params::conf_dir,
   Optional[Nginx::Switch] $daemon                            = undef, # 'on'
   String[1] $daemon_user                                     = $nginx::params::daemon_user,
   Optional[String[1]] $daemon_group                          = undef,
@@ -79,8 +80,9 @@ class nginx (
   Optional[String] $stream_custom_format_log                 = undef,
   Variant[String, Array[String]] $nginx_error_log            = "${log_dir}/error.log",
   Nginx::ErrorLogSeverity $nginx_error_log_severity          = 'error',
-  Variant[Stdlib::Absolutepath, Boolean] $pid                 = $nginx::params::pid,
-  Optional[Variant[Stdlib::Absolutepath, Tuple[Stdlib::Absolutepath, Integer, 1, 4]]] $proxy_temp_path = undef,  # 'proxy_temp'
+  Variant[Stdlib::Absolutepath, Boolean] $pid                = $nginx::params::pid,
+  Optional[Variant[Stdlib::Absolutepath, Tuple[Stdlib::Absolutepath, Integer, 1, 4]]]
+  $proxy_temp_path                                           = undef,  # 'proxy_temp'
   Optional[String] $proxy_cache_key                          = undef,  # $scheme$proxy_host$request_uri
   String[1] $root_group                                      = $nginx::params::root_group,
   String[1] $sites_available_owner                           = 'root',
@@ -105,7 +107,7 @@ class nginx (
   Optional[Nginx::Time] $client_body_timeout                 = undef,  # 60s
   Optional[Nginx::Time] $send_timeout                        = undef,  # 60s
   Optional[Nginx::Time] $lingering_timeout                   = undef,  # 5s
-  Optional[Enum['on','off','always']] $lingering_close       = undef,
+  Optional[Enum['on', 'off', 'always']] $lingering_close       = undef,
   Optional[String[1]] $lingering_time                        = undef,
   Optional[Nginx::Switch] $etag                              = undef,  # 'on'
   Optional[Nginx::ConnectionProcessing] $events_use          = undef,  # 'epoll'
@@ -113,7 +115,7 @@ class nginx (
   Optional[String] $fastcgi_cache_key                        = undef,  # undef
   Optional[Hash[Stdlib::Unixpath, Nginx::CachePath, 1]] $fastcgi_cache_path = undef,  # undef
   Optional[Variant[Nginx::CacheUseStale, Array[Nginx::CacheUseStale]]]
-                    $fastcgi_cache_use_stale                 = undef,  # 'off'
+  $fastcgi_cache_use_stale                                   = undef,  # 'off'
   Nginx::Switch $gzip                                        = false,  # 'on'
   Optional[Nginx::Buffers] $gzip_buffers                     = undef,  # '32 4k|16 8k'
   Optional[Integer] $gzip_comp_level                         = undef,  # 1
@@ -121,20 +123,20 @@ class nginx (
   Optional[Integer] $gzip_min_length                         = undef,  # 20
   Optional[Enum['1.0', '1.1']] $gzip_http_version            = undef,  # '1.1'
   Optional[
-      Variant[
-        Nginx::GzipProxied,
-        Array[Nginx::GzipProxied]
-      ]
+    Variant[
+      Nginx::GzipProxied,
+      Array[Nginx::GzipProxied]
+    ]
   ] $gzip_proxied                                            = undef,  # 'off'
   Optional[Variant[String, Array[String, 1]]] $gzip_types    = undef,  # 'text/html'
   Optional[Nginx::Switch] $gzip_vary                         = undef,  # 'off'
   Optional[Nginx::ConfigSet] $http_cfg_prepend               = undef,
   Optional[Nginx::ConfigSet] $http_cfg_append                = undef,
   Optional[
-      Variant[
-        Enum['always'],
-        Nginx::Switch
-      ]
+    Variant[
+      Enum['always'],
+      Nginx::Switch
+    ]
   ] $gzip_static                                             = undef,
   Optional[Variant[Array[String], String]] $http_raw_prepend = undef,
   Optional[Variant[Array[String], String]] $http_raw_append  = undef,
@@ -158,7 +160,7 @@ class nginx (
   Optional[Nginx::Size] $proxy_buffer_size                   = undef,  # '4k|8k'
   Optional[String] $proxy_cache                              = undef,  # off
   Optional[Hash[Stdlib::Unixpath, Nginx::CachePath, 1]]
-                    $proxy_cache_path                        = undef,  # undef
+  $proxy_cache_path                                          = undef,  # undef
   Optional[Nginx::Time] $proxy_connect_timeout               = undef,  # 60s
   Optional[Nginx::Size] $proxy_headers_hash_bucket_size      = undef,  # 64
   Optional[Enum['1.0', '1.1']] $proxy_http_version           = undef,  # '1.0'
@@ -221,16 +223,16 @@ class nginx (
   Optional[Nginx::Switch] $reset_timedout_connection         = undef,
 
   ### START Package Configuration ###
-  $package_ensure                                            = installed,
-  $package_name                                              = $nginx::params::package_name,
-  $package_source                                            = 'nginx',
-  $package_flavor                                            = undef,
+  String $package_ensure                                     = installed,
+  String $package_name                                       = $nginx::params::package_name,
+  Nginx::Package_source $package_source                      = 'nginx',
+  Optional[String] $package_flavor                           = undef,
   Boolean $manage_repo                                       = $nginx::params::manage_repo,
   Variant[Boolean, Enum['absent']] $yum_repo_sslverify       = 'absent',
   Hash[String[1], String[1]] $mime_types                     = $nginx::params::mime_types,
   Boolean $mime_types_preserve_defaults                      = false,
   Optional[String] $repo_release                             = undef,
-  $passenger_package_ensure                                  = installed,
+  String $passenger_package_ensure                           = installed,
   String[1] $passenger_package_name                          = $nginx::params::passenger_package_name,
   Optional[Stdlib::HTTPUrl] $repo_source                     = undef,
   ### END Package Configuration ###
@@ -238,10 +240,10 @@ class nginx (
   ### START Service Configuation ###
   Stdlib::Ensure::Service $service_ensure                    = 'running',
   Boolean $service_enable                                    = true,
-  $service_flags                                             = undef,
-  $service_restart                                           = undef,
+  Optional[String] $service_flags                            = undef,
+  Optional[String] $service_restart                          = undef,
   String $service_name                                       = 'nginx',
-  $service_manage                                            = true,
+  Boolean $service_manage                                    = true,
   Boolean $service_config_check                              = false,
   String $service_config_check_command                       = 'nginx -t',
   ### END Service Configuration ###
