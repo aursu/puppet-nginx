@@ -49,6 +49,357 @@
 # @param nginx_snippets_defaults
 #   Can be used to define default values for the parameter `nginx_snippets`.
 #
+# Nginx Class - Manages the Nginx daemon and its configurations
+#
+# @param client_body_temp_path
+#   Defines a directory for storing temporary files holding client request bodies.
+# @param recursive_error_pages
+#   Whether error pages should be processed recursively
+# @param confd_only
+#   If true, only use configuration from conf.d directory
+# @param confd_purge
+#   Whether to purge unmanaged files from conf.d
+# @param conf_dir
+#   Directory for Nginx configuration files
+# @param daemon
+#   Specifies if the service should run as a daemon
+# @param daemon_user
+#   User under which the nginx daemon runs
+# @param daemon_group
+#   Group under which the nginx daemon runs
+# @param dynamic_modules
+#   Whether to enable dynamic modules
+# @param global_owner
+#   Owner of the nginx global configuration files
+# @param global_group
+#   Group associated with the nginx global configuration files
+# @param global_mode
+#   File mode for the nginx global configuration files
+# @param limit_req_zone
+#   Configuration settings for limiting request zones
+# @param log_dir
+#   Directory for Nginx logs
+# @param manage_log_dir
+#   Whether to manage log directory creation
+# @param log_user
+#   User under whose authority log files are managed
+# @param log_group
+#   Group under whose authority log files are managed
+# @param log_mode
+#   Permissions setting for log files
+# @param http_access_log
+#   Path for HTTP access logs
+# @param http_format_log
+#   Log format for HTTP services
+# @param stream_access_log
+#   Path for stream access logs
+# @param stream_custom_format_log
+#   Custom log format for stream services
+# @param nginx_error_log
+#   Path for Nginx error logs
+# @param nginx_error_log_severity
+#   Severity level for error logs
+# @param pid
+#   Path to the PID file for Nginx processes
+# @param proxy_temp_path
+#   Temporary path for proxy server files
+# @param proxy_cache_key
+#   Key settings for proxy cache
+# @param root_group
+#   Group setting for Nginx root processes
+# @param sites_available_owner
+#   Owner of the sites-available directory
+# @param sites_available_group
+#   Group associated with the sites-available directory
+# @param sites_available_mode
+#   File permissions for sites-available directory
+# @param super_user
+#   User with enhanced permissions in the Nginx context
+# @param temp_dir
+#   Temporary directory for storing operational data
+# @param server_purge
+#   Whether to purge server configurations not managed by Puppet
+# @param conf_template
+#   Template used for the main Nginx configuration file
+# @param fastcgi_conf_template
+#   Template for FastCGI configuration
+# @param uwsgi_params_template
+#   Template for uWSGI parameter configuration
+# @param absolute_redirect
+#   Whether to use absolute redirection
+# @param accept_mutex
+#   Enable or disable the accept mutex
+# @param accept_mutex_delay
+#   Delay before retrying a locked accept mutex
+# @param client_body_buffer_size
+#   Buffer size for reading the client request body
+# @param client_max_body_size
+#   Maximum allowed size of the client request body
+# @param client_body_timeout
+#   Timeout for reading client body
+# @param send_timeout
+#   Timeout for sending response to the client
+# @param lingering_timeout
+#   Timeout for keeping a lingering connection open
+# @param lingering_close
+#   Close behavior for lingering connections
+# @param lingering_time
+#   Time to keep lingering connections alive
+# @param etag
+#   Whether to enable ETag generation
+# @param events_use
+#   Event model used by Nginx
+# @param fastcgi_cache_key
+#   Key settings for FastCGI caching
+# @param fastcgi_cache_path
+#   Path settings for FastCGI cache
+# @param fastcgi_cache_use_stale
+#   Behavior settings when using stale FastCGI cache
+# @param gzip
+#   Enable or disable gzip compression
+# @param gzip_buffers
+#   Number and size of buffers used for gzip compression
+# @param gzip_comp_level
+#   Compression level for gzip
+# @param gzip_disable
+#   Conditions under which gzip compression is disabled
+# @param gzip_min_length
+#   Minimum length required to perform gzip compression
+# @param gzip_http_version
+#   HTTP version that influences gzip behavior
+# @param gzip_proxied
+#   Setting for gzip compression on proxied requests
+# @param gzip_types
+#   Types of content that should be gzip compressed
+# @param gzip_vary
+#   Whether to send the Vary header for gzip compressed responses
+# @param http_cfg_prepend
+#   Directives to prepend to the HTTP configuration block
+# @param http_cfg_append
+#   Directives to append to the HTTP configuration block
+# @param gzip_static
+#   Enable or disable gzip static file compression
+# @param http_raw_prepend
+#   Raw configuration directives to prepend in the HTTP context
+# @param http_raw_append
+#   Raw configuration directives to append in the HTTP context
+# @param http_tcp_nodelay
+#   Whether to use the TCP_NODELAY option on HTTP connections
+# @param http_tcp_nopush
+#   Whether to use the TCP_NOPUSH option on HTTP connections
+# @param keepalive_timeout
+#   Timeout for keep-alive connections
+# @param keepalive_requests
+#   Maximum number of requests per keep-alive connection
+# @param log_format
+#   The format used for logging HTTP requests
+# @param stream_log_format
+#   The format used for logging stream connections
+# @param mail
+#   Enable or disable the mail module
+# @param map_hash_bucket_size
+#   Size of the hash buckets for the map directive
+# @param map_hash_max_size
+#   Maximum size of the hash tables for the map directive
+# @param mime_types_path
+#   Path to the mime.types configuration file
+# @param stream
+#   Enable or disable the stream module
+# @param multi_accept
+#   Whether to accept multiple connections per worker process
+# @param names_hash_bucket_size
+#   Size of the hash buckets for storing server names
+# @param names_hash_max_size
+#   Maximum size of the hash tables for storing server names
+# @param nginx_cfg_prepend
+#   Directives to prepend to the nginx configuration file
+# @param proxy_buffering
+#   Enable or disable buffering of responses from the proxy
+# @param proxy_buffers
+#   Number and size of buffers used for proxy responses
+# @param proxy_buffer_size
+#   Size of each buffer used for proxy responses
+# @param proxy_cache
+#   Enable or disable proxy caching
+# @param proxy_cache_path
+#   Path settings for proxy cache storage
+# @param proxy_connect_timeout
+#   Timeout for making a connection to a proxy server
+# @param proxy_headers_hash_bucket_size
+#   Size of the hash buckets for proxy headers
+# @param proxy_http_version
+#   HTTP version used for communications with the proxy server
+# @param proxy_read_timeout
+#   Timeout for reading a response from the proxy server
+# @param proxy_redirect
+#   Behavior for handling redirects from the proxy server
+# @param proxy_send_timeout
+#   Timeout for sending a request to the proxy server
+# @param proxy_set_header
+#   Headers to set for requests sent to the proxy
+# @param proxy_hide_header
+#   Headers to hide from responses received from the proxy
+# @param proxy_pass_header
+#   Headers to pass along from responses received from the proxy
+# @param proxy_ignore_header
+#   Headers to ignore from responses received from the proxy
+# @param proxy_max_temp_file_size
+#   Maximum size for temporary files used by the proxy
+# @param proxy_busy_buffers_size
+#   Size of the buffers used when the proxy is busy
+# @param sendfile
+#   Whether to use the sendfile mechanism for file transmission
+# @param server_tokens
+#   Whether to reveal server version tokens to clients
+# @param spdy
+#   Enable or disable the SPDY protocol (deprecated in favor of HTTP/2)
+# @param http2
+#   Enable or disable HTTP/2
+# @param ssl_stapling
+#   Enable or disable OCSP stapling for SSL
+# @param ssl_stapling_verify
+#   Whether to verify OCSP responses
+# @param snippets_dir
+#   Directory for storing configuration snippets
+# @param manage_snippets_dir
+#   Whether to manage the creation and permissions of the snippets directory
+# @param types_hash_bucket_size
+#   Size of the hash buckets for MIME type mappings
+# @param types_hash_max_size
+#   Maximum size of the hash tables for MIME type mappings
+# @param worker_connections
+#   Number of connections each worker process can handle
+# @param ssl_prefer_server_ciphers
+#   Whether to prefer server ciphers over client ciphers in SSL negotiations
+# @param worker_processes
+#   Number of worker processes to spawn
+# @param worker_rlimit_nofile
+#   Maximum number of file descriptors that can be opened by each worker process
+# @param pcre_jit
+#   Whether to use Just-in-time compilation for PCRE
+# @param ssl_protocols
+#   SSL protocols to use
+# @param ssl_ciphers
+#   SSL ciphers to use
+# @param ssl_dhparam
+#   Path to the Diffie-Hellman parameter file for SSL
+# @param open_file_cache
+#   Settings for the open file cache
+# @param open_file_cache_valid
+#   Duration an item remains in the open file cache without being accessed
+# @param open_file_cache_min_uses
+#   Minimum number of uses an item must have to remain in the open file cache
+# @param proxy_connection_upgrade
+#   Whether to upgrade a connection to the next protocol
+# @param proxy_cache_lock
+#   Whether to use a lock on a cache item to prevent multiple populates
+# @param default_type
+#   Default MIME type to use if one cannot be determined from the provided file extension
+# @param charset_types
+#   MIME types for which character set specifications are applied
+# @param charset
+#   Default character set to apply
+# @param index
+#   Default file to serve when a directory is requested
+# @param msie_padding
+#   Whether to pad responses for MS Internet Explorer
+# @param port_in_redirect
+#   Whether to include the port number in redirects
+# @param client_header_timeout
+#   Timeout for reading client headers
+# @param fastcgi_buffers
+#   Number and size of buffers for FastCGI
+# @param fastcgi_buffer_size
+#   Size of each buffer for FastCGI
+# @param ssl_ecdh_curve
+#   The Elliptic Curve Diffie-Hellman parameters to use for SSL
+# @param ssl_session_cache
+#   Type of session cache to use for SSL
+# @param ssl_session_timeout
+#   Timeout for SSL session cache
+# @param ssl_session_tickets
+#   Whether to use SSL session tickets
+# @param ssl_session_ticket_key
+#   Key for SSL session tickets
+# @param ssl_buffer_size
+#   Size of the buffer used for SSL data
+# @param ssl_crl
+#   Path to the Certificate Revocation List file for SSL
+# @param ssl_stapling_file
+#   File containing the OCSP stapling data
+# @param ssl_stapling_responder
+#   URL of the OCSP responder
+# @param ssl_trusted_certificate
+#   Path to the trusted SSL certificate
+# @param ssl_verify_depth
+#   Maximum depth for chain verification in SSL
+# @param ssl_password_file
+#   Path to the file containing the SSL password
+# @param package_ensure
+#   State of the package (installed, latest, etc.)
+# @param package_name
+#   Name of the Nginx package to be managed
+# @param package_source
+#   Source repository for the Nginx package
+# @param package_flavor
+#   Flavor of the package if applicable
+# @param manage_repo
+#   Whether to manage the repository where the Nginx package is stored
+# @param yum_repo_sslverify
+#   Whether to verify SSL certificates when accessing the YUM repository
+# @param mime_types
+#   Configuration for MIME types within Nginx
+# @param mime_types_preserve_defaults
+#   Whether to preserve default MIME types when overriding
+# @param repo_release
+#   The release version of the repository to use for package management
+# @param passenger_package_ensure
+#   State of the Passenger package (installed, latest, etc.)
+# @param repo_source
+#   Source of the repository for package management
+# @param service_ensure
+#   Desired state of the Nginx service (running, stopped, etc.)
+# @param service_enable
+#   Whether to enable the Nginx service to start at boot
+# @param service_flags
+#   Additional flags to pass to the service command
+# @param service_restart
+#   Whether to restart the service when necessary
+# @param service_name
+#   Name of the service to manage
+# @param service_manage
+#   Whether to manage the service itself
+# @param geo_mappings
+#   Settings for geographical IP-based mappings
+# @param geo_mappings_defaults
+#   Default settings for geo mappings
+# @param string_mappings
+#   Settings for string-based mappings
+# @param string_mappings_defaults
+#   Default settings for string mappings
+# @param nginx_locations
+#   Configuration settings for specific Nginx locations
+# @param nginx_locations_defaults
+#   Default settings for Nginx locations
+# @param nginx_mailhosts
+#   Configuration settings for mail hosts in Nginx
+# @param nginx_mailhosts_defaults
+#   Default settings for mail hosts
+# @param nginx_servers
+#   Configuration settings for Nginx servers
+# @param nginx_servers_defaults
+#   Default settings for servers
+# @param nginx_streamhosts
+#   Configuration settings for stream hosts in Nginx
+# @param nginx_streamhosts_defaults
+#   Default settings for stream hosts
+# @param nginx_upstreams
+#   Configuration settings for upstream server blocks in Nginx
+# @param nginx_upstreams_defaults
+#   Default settings for upstream configurations
+# @param purge_passenger_repo
+#   Whether to purge the Passenger repository configuration
+#
 class nginx (
   ### START Nginx Configuration ###
   Optional[Variant[Stdlib::Absolutepath, Tuple[Stdlib::Absolutepath, Integer, 1, 4]]]
