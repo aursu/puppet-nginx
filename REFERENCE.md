@@ -308,7 +308,7 @@ already installed.  If the fact is unavailable, it defaults to '1.6.0'.
 You may need to set this manually to get a working and idempotent
 configuration.
 
-Default value: `pick(fact('nginx_version'), '1.25.1')`
+Default value: `pick(fact('nginx_version'), '1.14.0')`
 
 ##### <a name="-nginx--debug_connections"></a>`debug_connections`
 
