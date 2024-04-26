@@ -49,106 +49,104 @@
 # @param nginx_snippets_defaults
 #   Can be used to define default values for the parameter `nginx_snippets`.
 #
-# Nginx Class - Manages the Nginx daemon and its configurations
-#
 # @param client_body_temp_path
-#   Defines a directory for storing temporary files holding client request bodies.
+#   Defines a directory for storing temporary files holding client request bodies, with optional subdirectory levels.
 # @param recursive_error_pages
-#   Whether error pages should be processed recursively
+#   Enables or disables doing several redirects using the error_page directive.
 # @param confd_only
-#   If true, only use configuration from conf.d directory
+#   If true, only use configuration from conf.d directory.
 # @param confd_purge
-#   Whether to purge unmanaged files from conf.d
+#   Whether to purge unmanaged files from conf.d.
 # @param conf_dir
-#   Directory for Nginx configuration files
+#   Directory for Nginx configuration files.
 # @param daemon
-#   Specifies if the service should run as a daemon
+#   Specifies if the service should run as a daemon.
 # @param daemon_user
-#   User under which the nginx daemon runs
+#   User under which the nginx daemon runs.
 # @param daemon_group
-#   Group under which the nginx daemon runs
+#   Group under which the nginx daemon runs.
 # @param dynamic_modules
-#   Whether to enable dynamic modules
+#   Whether to enable dynamic modules.
 # @param global_owner
-#   Owner of the nginx global configuration files
+#   Owner of the nginx global configuration files.
 # @param global_group
-#   Group associated with the nginx global configuration files
+#   Group associated with the nginx global configuration files.
 # @param global_mode
-#   File mode for the nginx global configuration files
+#   File mode for the nginx global configuration files.
 # @param limit_req_zone
-#   Configuration settings for limiting request zones
+#   Configuration settings for limiting request zones.
 # @param log_dir
-#   Directory for Nginx logs
+#   Directory for Nginx logs.
 # @param manage_log_dir
-#   Whether to manage log directory creation
+#   Whether to manage log directory creation.
 # @param log_user
-#   User under whose authority log files are managed
+#   User under whose authority log files are managed.
 # @param log_group
-#   Group under whose authority log files are managed
+#   Group under whose authority log files are managed.
 # @param log_mode
-#   Permissions setting for log files
+#   Permissions setting for log files.
 # @param http_access_log
-#   Path for HTTP access logs
+#   Path for HTTP access logs.
 # @param http_format_log
-#   Log format for HTTP services
+#   Log format for HTTP services.
 # @param stream_access_log
-#   Path for stream access logs
+#   Path for stream access logs.
 # @param stream_custom_format_log
-#   Custom log format for stream services
+#   Custom log format for stream services.
 # @param nginx_error_log
-#   Path for Nginx error logs
+#   Path for Nginx error logs.
 # @param nginx_error_log_severity
-#   Severity level for error logs
+#   Severity level for error logs.
 # @param pid
-#   Path to the PID file for Nginx processes
+#   Path to the PID file for Nginx processes.
 # @param proxy_temp_path
-#   Temporary path for proxy server files
+#   Temporary path for proxy server files.
 # @param proxy_cache_key
-#   Key settings for proxy cache
+#   Key settings for proxy cache.
 # @param root_group
-#   Group setting for Nginx root processes
+#   Group setting for Nginx root processes.
 # @param sites_available_owner
-#   Owner of the sites-available directory
+#   Owner of the sites-available directory.
 # @param sites_available_group
-#   Group associated with the sites-available directory
+#   Group associated with the sites-available directory.
 # @param sites_available_mode
-#   File permissions for sites-available directory
+#   File permissions for sites-available directory.
 # @param super_user
-#   User with enhanced permissions in the Nginx context
+#   User with enhanced permissions in the Nginx context.
 # @param temp_dir
-#   Temporary directory for storing operational data
+#   Temporary directory for storing operational data.
 # @param server_purge
-#   Whether to purge server configurations not managed by Puppet
+#   Whether to purge server configurations not managed by Puppet.
 # @param conf_template
-#   Template used for the main Nginx configuration file
+#   Template used for the main Nginx configuration file.
 # @param fastcgi_conf_template
-#   Template for FastCGI configuration
+#   Template for FastCGI configuration.
 # @param uwsgi_params_template
-#   Template for uWSGI parameter configuration
+#   Template for uWSGI parameter configuration.
 # @param absolute_redirect
-#   Whether to use absolute redirection
+#   Whether to use absolute redirection.
 # @param accept_mutex
-#   Enable or disable the accept mutex
+#   Enable or disable the accept mutex.
 # @param accept_mutex_delay
-#   Delay before retrying a locked accept mutex
+#   Delay before retrying a locked accept mutex.
 # @param client_body_buffer_size
-#   Buffer size for reading the client request body
+#   Buffer size for reading the client request body. In case the request body is larger than the buffer, the whole body or only its part is written to a temporary file.
 # @param client_max_body_size
-#   Maximum allowed size of the client request body
+#   Sets the maximum allowed size of the client request body. If the size in a request exceeds the configured value, the 413 (Request Entity Too Large) error is returned to the client.
 # @param client_body_timeout
-#   Timeout for reading client body
+#   Defines a timeout for reading client request body. The timeout is set only for a period between two successive read operations, not for the transmission of the whole request body.
 # @param send_timeout
-#   Timeout for sending response to the client
+#   Sets a timeout for sending a response to the client.
 # @param lingering_timeout
-#   Timeout for keeping a lingering connection open
+#   Sets the maximum time a server will wait for lingering data sent by a client after the client has finished sending data.
 # @param lingering_close
-#   Close behavior for lingering connections
+#   Controls how nginx closes client connections that are in a lingering state.
 # @param lingering_time
-#   Time to keep lingering connections alive
+#   Specifies the maximum time during which nginx will process (read and ignore) additional data coming from a client when lingering_close is active.
 # @param etag
-#   Whether to enable ETag generation
+#   Enables or disables automatic generation of the `ETag` response header field for static resources.
 # @param events_use
-#   Event model used by Nginx
+#   Event model used by Nginx for handling connections.
 # @param fastcgi_cache_key
 #   Key settings for FastCGI caching
 # @param fastcgi_cache_path
