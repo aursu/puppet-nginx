@@ -16,7 +16,7 @@ class nginx::package::redhat (
   #clone and provide the Red Hat-specific package. This comes into play when not
   #on RHEL or CentOS and $manage_repo is set manually to 'true'.
   $_os = $facts['os']['name'] ? {
-    'centos'         => 'centos',
+    'CentOS'         => 'centos',
     'VirtuozzoLinux' => 'centos',
     default          => 'rhel'
   }
@@ -119,9 +119,15 @@ class nginx::package::redhat (
         }
       }
       'openresty': {
+        $_os_resty = $facts['os']['name'] ? {
+          'CentOS'         => 'centos',
+          'Rocky'          => 'rocky',
+          default          => 'rhel'
+        }
+
         # https://openresty.org/en/linux-packages.html
         yumrepo { 'openresty':
-          baseurl             => "https://openresty.org/package/${_os}/\$releasever/\$basearch",
+          baseurl             => "https://openresty.org/package/${_os_resty}/\$releasever/\$basearch",
           descr               => "Official OpenResty Open Source Repository for ${facts['os']['name']}",
           skip_if_unavailable => '0',
           enabled             => '1',

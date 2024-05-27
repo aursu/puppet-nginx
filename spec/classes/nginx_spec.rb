@@ -133,7 +133,16 @@ describe 'nginx' do
 
           context 'package_source => openresty' do
             let(:params) { { package_source: 'openresty' } }
-            let(:os_path) { facts[:operatingsystem] == 'CentOS' ? 'centos' : 'rhel' }
+            let(:os_path) do
+              case facts[:operatingsystem]
+              when 'CentOS'
+                'centos'
+              when 'Rocky'
+                'rocky'
+              else
+                'rhel'
+              end
+            end
 
             it do
               is_expected.to contain_yumrepo('openresty').with(
