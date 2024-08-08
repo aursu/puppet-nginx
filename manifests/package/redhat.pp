@@ -125,6 +125,11 @@ class nginx::package::redhat (
           default          => 'rhel'
         }
 
+        $repo_gpgkey = $facts['os']['release']['major'] ? {
+          '9'     => 'https://openresty.org/package/pubkey2.gpg',
+          default => 'https://openresty.org/package/pubkey.gpg',
+        }
+
         # https://openresty.org/en/linux-packages.html
         yumrepo { 'openresty':
           baseurl             => "https://openresty.org/package/${_os_resty}/\$releasever/\$basearch",
@@ -133,7 +138,7 @@ class nginx::package::redhat (
           enabled             => '1',
           gpgcheck            => '1',
           repo_gpgcheck       => '0',
-          gpgkey              => 'https://openresty.org/package/pubkey.gpg',
+          gpgkey              => $repo_gpgkey,
           sslverify           => $sslverify,
           before              => Package['nginx'],
           notify              => Exec['yum-clean-b114182'],
