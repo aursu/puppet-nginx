@@ -15,14 +15,19 @@
   Optional[String]  $smtp_auth,
   Optional[Array]   $smtp_capabilities,
   Nginx::Switch     $xclient,
+  String            $nginx_version,
 | -%>
   server_name           <%= $server_name.join(" ") %>;
 <%- if $protocol { -%>
   protocol              <%= $protocol %>;
 <%- } -%>
   xclient               <%= nginx::switch($xclient) %>;
+<%- if versioncmp($nginx_version, '1.19.8') >= 0 { -%>
   proxy_protocol        <%= nginx::switch($proxy_protocol) %>;
+<%- } -%>
+<%- if versioncmp($nginx_version, '1.19.4') >= 0 { -%>
   proxy_smtp_auth       <%= nginx::switch($proxy_smtp_auth) %>;
+<%- } -%>
 <%- if $auth_http { -%>
   auth_http             <%= $auth_http %>;
 <%- } -%>

@@ -18,7 +18,7 @@ describe 'nginx::resource::streamhost' do
         }
       end
 
-      let(:pre_condition) { 'class {"nginx": stream => true}' }
+      let(:pre_condition) { 'class { "nginx": stream => true }' }
 
       describe 'os-independent items' do
         describe 'basic assumptions' do

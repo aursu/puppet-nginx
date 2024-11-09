@@ -15,18 +15,12 @@ describe 'nginx::resource::map' do
       let :default_params do
         {
           string: '$uri',
-          default: 'pool_a',
-          mappings: {
-            'foo' => 'pool_b',
-            'bar' => 'pool_c',
-            'baz' => 'pool_d'
-          }
         }
       end
 
       let :pre_condition do
         [
-          'include ::nginx'
+          'include nginx'
         ]
       end
 

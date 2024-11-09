@@ -255,9 +255,10 @@
 #   server stanza, rather than setting a default. Can also be disabled for this
 #   server with the string 'off'.
 # @param error_log
-#   Where to write error log. May add additional options like error level to
-#   the end. May set to 'absent', in which case it will be omitted in this
+#   Where to write error log. May be set to 'absent', in which case it will be omitted in this
 #   server stanza (and default to nginx.conf setting)
+# @param error_log_severity
+#   Optional error level
 # @param passenger_cgi_param
 #   Allows one to define additional CGI environment variables to pass to the backend application
 # @param passenger_set_header
@@ -456,6 +457,7 @@ define nginx::resource::server (
     Hash[String, String]
   ] $access_log                                                                  = 'absent',
   Variant[Boolean, String, Array]           $error_log                           = false,
+  Optional[Nginx::ErrorLogSeverity] $error_log_severity                          = undef,
   Optional[String] $format_log                                                   = $nginx::http_format_log,
   Optional[Hash] $passenger_cgi_param                                            = undef,
   Optional[Hash] $passenger_set_header                                           = undef,
@@ -724,9 +726,9 @@ define nginx::resource::server (
     }
   }
 
-  create_resources('::nginx::resource::map', $string_mappings)
-  create_resources('::nginx::resource::geo', $geo_mappings)
-  create_resources('::nginx::resource::location', $locations, {
+  create_resources('nginx::resource::map', $string_mappings)
+  create_resources('nginx::resource::geo', $geo_mappings)
+  create_resources('nginx::resource::location', $locations, {
       ensure   => $ensure,
       server   => $name_sanitized,
       ssl      => $ssl,
