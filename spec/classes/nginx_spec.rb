@@ -134,7 +134,7 @@ describe 'nginx' do
           context 'package_source => openresty' do
             let(:params) { { package_source: 'openresty' } }
             let(:os_path) do
-              case facts[:operatingsystem]
+              case facts[:os]['name']
               when 'CentOS'
                 'centos'
               when 'Rocky'

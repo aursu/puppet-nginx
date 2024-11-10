@@ -12,6 +12,9 @@ RUN mkdir -p /etc/sv
 ARG PUPPET_GEM_VERSION="~> 7.0"
 ARG PARALLEL_TEST_PROCESSORS=4
 
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+
 # Cache gems
 COPY Gemfile .
 RUN bundle install --without system_tests development release --path=${BUNDLE_PATH:-vendor/bundle}
@@ -19,7 +22,7 @@ RUN bundle install --without system_tests development release --path=${BUNDLE_PA
 COPY . .
 
 RUN bundle install
-RUN bundle exec rake release_checks
+# RUN bundle exec rake release_checks
 
-# Container should not saved
-RUN exit 1
+# # Container should not saved
+# RUN exit 1

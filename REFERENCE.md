@@ -1796,7 +1796,7 @@ A description of what this defined type does
 
 #### Examples
 
-#####
+##### 
 
 ```puppet
 nginx::resource::config { '99-gitlab-logging':
