@@ -2,6 +2,8 @@ services:
   rocky9base:
     build:
       context: .
+      secrets:
+        - forge_key
       args:
         rocky: $RL9
         platform: puppet8
