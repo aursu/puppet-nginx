@@ -6,9 +6,9 @@ FROM aursu/rockylinux:${rocky}-ruby33-puppet
 
 ARG platform=puppet8
 ARG DNF_ENV_FILE=/dev/null
-ARG AGENT_VERSION="8.12.0"
+ARG AGENT_VERSION="8.15.0"
 ARG BOLT_VERSION="4.0.0"
-ARG PDK_VERSION="3.4.0.1"
+ARG PDK_VERSION="3.5.1.1"
 
 RUN --mount=type=secret,id=forge_key,required \
         rpm -ivh https://yum-puppetcore.puppet.com/public/${platform}-release-el-9.noarch.rpm \
