@@ -56,13 +56,13 @@ describe 'nginx' do
                 'gpgcheck'  => '1',
                 'priority'  => '1',
                 'sslverify' => 'absent',
-                'gpgkey'    => 'https://nginx.org/keys/nginx_signing.key'
+                'gpgkey'    => 'https://nginx.org/keys/nginx_signing.key',
               )
             end
 
             it do
               is_expected.to contain_yumrepo('passenger').with(
-                'ensure' => 'absent'
+                'ensure' => 'absent',
               )
             end
 
@@ -82,7 +82,7 @@ describe 'nginx' do
                 'enabled'  => '1',
                 'gpgcheck' => '1',
                 'priority' => '1',
-                'gpgkey'   => 'https://nginx.org/keys/nginx_signing.key'
+                'gpgkey'   => 'https://nginx.org/keys/nginx_signing.key',
               )
             end
 
@@ -91,16 +91,24 @@ describe 'nginx' do
 
           context 'package_source => nginx-mainline' do
             let(:params) { { package_source: 'nginx-mainline' } }
+            let(:os_path) do
+              case facts[:os]['name']
+              when 'CentOS', 'VirtuozzoLinux', 'OracleLinux'
+                'centos'
+              else
+                'rhel'
+              end
+            end
 
             it do
               is_expected.to contain_yumrepo('nginx-release').with(
-                'baseurl' => "https://nginx.org/packages/mainline/#{%w[CentOS VirtuozzoLinux OracleLinux].include?(facts[:os]['name']) ? 'centos' : 'rhel'}/#{facts[:os]['release']['major']}/$basearch/"
+                'baseurl' => "https://nginx.org/packages/mainline/#{os_path}/#{facts[:os]['release']['major']}/$basearch/",
               )
             end
 
             it do
               is_expected.to contain_yumrepo('passenger').with(
-                'ensure' => 'absent'
+                'ensure' => 'absent',
               )
             end
 
@@ -116,13 +124,13 @@ describe 'nginx' do
                 'baseurl'       => "https://oss-binaries.phusionpassenger.com/yum/passenger/el/#{facts[:os]['release']['major']}/$basearch",
                 'gpgcheck'      => '0',
                 'repo_gpgcheck' => '1',
-                'gpgkey'        => 'https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key.txt'
+                'gpgkey'        => 'https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key.txt',
               )
             end
 
             it do
               is_expected.to contain_yumrepo('nginx-release').with(
-                'ensure' => 'absent'
+                'ensure' => 'absent',
               )
             end
 
@@ -146,13 +154,13 @@ describe 'nginx' do
 
             it do
               is_expected.to contain_yumrepo('openresty').with(
-                'baseurl' => "https://openresty.org/package/#{os_path}/$releasever/$basearch"
+                'baseurl' => "https://openresty.org/package/#{os_path}/$releasever/$basearch",
               )
             end
 
             it do
               is_expected.to contain_yumrepo('passenger').with(
-                'ensure' => 'absent'
+                'ensure' => 'absent',
               )
             end
 
@@ -180,7 +188,7 @@ describe 'nginx' do
 
             it do
               is_expected.to contain_yumrepo('nginx-release').with(
-                'sslverify' => true
+                'sslverify' => true,
               )
             end
           end
@@ -205,7 +213,7 @@ describe 'nginx' do
                 'key'      => {
                   'source' => 'https://nginx.org/keys/nginx_signing.key',
                   'name' => 'nginx.asc'
-                }
+                },
               )
             end
           end
@@ -215,7 +223,7 @@ describe 'nginx' do
 
             it do
               is_expected.to contain_apt__source('nginx').with(
-                'location' => 'https://example.com/nginx'
+                'location' => 'https://example.com/nginx',
               )
             end
           end
@@ -225,7 +233,7 @@ describe 'nginx' do
 
             it do
               is_expected.to contain_apt__source('nginx').with(
-                'location' => "https://nginx.org/packages/mainline/#{facts[:os]['name'].downcase}"
+                'location' => "https://nginx.org/packages/mainline/#{facts[:os]['name'].downcase}",
               )
             end
           end
@@ -243,7 +251,7 @@ describe 'nginx' do
                 'key'      => {
                   'source' => 'https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key.txt',
                   'name' => 'phusionpassenger.asc'
-                }
+                },
               )
             end
           end
@@ -278,7 +286,7 @@ describe 'nginx' do
           it do
             is_expected.to contain_service('nginx').with(
               ensure: 'running',
-              enable: true
+              enable: true,
             )
           end
 
@@ -356,7 +364,7 @@ describe 'nginx' do
               ensure: 'directory',
               owner: 'root',
               group: 'root',
-              mode: '0644'
+              mode: '0644',
             )
           end
 
@@ -366,7 +374,7 @@ describe 'nginx' do
               ensure: 'directory',
               owner: 'root',
               group: 'root',
-              mode: '0644'
+              mode: '0644',
             )
           end
 
@@ -375,7 +383,7 @@ describe 'nginx' do
               ensure: 'file',
               owner: 'root',
               group: 'root',
-              mode: '0644'
+              mode: '0644',
             )
           end
 
@@ -384,7 +392,7 @@ describe 'nginx' do
               ensure: 'file',
               owner: 'root',
               group: 'root',
-              mode: '0644'
+              mode: '0644',
             )
           end
 
@@ -392,7 +400,7 @@ describe 'nginx' do
             is_expected.to contain_file('/tmp/nginx.d').with(
               ensure: 'absent',
               purge: true,
-              recurse: true
+              recurse: true,
             )
           end
 
@@ -400,7 +408,7 @@ describe 'nginx' do
             is_expected.to contain_file('/tmp/nginx.mail.d').with(
               ensure: 'absent',
               purge: true,
-              recurse: true
+              recurse: true,
             )
           end
 
@@ -409,7 +417,7 @@ describe 'nginx' do
 
             it do
               is_expected.to contain_file('/var/log/nginx').with(
-                replace: false
+                replace: false,
               )
             end
           end
@@ -424,7 +432,7 @@ describe 'nginx' do
                 owner: 'nginx',
                 group: 'nginx',
                 mode: '0750',
-                replace: true
+                replace: true,
               )
             end
           when 'Debian'
@@ -436,7 +444,7 @@ describe 'nginx' do
                 owner: 'root',
                 group: 'adm',
                 mode: '0755',
-                replace: true
+                replace: true,
               )
             end
           end
@@ -533,7 +541,7 @@ describe 'nginx' do
                 value: ['/path/to/error.log', 'syslog:server=localhost'],
                 match: [
                   '  error_log /path/to/error.log error;',
-                  '  error_log syslog:server=localhost error;'
+                  '  error_log syslog:server=localhost error;',
                 ]
               },
               {
@@ -602,7 +610,7 @@ describe 'nginx' do
                   '  log_format format1 "FORMAT1";',
                   '  log_format format2 "FORMAT2";',
                   '  log_format format3 "FORMAT3";',
-                  '  log_format format4 escape=json "{\\"response\\": $status, \\"verb\\": \\"$request_method\\"}";'
+                  '  log_format format4 escape=json "{\\"response\\": $status, \\"verb\\": \\"$request_method\\"}";',
                 ]
               },
               {
@@ -650,7 +658,7 @@ describe 'nginx' do
                 },
                 match: [
                   '  access_log /path/to/access.log combined;',
-                  '  access_log syslog:server=localhost main if=$loggable;'
+                  '  access_log syslog:server=localhost main if=$loggable;',
                 ]
               },
               {
@@ -659,7 +667,7 @@ describe 'nginx' do
                 value: ['/path/to/access.log', 'syslog:server=localhost'],
                 match: [
                   '  access_log /path/to/access.log;',
-                  '  access_log syslog:server=localhost;'
+                  '  access_log syslog:server=localhost;',
                 ]
               },
               {
@@ -710,7 +718,7 @@ describe 'nginx' do
                 value: [
                   'if (a) {',
                   '  b;',
-                  '}'
+                  '}',
                 ],
                 match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
               },
@@ -721,7 +729,7 @@ describe 'nginx' do
                 match: [
                   '  allow test value 3;',
                   '  test1 test value 1;',
-                  '  test2 test value 2;'
+                  '  test2 test value 2;',
                 ]
               },
               {
@@ -730,7 +738,7 @@ describe 'nginx' do
                 value: [['allow', 'test value 1'], ['allow', 'test value 2']],
                 match: [
                   '  allow test value 1;',
-                  '  allow test value 2;'
+                  '  allow test value 2;',
                 ]
               },
               {
@@ -739,7 +747,7 @@ describe 'nginx' do
                 value: { 'test1' => ['test value 1', 'test value 2', 'test value 3'] },
                 match: [
                   '  test1 test value 1;',
-                  '  test1 test value 2;'
+                  '  test1 test value 2;',
                 ]
               },
               {
@@ -748,7 +756,7 @@ describe 'nginx' do
                 value: [
                   'if (a) {',
                   '  b;',
-                  '}'
+                  '}',
                 ],
                 match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
               },
@@ -759,7 +767,7 @@ describe 'nginx' do
                 match: [
                   '  allow test value 3;',
                   '  test1 test value 1;',
-                  '  test2 test value 2;'
+                  '  test2 test value 2;',
                 ]
               },
               {
@@ -768,7 +776,7 @@ describe 'nginx' do
                 value: [['allow', 'test value 1'], ['allow', 'test value 2']],
                 match: [
                   '  allow test value 1;',
-                  '  allow test value 2;'
+                  '  allow test value 2;',
                 ]
               },
               {
@@ -777,7 +785,7 @@ describe 'nginx' do
                 value: { 'test1' => ['test value 1', 'test value 2', 'test value 3'] },
                 match: [
                   '  test1 test value 1;',
-                  '  test1 test value 2;'
+                  '  test1 test value 2;',
                 ]
               },
               {
@@ -787,7 +795,7 @@ describe 'nginx' do
                 match: [
                   'allow test value 3;',
                   'test1 test value 1;',
-                  'test2 test value 2;'
+                  'test2 test value 2;',
                 ]
               },
               {
@@ -796,7 +804,7 @@ describe 'nginx' do
                 value: [['allow', 'test value 1'], ['allow', 'test value 2']],
                 match: [
                   'allow test value 1;',
-                  'allow test value 2;'
+                  'allow test value 2;',
                 ]
               },
               {
@@ -806,7 +814,7 @@ describe 'nginx' do
                 match: [
                   'test1 test value 1;',
                   'test1 test value 2;',
-                  'test1 test value 3;'
+                  'test1 test value 3;',
                 ]
               },
               {
@@ -1007,7 +1015,7 @@ describe 'nginx' do
                 value: %w[127.0.0.1 unix:],
                 match: [
                   '  debug_connection 127.0.0.1;',
-                  '  debug_connection unix:;'
+                  '  debug_connection unix:;',
                 ]
               },
               {
@@ -1041,7 +1049,7 @@ describe 'nginx' do
                   '/path/to/body_temp',
                   1,
                   2,
-                  3
+                  3,
                 ],
                 match: %r{^\s*client_body_temp_path /path/to/body_temp 1 2 3;$}
               },
@@ -1137,9 +1145,9 @@ describe 'nginx' do
                 },
                 match: [
                   'limit_req_zone $binary_remote_addr zone=myzone1:10m rate=5r/s;',
-                  'limit_req_zone $binary_remote_addr zone=myzone2:10m rate=5r/s;'
+                  'limit_req_zone $binary_remote_addr zone=myzone2:10m rate=5r/s;',
                 ]
-              }
+              },
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) { { param[:attr].to_sym => param[:value] } }
@@ -1193,12 +1201,12 @@ describe 'nginx' do
                 attr: 'open_file_cache_min_uses',
                 value: 2,
                 match: 'open_file_cache_min_uses 2;'
-              }
+              },
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) do
                   super().merge(
-                    param[:attr].to_sym => param[:value]
+                    param[:attr].to_sym => param[:value],
                   )
                 end
 
@@ -1230,7 +1238,7 @@ describe 'nginx' do
                   '/path/to/proxy_temp',
                   1,
                   2,
-                  3
+                  3,
                 ],
                 match: %r{^\s*proxy_temp_path /path/to/proxy_temp 1 2 3;}
               },
@@ -1269,7 +1277,7 @@ describe 'nginx' do
                 attr: 'proxy_cache_path',
                 value: { '/var/cache/nginx/shared' => { 'levels' => '1:2', 'keys_zone' => 'shared:16m', 'use_temp_path' => false, 'inactive' => '60m', 'max_size' => '10g' } },
                 match: %r{\s*proxy_cache_path\s+/var/cache/nginx/shared levels=1:2 keys_zone=shared:16m use_temp_path=off inactive=60m max_size=10g;}
-              }
+              },
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) { { param[:attr].to_sym => param[:value] } }
@@ -1334,7 +1342,7 @@ describe 'nginx' do
                   'text/css',
                   'text/javascript',
                   'text/plain',
-                  'text/xml'
+                  'text/xml',
                 ],
                 match: 'gzip_types application/javascript application/json application/x-javascript application/xml application/xml+rss text/css text/javascript text/plain text/xml;'
               },
@@ -1343,7 +1351,7 @@ describe 'nginx' do
                 attr: 'gzip_types',
                 value: 'text/plain',
                 match: 'gzip_types text/plain;'
-              }
+              },
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) { { param[:attr].to_sym => param[:value] } }
@@ -1422,7 +1430,7 @@ describe 'nginx' do
             it do
               is_expected.to contain_file('/etc/nginx/conf.d').with(
                 purge: true,
-                recurse: true
+                recurse: true,
               )
             end
           end
@@ -1436,7 +1444,7 @@ describe 'nginx' do
                   ignore
                   purge
                   recurse
-                ]
+                ],
               )
             end
           end
@@ -1450,7 +1458,7 @@ describe 'nginx' do
                   ignore
                   purge
                   recurse
-                ]
+                ],
               )
               is_expected.not_to contain_file('/etc/nginx/sites-available')
               is_expected.not_to contain_file('/etc/nginx/sites-enabled')
@@ -1466,14 +1474,14 @@ describe 'nginx' do
             it do
               is_expected.to contain_file('/etc/nginx/sites-available').with(
                 purge: true,
-                recurse: true
+                recurse: true,
               )
             end
 
             it do
               is_expected.to contain_file('/etc/nginx/sites-enabled').with(
                 purge: true,
-                recurse: true
+                recurse: true,
               )
             end
           end
@@ -1491,14 +1499,14 @@ describe 'nginx' do
             it do
               is_expected.to contain_file('/etc/nginx/conf.d').with(
                 purge: true,
-                recurse: true
+                recurse: true,
               )
             end
 
             it do
               is_expected.to contain_file('/etc/nginx/conf.stream.d').with(
                 purge: true,
-                recurse: true
+                recurse: true,
               )
             end
           end
@@ -1516,7 +1524,7 @@ describe 'nginx' do
               is_expected.to contain_file('/etc/nginx/conf.d').without(
                 %w[
                   purge
-                ]
+                ],
               )
             end
 
@@ -1524,7 +1532,7 @@ describe 'nginx' do
               is_expected.to contain_file('/etc/nginx/conf.stream.d').without(
                 %w[
                   purge
-                ]
+                ],
               )
             end
           end
@@ -1543,7 +1551,7 @@ describe 'nginx' do
                   ignore
                   purge
                   recurse
-                ]
+                ],
               )
             end
 
@@ -1553,7 +1561,7 @@ describe 'nginx' do
                   ignore
                   purge
                   recurse
-                ]
+                ],
               )
             end
 
@@ -1563,7 +1571,7 @@ describe 'nginx' do
                   ignore
                   purge
                   recurse
-                ]
+                ],
               )
             end
 
@@ -1573,7 +1581,7 @@ describe 'nginx' do
                   ignore
                   purge
                   recurse
-                ]
+                ],
               )
             end
 
@@ -1583,7 +1591,7 @@ describe 'nginx' do
                   ignore
                   purge
                   recurse
-                ]
+                ],
               )
             end
           end
@@ -1607,13 +1615,13 @@ describe 'nginx' do
 
             it do
               is_expected.to contain_file('/etc/nginx/nginx.conf').with_content(
-                %r{access_log /foo/bar/access.log;}
+                %r{access_log /foo/bar/access.log;},
               )
             end
 
             it do
               is_expected.to contain_file('/etc/nginx/nginx.conf').with_content(
-                %r{error_log /foo/bar/error.log error;}
+                %r{error_log /foo/bar/error.log error;},
               )
             end
           end
@@ -1634,13 +1642,13 @@ describe 'nginx' do
 
             it do
               is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
-                %r{gzip on;}
+                %r{gzip on;},
               )
             end
 
             it do
               is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
-                %r{gzip_disable msie6;}
+                %r{gzip_disable msie6;},
               )
             end
           end
@@ -1655,7 +1663,7 @@ describe 'nginx' do
 
             it do
               is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
-                %r{gzip_buffers 32 4k;}
+                %r{gzip_buffers 32 4k;},
               )
             end
           end
@@ -1685,7 +1693,7 @@ describe 'nginx' do
 
             it do
               is_expected.to contain_file('/etc/nginx/conf.d/00-gzip.conf').with_content(
-                %r{gzip_static on;}
+                %r{gzip_static on;},
               )
             end
           end
@@ -1695,7 +1703,7 @@ describe 'nginx' do
 
             it do
               is_expected.to contain_file('/etc/nginx/nginx.conf').with_content(
-                %r{stream\s\{}
+                %r{stream\s\{},
               )
             end
 
@@ -1706,7 +1714,7 @@ describe 'nginx' do
 
               it do
                 is_expected.to contain_file('/etc/nginx/nginx.conf').with_content(
-                  %r{log_format stream_format 'STREAM_FORMAT';}
+                  %r{log_format stream_format 'STREAM_FORMAT';},
                 )
               end
             end
@@ -1714,7 +1722,7 @@ describe 'nginx' do
             context 'when stream_custom_format_log is default' do
               it do
                 is_expected.to contain_file('/etc/nginx/nginx.conf').with_content(
-                  %r{access_log /var/log/nginx/stream-access.log;}
+                  %r{access_log /var/log/nginx/stream-access.log;},
                 )
               end
             end
@@ -1726,7 +1734,7 @@ describe 'nginx' do
 
               it do
                 is_expected.to contain_file('/etc/nginx/nginx.conf').with_content(
-                  %r{access_log /var/log/nginx/stream-access.log stream_format;}
+                  %r{access_log /var/log/nginx/stream-access.log stream_format;},
                 )
               end
             end

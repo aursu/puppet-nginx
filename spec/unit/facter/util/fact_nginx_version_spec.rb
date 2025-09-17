@@ -3,10 +3,10 @@
 require 'spec_helper'
 
 describe Facter::Util::Fact do
-  before { Facter.clear }
+  before(:each) { Facter.clear }
 
   context 'neither nginx or openresty in path' do
-    before do
+    before(:each) do
       allow(Facter::Util::Resolution).to receive(:which).with('nginx').and_return(false)
       allow(Facter::Util::Resolution).to receive(:which).with('openresty').and_return(false)
     end
@@ -16,7 +16,7 @@ describe Facter::Util::Fact do
 
   context 'nginx' do
     context 'with current version output format' do
-      before do
+      before(:each) do
         allow(Facter::Util::Resolution).to(receive(:which).with('nginx').twice).and_return(true)
         allow(Facter::Util::Resolution).to receive(:exec).with('nginx -v 2>&1').and_return('nginx version: nginx/1.8.1')
       end
@@ -25,7 +25,7 @@ describe Facter::Util::Fact do
     end
 
     context 'with old version output format' do
-      before do
+      before(:each) do
         allow(Facter::Util::Resolution).to(receive(:which).with('nginx').twice).and_return(true)
         allow(Facter::Util::Resolution).to receive(:exec).with('nginx -v 2>&1').and_return('nginx: nginx version: nginx/0.7.0')
       end
@@ -36,7 +36,7 @@ describe Facter::Util::Fact do
 
   context 'openresty' do
     context 'with current version output format' do
-      before do
+      before(:each) do
         allow(Facter::Util::Resolution).to(receive(:which).with('nginx').twice).and_return(false)
         allow(Facter::Util::Resolution).to receive(:which).with('openresty').and_return(true)
         allow(Facter::Util::Resolution).to receive(:exec).with('openresty -v 2>&1').and_return('nginx version: openresty/1.11.2.1')

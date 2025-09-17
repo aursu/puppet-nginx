@@ -225,7 +225,7 @@ describe 'nginx::resource::server define:' do
       it { is_expected.to be_listening }
     end
 
-    it 'answers to http://www.puppetlabs.com with redirect to HTTPS' do
+    it 'answers to http://www.puppetlabs.com with redirect status 301' do
       shell('/usr/bin/curl -I http://www.puppetlabs.com:80') do |r|
         expect(r.stdout).to contain('301 Moved Permanently')
       end

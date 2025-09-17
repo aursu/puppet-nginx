@@ -158,7 +158,7 @@ describe 'nginx::resource::mailhost' do
               value: [
                 'if (a) {',
                 '  b;',
-                '}'
+                '}',
               ],
               match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
             },
@@ -168,7 +168,7 @@ describe 'nginx::resource::mailhost' do
               value: [
                 'if (a) {',
                 '  b;',
-                '}'
+                '}',
               ],
               match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
             },
@@ -215,7 +215,7 @@ describe 'nginx::resource::mailhost' do
                 '  test3 subkey 3b subvalue 3b2;',
                 '  test4 test value 4;',
               ]
-            }
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let :default_params do
@@ -280,7 +280,7 @@ describe 'nginx::resource::mailhost' do
               attr: 'imap_client_buffer',
               value: '8k',
               match: '  imap_client_buffer  8k;'
-            }
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let :default_params do
@@ -322,7 +322,7 @@ describe 'nginx::resource::mailhost' do
               attr: 'pop3_capabilities',
               value: %w[TOP USER UIDL],
               match: '  pop3_capabilities  TOP USER UIDL;'
-            }
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let :default_params do
@@ -363,7 +363,7 @@ describe 'nginx::resource::mailhost' do
               attr: 'smtp_capabilities',
               value: %w[8BITMIME PIPELINING HELP],
               match: '  smtp_capabilities  8BITMIME PIPELINING HELP;'
-            }
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let :default_params do
@@ -518,7 +518,7 @@ describe 'nginx::resource::mailhost' do
               attr: 'ssl_verify_depth',
               value: 2,
               match: '  ssl_verify_depth           2;'
-            }
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let :default_params do
@@ -638,7 +638,7 @@ describe 'nginx::resource::mailhost' do
               attr: 'ssl_key',
               value: 'test-ssl-cert-key',
               match: '  ssl_certificate_key        test-ssl-cert-key;'
-            }
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let :default_params do
@@ -732,11 +732,14 @@ describe 'nginx::resource::mailhost' do
           context 'SSL cert missing and ssl => true' do
             let(:params) do
               default_params.merge(
-                ssl: true, ssl_key: 'key'
+                ssl: true, ssl_key: 'key',
               )
             end
 
-            it { expect { is_expected.to contain_class('nginx::resource::server') }.to raise_error(Puppet::Error, %r{nginx: SSL certificate/key \(ssl_cert/ssl_cert\) and/or SSL Private must be defined and exist on the target system\(s\)}) }
+            it {
+              expect { is_expected.to contain_class('nginx::resource::server') }
+                .to raise_error(Puppet::Error, %r{nginx: SSL certificate/key \(ssl_cert/ssl_cert\) and/or SSL Private must be defined and exist on the target system\(s\)})
+            }
           end
 
           context 'SSL key missing and ssl => true' do
@@ -745,7 +748,10 @@ describe 'nginx::resource::mailhost' do
                                    ssl_cert: 'cert')
             end
 
-            it { expect { is_expected.to contain_class('nginx::resource::server') }.to raise_error(Puppet::Error, %r{nginx: SSL certificate/key \(ssl_cert/ssl_cert\) and/or SSL Private must be defined and exist on the target system\(s\)}) }
+            it {
+              expect { is_expected.to contain_class('nginx::resource::server') }
+                .to raise_error(Puppet::Error, %r{nginx: SSL certificate/key \(ssl_cert/ssl_cert\) and/or SSL Private must be defined and exist on the target system\(s\)})
+            }
           end
 
           context "SSL cert missing and starttls => 'on'" do
@@ -754,7 +760,10 @@ describe 'nginx::resource::mailhost' do
                                    ssl_key: 'key')
             end
 
-            it { expect { is_expected.to contain_class('nginx::resource::server') }.to raise_error(Puppet::Error, %r{nginx: SSL certificate/key \(ssl_cert/ssl_cert\) and/or SSL Private must be defined and exist on the target system\(s\)}) }
+            it {
+              expect { is_expected.to contain_class('nginx::resource::server') }
+                .to raise_error(Puppet::Error, %r{nginx: SSL certificate/key \(ssl_cert/ssl_cert\) and/or SSL Private must be defined and exist on the target system\(s\)})
+            }
           end
 
           context "SSL key missing and starttls => 'on'" do
@@ -763,7 +772,10 @@ describe 'nginx::resource::mailhost' do
                                    ssl_cert: 'cert')
             end
 
-            it { expect { is_expected.to contain_class('nginx::resource::server') }.to raise_error(Puppet::Error, %r{nginx: SSL certificate/key \(ssl_cert/ssl_cert\) and/or SSL Private must be defined and exist on the target system\(s\)}) }
+            it {
+              expect { is_expected.to contain_class('nginx::resource::server') }
+                .to raise_error(Puppet::Error, %r{nginx: SSL certificate/key \(ssl_cert/ssl_cert\) and/or SSL Private must be defined and exist on the target system\(s\)})
+            }
           end
 
           context "SSL cert missing and starttls => 'only'" do
@@ -772,7 +784,10 @@ describe 'nginx::resource::mailhost' do
                                    ssl_key: 'key')
             end
 
-            it { expect { is_expected.to contain_class('nginx::resource::server') }.to raise_error(Puppet::Error, %r{nginx: SSL certificate/key \(ssl_cert/ssl_cert\) and/or SSL Private must be defined and exist on the target system\(s\)}) }
+            it {
+              expect { is_expected.to contain_class('nginx::resource::server') }
+                .to raise_error(Puppet::Error, %r{nginx: SSL certificate/key \(ssl_cert/ssl_cert\) and/or SSL Private must be defined and exist on the target system\(s\)})
+            }
           end
 
           context "SSL key missing and starttls => 'only'" do
@@ -781,7 +796,10 @@ describe 'nginx::resource::mailhost' do
                                    ssl_cert: 'cert')
             end
 
-            it { expect { is_expected.to contain_class('nginx::resource::server') }.to raise_error(Puppet::Error, %r{nginx: SSL certificate/key \(ssl_cert/ssl_cert\) and/or SSL Private must be defined and exist on the target system\(s\)}) }
+            it {
+              expect { is_expected.to contain_class('nginx::resource::server') }
+                .to raise_error(Puppet::Error, %r{nginx: SSL certificate/key \(ssl_cert/ssl_cert\) and/or SSL Private must be defined and exist on the target system\(s\)})
+            }
           end
 
           context 'when listen_port != ssl_port' do
@@ -844,13 +862,13 @@ describe 'nginx::resource::mailhost' do
           end
 
           it do
-            is_expected.to contain_concat__fragment("#{title}-header").
-              without_content(%r{^  listen                \[::\]:25 default ipv6only=on;})
+            is_expected.to contain_concat__fragment("#{title}-header")
+              .without_content(%r{^  listen                \[::\]:25 default ipv6only=on;})
           end
 
           it do
-            is_expected.to contain_concat__fragment("#{title}-ssl").
-              without_content(%r{^  listen                \[::\]:587 default ipv6only=on;})
+            is_expected.to contain_concat__fragment("#{title}-ssl")
+              .without_content(%r{^  listen                \[::\]:587 default ipv6only=on;})
           end
         end
       end

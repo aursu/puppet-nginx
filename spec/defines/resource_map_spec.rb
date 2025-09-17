@@ -20,7 +20,7 @@ describe 'nginx::resource::map' do
 
       let :pre_condition do
         [
-          'include nginx'
+          'include nginx',
         ]
       end
 
@@ -36,7 +36,7 @@ describe 'nginx::resource::map' do
               'group'   => 'root',
               'mode'    => '0644',
               'ensure'  => 'file',
-              'content' => %r{map \$uri \$#{title}}
+              'content' => %r{map \$uri \$#{title}},
             )
           end
         end
@@ -44,12 +44,12 @@ describe 'nginx::resource::map' do
         describe 'basic assumptions on stream mapfiles' do
           let :pre_condition do
             [
-              "class {'::nginx': stream => true, }"
+              "class {'::nginx': stream => true, }",
             ]
           end
           let :params do
             default_params.merge(
-              context: 'stream'
+              context: 'stream',
             )
           end
 
@@ -61,7 +61,7 @@ describe 'nginx::resource::map' do
               'group'   => 'root',
               'mode'    => '0644',
               'ensure'  => 'file',
-              'content' => %r{map \$uri \$#{title}}
+              'content' => %r{map \$uri \$#{title}},
             )
           end
         end
@@ -92,12 +92,12 @@ describe 'nginx::resource::map' do
               value: [
                 '/etc/includes/A.map',
                 '/etc/includes/B.map',
-                '/etc/includes/C.map'
+                '/etc/includes/C.map',
               ],
               match: [
                 '  include /etc/includes/A.map;',
                 '  include /etc/includes/B.map;',
-                '  include /etc/includes/C.map;'
+                '  include /etc/includes/C.map;',
               ]
             },
             {
@@ -117,7 +117,7 @@ describe 'nginx::resource::map' do
               match: [
                 '  foo pool_b;',
                 '  bar pool_c;',
-                '  baz pool_d;'
+                '  baz pool_d;',
               ]
             },
             {
@@ -126,14 +126,14 @@ describe 'nginx::resource::map' do
               value: [
                 { 'key' => 'foo', 'value' => 'pool_b' },
                 { 'key' => 'bar', 'value' => 'pool_c' },
-                { 'key' => 'baz', 'value' => 'pool_d' }
+                { 'key' => 'baz', 'value' => 'pool_d' },
               ],
               match: [
                 '  foo pool_b;',
                 '  bar pool_c;',
-                '  baz pool_d;'
+                '  baz pool_d;',
               ]
-            }
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
@@ -154,7 +154,7 @@ describe 'nginx::resource::map' do
           context 'when ensure => absent' do
             let :params do
               default_params.merge(
-                ensure: 'absent'
+                ensure: 'absent',
               )
             end
 

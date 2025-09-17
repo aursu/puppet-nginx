@@ -46,34 +46,34 @@ describe 'nginx::resource::upstream' do
           }
 
           it {
-            is_expected.to contain_concat("/etc/nginx/conf.d/#{title}-upstream.conf").
-              that_requires('File[/etc/nginx/conf.d]')
+            is_expected.to contain_concat("/etc/nginx/conf.d/#{title}-upstream.conf")
+              .that_requires('File[/etc/nginx/conf.d]')
           }
 
           it {
-            is_expected.to contain_concat__fragment("#{title}_upstream_header").
-              with_content(%r{upstream #{title}}).
-              with(
+            is_expected.to contain_concat__fragment("#{title}_upstream_header")
+              .with_content(%r{upstream #{title}})
+              .with(
                 'target' => "/etc/nginx/conf.d/#{title}-upstream.conf",
-                'order' => 10
+                'order' => 10,
               )
           }
 
           it {
-            is_expected.to contain_concat__fragment("#{title}_upstream_member_#{params[:members].keys[0]}").
-              with(
+            is_expected.to contain_concat__fragment("#{title}_upstream_member_#{params[:members].keys[0]}")
+              .with(
                 'target' => "/etc/nginx/conf.d/#{title}-upstream.conf",
-                'order' => 40
+                'order' => 40,
               )
           }
 
           it {
-            is_expected.to contain_concat__fragment("#{title}_upstream_footer").
-              with(
+            is_expected.to contain_concat__fragment("#{title}_upstream_footer")
+              .with(
                 'target' => "/etc/nginx/conf.d/#{title}-upstream.conf",
-                'order' => 90
-              ).
-              with_content("}\n")
+                'order' => 90,
+              )
+              .with_content("}\n")
           }
         end
 
@@ -90,34 +90,34 @@ describe 'nginx::resource::upstream' do
             }
 
             it {
-              is_expected.to contain_concat("#{conf_d_path}/#{title}-upstream.conf").
-                that_requires("File[#{conf_d_path}]")
+              is_expected.to contain_concat("#{conf_d_path}/#{title}-upstream.conf")
+                .that_requires("File[#{conf_d_path}]")
             }
 
             it {
-              is_expected.to contain_concat__fragment("#{title}_upstream_header").
-                with_content(%r{upstream #{title}}).
-                with(
+              is_expected.to contain_concat__fragment("#{title}_upstream_header")
+                .with_content(%r{upstream #{title}})
+                .with(
                   'target' => "#{conf_d_path}/#{title}-upstream.conf",
-                  'order' => 10
+                  'order' => 10,
                 )
             }
 
             it {
-              is_expected.to contain_concat__fragment("#{title}_upstream_member_#{params[:members].keys[0]}").
-                with(
+              is_expected.to contain_concat__fragment("#{title}_upstream_member_#{params[:members].keys[0]}")
+                .with(
                   'target' => "#{conf_d_path}/#{title}-upstream.conf",
-                  'order' => 40
+                  'order' => 40,
                 )
             }
 
             it {
-              is_expected.to contain_concat__fragment("#{title}_upstream_footer").
-                with(
+              is_expected.to contain_concat__fragment("#{title}_upstream_footer")
+                .with(
                   'target' => "#{conf_d_path}/#{title}-upstream.conf",
-                  'order' => 90
-                ).
-                with_content("}\n")
+                  'order' => 90,
+                )
+                .with_content("}\n")
             }
           end
 
@@ -137,23 +137,23 @@ describe 'nginx::resource::upstream' do
               }
 
               it {
-                is_expected.to contain_concat("#{conf_d_path}/#{title}-upstream.conf").
-                  with_mode('0644')
+                is_expected.to contain_concat("#{conf_d_path}/#{title}-upstream.conf")
+                  .with_mode('0644')
               }
 
               it {
-                is_expected.to contain_concat__fragment("#{title}_upstream_header").
-                  with_content("# MANAGED BY PUPPET\nupstream #{title} {\n")
+                is_expected.to contain_concat__fragment("#{title}_upstream_header")
+                  .with_content("# MANAGED BY PUPPET\nupstream #{title} {\n")
               }
 
               it {
-                is_expected.to contain_concat__fragment("#{title}_upstream_member_#{params[:members].keys[0]}").
-                  with_content("  server #{params[:members].keys[0]}:80;\n")
+                is_expected.to contain_concat__fragment("#{title}_upstream_member_#{params[:members].keys[0]}")
+                  .with_content("  server #{params[:members].keys[0]}:80;\n")
               }
 
               it {
-                is_expected.to contain_concat__fragment("#{title}_upstream_footer").
-                  with_content("}\n")
+                is_expected.to contain_concat__fragment("#{title}_upstream_footer")
+                  .with_content("}\n")
               }
             end
 
@@ -242,7 +242,7 @@ describe 'nginx::resource::upstream' do
               {
                 value: { zone: 'backend 64k' },
                 match: 'zone backend 64k'
-              }
+              },
             ].each do |upstream_parameter|
               context "when #{upstream_parameter[:value].keys[0]} is set to #{upstream_parameter[:value]} in #{upstreamcontext} upstream" do
                 let(:params) { default_params[upstreamcontext.to_sym].merge(upstream_parameter[:value]) }
@@ -261,29 +261,29 @@ describe 'nginx::resource::upstream' do
                 }
 
                 it {
-                  is_expected.to contain_concat("#{conf_d_path}/#{title}-upstream.conf").
-                    with_mode('0644')
+                  is_expected.to contain_concat("#{conf_d_path}/#{title}-upstream.conf")
+                    .with_mode('0644')
                 }
 
                 it {
-                  is_expected.to contain_concat__fragment("#{title}_upstream_header").
-                    with_content("# MANAGED BY PUPPET\nupstream #{title} {\n")
+                  is_expected.to contain_concat__fragment("#{title}_upstream_header")
+                    .with_content("# MANAGED BY PUPPET\nupstream #{title} {\n")
                 }
 
                 it {
-                  is_expected.to contain_concat__fragment("#{title}_upstream_member_#{params[:members].keys[0]}").
-                    with_content("  server #{params[:members].keys[0]}:80;\n")
+                  is_expected.to contain_concat__fragment("#{title}_upstream_member_#{params[:members].keys[0]}")
+                    .with_content("  server #{params[:members].keys[0]}:80;\n")
                 }
 
                 if upstream_parameter[:match]
                   it {
-                    is_expected.to contain_concat__fragment("#{title}_upstream_footer").
-                      with_content("  #{upstream_parameter[:match]};\n}\n")
+                    is_expected.to contain_concat__fragment("#{title}_upstream_footer")
+                      .with_content("  #{upstream_parameter[:match]};\n}\n")
                   }
                 else
                   it {
-                    is_expected.to contain_concat__fragment("#{title}_upstream_footer").
-                      with_content("}\n")
+                    is_expected.to contain_concat__fragment("#{title}_upstream_footer")
+                      .with_content("}\n")
                   }
                 end
               end
@@ -382,7 +382,7 @@ describe 'nginx::resource::upstream' do
               {
                 value: { member1: { comment: 'member1' } },
                 match: 'member1:80; # member1'
-              }
+              },
             ].each do |upstream_member_parameter|
               context "when members is set to #{upstream_member_parameter[:value]}" do
                 let(:params) { default_params[upstreamcontext.to_sym].merge(members: upstream_member_parameter[:value]) }
@@ -401,23 +401,23 @@ describe 'nginx::resource::upstream' do
                 }
 
                 it {
-                  is_expected.to contain_concat("#{conf_d_path}/#{title}-upstream.conf").
-                    with_mode('0644')
+                  is_expected.to contain_concat("#{conf_d_path}/#{title}-upstream.conf")
+                    .with_mode('0644')
                 }
 
                 it {
-                  is_expected.to contain_concat__fragment("#{title}_upstream_header").
-                    with_content("# MANAGED BY PUPPET\nupstream #{title} {\n")
+                  is_expected.to contain_concat__fragment("#{title}_upstream_header")
+                    .with_content("# MANAGED BY PUPPET\nupstream #{title} {\n")
                 }
 
                 it {
-                  is_expected.to contain_concat__fragment("#{title}_upstream_member_#{upstream_member_parameter[:value].keys[0]}").
-                    with_content("  server #{upstream_member_parameter[:match]}\n")
+                  is_expected.to contain_concat__fragment("#{title}_upstream_member_#{upstream_member_parameter[:value].keys[0]}")
+                    .with_content("  server #{upstream_member_parameter[:match]}\n")
                 }
 
                 it {
-                  is_expected.to contain_concat__fragment("#{title}_upstream_footer").
-                    with_content("}\n")
+                  is_expected.to contain_concat__fragment("#{title}_upstream_footer")
+                    .with_content("}\n")
                 }
               end
             end
@@ -449,7 +449,7 @@ describe 'nginx::resource::upstream' do
                 },
                 match: "  k2 v2;\n  k5 k51 v51;\n  k5 k51 v52;\n  k1 v2;\n  k4 k41 v41;\n  k3 v31;\n  k3 v32;\n",
                 fragment: 'footer'
-              }
+              },
             ].each do |upstream_cfg_extension|
               context "when #{upstream_cfg_extension[:parameter]} is set to #{upstream_cfg_extension[:values]} in #{upstreamcontext} upstream" do
                 let(:params) { default_params[upstreamcontext.to_sym].merge(upstream_cfg_extension[:parameter].to_sym => upstream_cfg_extension[:values]) }
@@ -460,35 +460,35 @@ describe 'nginx::resource::upstream' do
                 }
 
                 it {
-                  is_expected.to contain_concat("#{conf_d_path}/#{title}-upstream.conf").
-                    with_mode('0644')
+                  is_expected.to contain_concat("#{conf_d_path}/#{title}-upstream.conf")
+                    .with_mode('0644')
                 }
 
                 if upstream_cfg_extension[:fragment] == 'header'
                   it {
-                    is_expected.to contain_concat__fragment("#{title}_upstream_header").
-                      with_content("# MANAGED BY PUPPET\nupstream #{title} {\n#{upstream_cfg_extension[:match]}")
+                    is_expected.to contain_concat__fragment("#{title}_upstream_header")
+                      .with_content("# MANAGED BY PUPPET\nupstream #{title} {\n#{upstream_cfg_extension[:match]}")
                   }
                 else
                   it {
-                    is_expected.to contain_concat__fragment("#{title}_upstream_header").
-                      with_content("# MANAGED BY PUPPET\nupstream #{title} {\n")
+                    is_expected.to contain_concat__fragment("#{title}_upstream_header")
+                      .with_content("# MANAGED BY PUPPET\nupstream #{title} {\n")
                   }
                 end
                 it {
-                  is_expected.to contain_concat__fragment("#{title}_upstream_member_#{params[:members].keys[0]}").
-                    with_content("  server #{params[:members].keys[0]}:80;\n")
+                  is_expected.to contain_concat__fragment("#{title}_upstream_member_#{params[:members].keys[0]}")
+                    .with_content("  server #{params[:members].keys[0]}:80;\n")
                 }
 
                 if upstream_cfg_extension[:fragment] == 'footer'
                   it {
-                    is_expected.to contain_concat__fragment("#{title}_upstream_footer").
-                      with_content("#{upstream_cfg_extension[:match]}}\n")
+                    is_expected.to contain_concat__fragment("#{title}_upstream_footer")
+                      .with_content("#{upstream_cfg_extension[:match]}}\n")
                   }
                 else
                   it {
-                    is_expected.to contain_concat__fragment("#{title}_upstream_footer").
-                      with_content("}\n")
+                    is_expected.to contain_concat__fragment("#{title}_upstream_footer")
+                      .with_content("}\n")
                   }
                 end
               end
@@ -503,8 +503,8 @@ describe 'nginx::resource::upstream' do
               }
 
               it {
-                is_expected.to contain_concat("#{conf_d_path}/#{title}-upstream.conf").
-                  with_ensure('absent')
+                is_expected.to contain_concat("#{conf_d_path}/#{title}-upstream.conf")
+                  .with_ensure('absent')
               }
             end
           end

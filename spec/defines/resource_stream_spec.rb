@@ -114,7 +114,7 @@ describe 'nginx::resource::streamhost' do
               value: [
                 'if (a) {',
                 '  b;',
-                '}'
+                '}',
               ],
               match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
             },
@@ -124,10 +124,10 @@ describe 'nginx::resource::streamhost' do
               value: [
                 'if (a) {',
                 '  b;',
-                '}'
+                '}',
               ],
               match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
-            }
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }

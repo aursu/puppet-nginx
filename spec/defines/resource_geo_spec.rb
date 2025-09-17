@@ -14,7 +14,7 @@ describe 'nginx::resource::geo' do
 
       let :pre_condition do
         [
-          'include nginx'
+          'include nginx',
         ]
       end
 
@@ -42,7 +42,7 @@ describe 'nginx::resource::geo' do
               'group'   => 'root',
               'mode'    => '0644',
               'ensure'  => 'file',
-              'content' => %r{geo \$#{title}}
+              'content' => %r{geo \$#{title}},
             )
           end
         end
@@ -78,7 +78,7 @@ describe 'nginx::resource::geo' do
               match: [
                 '  10.0.0.0/8     intra;',
                 '  172.16.0.0/12  intra;',
-                '  192.168.0.0/16 intra;'
+                '  192.168.0.0/16 intra;',
               ]
             },
             {
@@ -87,7 +87,7 @@ describe 'nginx::resource::geo' do
               value: ['1.2.3.4', '4.3.2.1'],
               match: [
                 '  proxy 1.2.3.4;',
-                '  proxy 4.3.2.1;'
+                '  proxy 4.3.2.1;',
               ]
             },
             {
@@ -101,7 +101,7 @@ describe 'nginx::resource::geo' do
               attr: 'delete',
               value: '192.168.0.0/16',
               match: '  delete  192.168.0.0/16;'
-            }
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
@@ -122,7 +122,7 @@ describe 'nginx::resource::geo' do
           context 'when ensure => absent' do
             let :params do
               default_params.merge(
-                ensure: 'absent'
+                ensure: 'absent',
               )
             end
 

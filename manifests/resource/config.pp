@@ -7,15 +7,12 @@
 #        template => 'profile/gitlab/nginx/conf.d/gitlab-logging.conf.erb',
 #    }
 define nginx::resource::config (
-  Optional[String]
-          $content      = undef,
-  Optional[String]
-          $template     = undef,
-  String  $filename     = $name,
-  Hash    $options      = {},
-  Stdlib::Unixpath
-          $conf_dir     = $nginx::conf_dir,
-  String  $service_name = $nginx::service_name,
+  Optional[String] $content      = undef,
+  Optional[String] $template     = undef,
+  String           $filename     = $name,
+  Hash             $options      = {},
+  Stdlib::Unixpath $conf_dir     = $nginx::conf_dir,
+  String           $service_name = $nginx::service_name,
 ) {
   if ! defined(Class['nginx']) {
     fail('You must include the nginx base class before using any defined resources')

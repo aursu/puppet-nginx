@@ -20,7 +20,7 @@ describe 'nginx::resource::config' do
       it {
         is_expected.to contain_file('/etc/nginx/conf.d/namevar.conf').with(
           'ensure' => 'file',
-          'content' => %r{"" "max-age=15768000";}
+          'content' => %r{"" "max-age=15768000";},
         ).that_requires('File[/etc/nginx/conf.d]').that_notifies('Service[nginx]')
       }
 
@@ -34,7 +34,7 @@ describe 'nginx::resource::config' do
         it {
           is_expected.to contain_file('/etc/nginx/conf.d/namevar.conf').with(
             'ensure' => 'file',
-            'content' => '<html><body>It works!</body></html>'
+            'content' => '<html><body>It works!</body></html>',
           ).that_requires('File[/etc/nginx/conf.d]').that_notifies('Service[nginx]')
         }
       end

@@ -25,7 +25,7 @@ describe 'nginx::resource::server' do
 
       let :pre_condition do
         [
-          'include nginx'
+          'include nginx',
         ]
       end
 
@@ -76,7 +76,7 @@ describe 'nginx::resource::server' do
 
           it do
             is_expected.to compile.and_raise_error(
-              %r{You must not set both \$rewrite_www_to_non_www and \$rewrite_non_www_to_www to true}
+              %r{You must not set both \$rewrite_www_to_non_www and \$rewrite_non_www_to_www to true},
             )
           end
         end
@@ -283,7 +283,7 @@ describe 'nginx::resource::server' do
               value: [
                 'if (a) {',
                 '  b;',
-                '}'
+                '}',
               ],
               match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
             },
@@ -295,7 +295,7 @@ describe 'nginx::resource::server' do
                 '  allow test value 3;',
                 '  test1 test value 1a;',
                 '  test1 test value 1b;',
-                '  test2 test value 2;'
+                '  test2 test value 2;',
               ]
             },
             {
@@ -337,7 +337,7 @@ describe 'nginx::resource::server' do
               },
               match: [
                 %r{\s*access_log /path/to/access.log combined;},
-                %r{\s*access_log syslog:server=localhost main if=\$loggable;}
+                %r{\s*access_log syslog:server=localhost main if=\$loggable;},
               ]
             },
             {
@@ -346,7 +346,7 @@ describe 'nginx::resource::server' do
               value: ['/path/to/log/1', 'syslog:server=localhost'],
               match: [
                 '  access_log            /path/to/log/1;',
-                '  access_log            syslog:server=localhost;'
+                '  access_log            syslog:server=localhost;',
               ]
             },
             {
@@ -385,7 +385,7 @@ describe 'nginx::resource::server' do
               value: ['/path/to/error.log', 'syslog:server=localhost'],
               match: [
                 '  error_log             /path/to/error.log;',
-                '  error_log             syslog:server=localhost;'
+                '  error_log             syslog:server=localhost;',
               ]
             },
             {
@@ -487,14 +487,14 @@ describe 'nginx::resource::server' do
               },
               match: [
                 '    proxy_cookie_domain www.$host $host;',
-                '    proxy_cookie_domain ~\.([a-z]+\.[a-z]+)$ $1;'
+                '    proxy_cookie_domain ~\.([a-z]+\.[a-z]+)$ $1;',
               ]
             },
             {
               title: 'should set proxy_ignore_header',
               attr: 'proxy_ignore_header',
               value: [
-                'Set-Cookie'
+                'Set-Cookie',
               ],
               match: %r{^\s*proxy_ignore_headers Set-Cookie;$}
             },
@@ -561,7 +561,7 @@ describe 'nginx::resource::server' do
               ],
               match: [
                 '    limit_req zone=perip burst=5 nodelay;',
-                '    limit_req zone=perserver burst=10;'
+                '    limit_req zone=perserver burst=10;',
               ]
             },
             {
@@ -581,7 +581,7 @@ describe 'nginx::resource::server' do
               attr: 'limit_req_status',
               value: 500,
               match: '    limit_req_status 500;'
-            }
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
@@ -639,7 +639,7 @@ describe 'nginx::resource::server' do
                 attr: 'rewrite_non_www_to_www',
                 value: false,
                 notmatch: %r{\s+server_name\s+www.rspec.example.com;}
-              }
+              },
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
@@ -698,7 +698,7 @@ describe 'nginx::resource::server' do
                 attr: 'rewrite_non_www_to_www',
                 value: false,
                 notmatch: %r{\s+server_name\s+www.rspec.example.com;}
-              }
+              },
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
                 let(:params) { default_params.merge(param[:attr].to_sym => param[:value], ssl: true, ssl_cert: '/tmp/dummy.crt', ssl_key: '/tmp/dummy.key', listen_port: 443) }
@@ -741,7 +741,7 @@ describe 'nginx::resource::server' do
               value: ['/file1', '/file2'],
               match: [
                 %r{^\s+include\s+/file1;},
-                %r{^\s+include\s+/file2;}
+                %r{^\s+include\s+/file2;},
               ]
             },
             {
@@ -752,7 +752,7 @@ describe 'nginx::resource::server' do
                 '  allow test value 3;',
                 '  test1 test value 1;',
                 '  test2 test value 2a;',
-                '  test2 test value 2b;'
+                '  test2 test value 2b;',
               ]
             },
             {
@@ -761,10 +761,10 @@ describe 'nginx::resource::server' do
               value: [
                 'if (a) {',
                 '  b;',
-                '}'
+                '}',
               ],
               match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
-            }
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
@@ -799,7 +799,7 @@ describe 'nginx::resource::server' do
               \s+server_name\s+rspec\.example\.com;\n
               \s+return\s+301\s+https://www\.rspec\.example\.com\$request_uri;
               }x
-            }
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
@@ -829,7 +829,7 @@ describe 'nginx::resource::server' do
               default_params.merge(
                 ssl: true,
                 ssl_key: '/tmp/dummy.key',
-                ssl_cert: '/tmp/dummy.crt'
+                ssl_cert: '/tmp/dummy.crt',
               )
             end
 
@@ -860,7 +860,7 @@ describe 'nginx::resource::server' do
                   http2: 'on',
                   ssl: true,
                   ssl_key: '/tmp/dummy.key',
-                  ssl_cert: '/tmp/dummy.crt'
+                  ssl_cert: '/tmp/dummy.crt',
                 )
               end
 
@@ -1153,7 +1153,7 @@ describe 'nginx::resource::server' do
               value: ['/path/to/log/1', 'syslog:server=localhost'],
               match: [
                 '  access_log            /path/to/log/1;',
-                '  access_log            syslog:server=localhost;'
+                '  access_log            syslog:server=localhost;',
               ]
             },
             {
@@ -1186,7 +1186,7 @@ describe 'nginx::resource::server' do
               value: ['/path/to/error.log', 'syslog:server=localhost'],
               match: [
                 '  error_log             /path/to/error.log;',
-                '  error_log             syslog:server=localhost;'
+                '  error_log             syslog:server=localhost;',
               ]
             },
             {
@@ -1207,7 +1207,7 @@ describe 'nginx::resource::server' do
               value: [
                 'if (a) {',
                 '  b;',
-                '}'
+                '}',
               ],
               match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
             },
@@ -1219,7 +1219,7 @@ describe 'nginx::resource::server' do
                 '  allow test value 3;',
                 '  test1 test value 1;',
                 '  test2 test value 2a;',
-                '  test2 test value 2b;'
+                '  test2 test value 2b;',
               ]
             },
             {
@@ -1230,7 +1230,7 @@ describe 'nginx::resource::server' do
                 '  allow test value 3;',
                 '  test1 test value 1;',
                 '  test2 test value 2a;',
-                '  test2 test value 2b;'
+                '  test2 test value 2b;',
               ]
             },
             {
@@ -1315,7 +1315,7 @@ describe 'nginx::resource::server' do
               title: 'should set proxy_ignore_header',
               attr: 'proxy_ignore_header',
               value: [
-                'Set-Cookie'
+                'Set-Cookie',
               ],
               match: %r{^\s*proxy_ignore_headers Set-Cookie;$}
             },
@@ -1370,7 +1370,7 @@ describe 'nginx::resource::server' do
               ],
               match: [
                 '    limit_req zone=perip burst=5 nodelay;',
-                '    limit_req zone=perserver burst=10;'
+                '    limit_req zone=perserver burst=10;',
               ]
             },
             {
@@ -1390,7 +1390,7 @@ describe 'nginx::resource::server' do
               attr: 'limit_req_status',
               value: 500,
               match: '    limit_req_status 500;'
-            }
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let :params do
@@ -1437,7 +1437,7 @@ describe 'nginx::resource::server' do
               value: ['/file1', '/file2'],
               match: [
                 %r{^\s+include\s+/file1;},
-                %r{^\s+include\s+/file2;}
+                %r{^\s+include\s+/file2;},
               ]
             },
             {
@@ -1447,7 +1447,7 @@ describe 'nginx::resource::server' do
               match: [
                 '  allow test value 3;',
                 '  test1 test value 1;',
-                '  test2 test value 2;'
+                '  test2 test value 2;',
               ]
             },
             {
@@ -1456,7 +1456,7 @@ describe 'nginx::resource::server' do
               value: [
                 'if (a) {',
                 '  b;',
-                '}'
+                '}',
               ],
               match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
             },
@@ -1468,9 +1468,9 @@ describe 'nginx::resource::server' do
                 '  allow test value 3;',
                 '  test1 test value 1;',
                 '  test2 test value 2a;',
-                '  test2 test value 2b;'
+                '  test2 test value 2b;',
               ]
-            }
+            },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
               let :params do
@@ -1968,7 +1968,8 @@ describe 'nginx::resource::server' do
             end
 
             it 'has correctly ordered entries in the config' do
-              is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{\s+add_header\s+"header1" "test value 1";\n\s+add_header\s+"header2" "test value 2" tv2;\n\s+add_header\s+"header3"  'test value 3' tv3;\n})
+              is_expected.to contain_concat__fragment("#{title}-header")
+                .with_content(%r{\s+add_header\s+"header1" "test value 1";\n\s+add_header\s+"header2" "test value 2" tv2;\n\s+add_header\s+"header3"  'test value 3' tv3;\n})
             end
           end
 
@@ -1981,11 +1982,13 @@ describe 'nginx::resource::server' do
             end
 
             it 'has correctly ordered entries in SSL config' do
-              is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{\s+add_header\s+"header1" "test value 1";\n\s+add_header\s+"header2" "test value 2" tv2;\n\s+add_header\s+"header3"  'test value 3' tv3;\n})
+              is_expected.to contain_concat__fragment("#{title}-ssl-header")
+                .with_content(%r{\s+add_header\s+"header1" "test value 1";\n\s+add_header\s+"header2" "test value 2" tv2;\n\s+add_header\s+"header3"  'test value 3' tv3;\n})
             end
 
             it 'has correctly ordered entries in non-SSL config' do
-              is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{\s+add_header\s+"header1" "test value 1";\n\s+add_header\s+"header2" "test value 2" tv2;\n\s+add_header\s+"header3"  'test value 3' tv3;\n})
+              is_expected.to contain_concat__fragment("#{title}-header")
+                .with_content(%r{\s+add_header\s+"header1" "test value 1";\n\s+add_header\s+"header2" "test value 2" tv2;\n\s+add_header\s+"header3"  'test value 3' tv3;\n})
             end
           end
 
@@ -1998,7 +2001,8 @@ describe 'nginx::resource::server' do
             end
 
             it 'has correctly ordered entries in SSL config' do
-              is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{\s+add_header\s+"header1" "test value 1";\n\s+add_header\s+"header2" "test value 2" tv2;\n\s+add_header\s+"header3"  'test value 3' tv3;\n})
+              is_expected.to contain_concat__fragment("#{title}-ssl-header")
+                .with_content(%r{\s+add_header\s+"header1" "test value 1";\n\s+add_header\s+"header2" "test value 2" tv2;\n\s+add_header\s+"header3"  'test value 3' tv3;\n})
             end
 
             it 'has not entries in non-SSL config' do
@@ -2056,7 +2060,7 @@ describe 'nginx::resource::server' do
             let :params do
               super().merge(
                 format_log: 'custom',
-                access_log: '/var/log/nginx/www.rspec.example.com.access.log'
+                access_log: '/var/log/nginx/www.rspec.example.com.access.log',
               )
             end
 
