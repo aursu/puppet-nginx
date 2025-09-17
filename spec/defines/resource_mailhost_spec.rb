@@ -7,7 +7,9 @@ describe 'nginx::resource::mailhost' do
     context "on #{os} with Facter #{facts[:facterversion]} and Puppet #{facts[:puppetversion]}" do
       let(:facts) do
         # Explicitly define the IPv6 address facts
-        override_facts(facts, networking: { ip6: '2001:db8::c0:ffee' })
+        # override_facts(facts, networking: { ip6: '2001:db8::c0:ffee' })
+        # requires Ruby >= 3.0.0
+        facts.deep_merge(networking: { ip6: '2001:db8::c0:ffee' })
       end
       let(:title) { 'www.rspec.example.com' }
       let :default_params do
