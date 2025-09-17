@@ -59,7 +59,7 @@
 * [`Nginx::Size`](#Nginx--Size): Type Alias for Nginx::Size
 * [`Nginx::StringMappings`](#Nginx--StringMappings): custom type for the `map` variable mapping
 * [`Nginx::Switch`](#Nginx--Switch)
-* [`Nginx::Time`](#Nginx--Time): http://nginx.org/en/docs/syntax.html ms	milliseconds s	seconds m	minutes h	hours d	days w	weeks M	months, 30 days y	years, 365 days A value w; Type Alias for Nginx::Time
+* [`Nginx::Time`](#Nginx--Time): Type Alias for Nginx::Time
 * [`Nginx::UpstreamCustomParameters`](#Nginx--UpstreamCustomParameters): Type Alias for Nginx::UpstreamCustomParameters
 * [`Nginx::UpstreamDefaults`](#Nginx--UpstreamDefaults): Type Alias for Nginx::UpstreamDefaults
 * [`Nginx::UpstreamLeastTime`](#Nginx--UpstreamLeastTime): Type Alias for Nginx::UpstreamLeastTime
@@ -1129,7 +1129,7 @@ Default value: `undef`
 
 ##### <a name="-nginx--proxy_redirect"></a>`proxy_redirect`
 
-Data type: `Optional[Variant[Array[String],String]]`
+Data type: `Optional[Variant[Array[String], String]]`
 
 Behavior for handling redirects from the proxy server
 
@@ -2170,11 +2170,7 @@ The following parameters are available in the `nginx::resource::location` define
 * [`chunked_transfer_encoding`](#-nginx--resource--location--chunked_transfer_encoding)
 * [`rewrite_rules`](#-nginx--resource--location--rewrite_rules)
 * [`return`](#-nginx--resource--location--return)
-* [`access_log`](#-nginx--resource--location--access_log)
-* [`format_log`](#-nginx--resource--location--format_log)
-* [`error_log`](#-nginx--resource--location--error_log)
 * [`error_log_level`](#-nginx--resource--location--error_log_level)
-* [`log_not_found`](#-nginx--resource--location--log_not_found)
 
 ##### <a name="-nginx--resource--location--ensure"></a>`ensure`
 
@@ -2960,15 +2956,23 @@ Default value: `undef`
 
 ##### <a name="-nginx--resource--location--format_log"></a>`format_log`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[String]`
 
 Log_format to use with the defined access_log
 
-Default value: `$nginx::http_format_log`
+Default value: `undef`
 
 ##### <a name="-nginx--resource--location--access_log"></a>`access_log`
 
-Data type: `Optional[Variant[Array[String[1], 1], String[1]]]`
+Data type:
+
+```puppet
+Optional[Variant[
+      String,
+      Array[String],
+      Hash[String, String]
+  ]]
+```
 
 Where to write access log (log format can be set with $format_log). This
 can be either a string or an array; in the latter case, multiple lines will
@@ -2981,7 +2985,7 @@ Default value: `undef`
 
 ##### <a name="-nginx--resource--location--error_log"></a>`error_log`
 
-Data type: `Optional[Variant[Array[String[1], 1], String[1]]]`
+Data type: `Optional[Variant[String, Array[String]]]`
 
 Where to write error log. May add additional options like error level to
 the end. May set to 'absent', in which case it will be omitted in this
@@ -2991,7 +2995,7 @@ Default value: `undef`
 
 ##### <a name="-nginx--resource--location--log_not_found"></a>`log_not_found`
 
-Data type: `Optional[Enum['on', 'off']]`
+Data type: `Optional[Nginx::Switch]`
 
 Enables or disables the logging of not found errors in error_log
 
@@ -3069,38 +3073,6 @@ Data type: `Optional[String]`
 
 Default value: `undef`
 
-##### <a name="-nginx--resource--location--access_log"></a>`access_log`
-
-Data type:
-
-```puppet
-Optional[Variant[
-      String,
-      Array[String],
-      Hash[String, String]
-  ]]
-```
-
-
-
-Default value: `undef`
-
-##### <a name="-nginx--resource--location--format_log"></a>`format_log`
-
-Data type: `Optional[String]`
-
-
-
-Default value: `undef`
-
-##### <a name="-nginx--resource--location--error_log"></a>`error_log`
-
-Data type: `Optional[Variant[String, Array[String]]]`
-
-
-
-Default value: `undef`
-
 ##### <a name="-nginx--resource--location--error_log_level"></a>`error_log_level`
 
 Data type: `Nginx::ErrorLogSeverity`
@@ -3108,14 +3080,6 @@ Data type: `Nginx::ErrorLogSeverity`
 
 
 Default value: `'error'`
-
-##### <a name="-nginx--resource--location--log_not_found"></a>`log_not_found`
-
-Data type: `Optional[Nginx::Switch]`
-
-
-
-Default value: `undef`
 
 ### <a name="nginx--resource--mailhost"></a>`nginx::resource::mailhost`
 
@@ -4118,7 +4082,7 @@ Default value: `undef`
 
 ##### <a name="-nginx--resource--server--proxy_redirect"></a>`proxy_redirect`
 
-Data type: `Optional[Variant[Array[String],String]]`
+Data type: `Optional[Variant[Array[String], String]]`
 
 Override the default proxy_redirect value of off.
 
@@ -6255,8 +6219,6 @@ M	months, 30 days
 y	years, 365 days
 A value without a suffix means seconds
 
-Type Alias for Nginx::Time
-
 Alias of `Variant[Integer[0], Pattern[/^(?!$)((\d+y *)?(\d+M *)?(\d+w *)?(\d+d *)?(\d+h *)?(\d+m *)?(\d+s *)?(\d+ms)?|\d+)$/]]`
 
 ### <a name="Nginx--UpstreamCustomParameters"></a>`Nginx::UpstreamCustomParameters`
@@ -6444,3 +6406,4 @@ Alias of `Pattern[/^[-_\.A-Za-z0-9]*:\d+[k|K|m|M]$/]`
 Type Alias for Nginx::UpstreamZone
 
 Alias of `Pattern[/^[-_\.A-Za-z0-9]* \d+[k|K|m|M]$/]`
+
