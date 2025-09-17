@@ -1,13 +1,12 @@
-version: "3"
 services:
-  rocky8base:
+  rocky9base:
     build:
       context: .
       args:
-        rocky: $RL8
-  rocky8docs:
+        rocky: $RL9
+  rocky9docs:
     build:
       context: .
       dockerfile: Dockerfile.strings
       args:
-        rocky: $RL8
+        rocky: $RL9

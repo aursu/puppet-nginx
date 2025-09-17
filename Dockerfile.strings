@@ -1,7 +1,7 @@
 # MANAGED BY MODULESYNC
 # https://voxpupuli.org/docs/updating-files-managed-with-modulesync/
 
-ARG rocky=8.9.20231119
+ARG rocky=9.6.20250531
 FROM aursu/rockylinux:${rocky}-ruby31-puppet
 
 WORKDIR /opt/puppet
