@@ -4,6 +4,23 @@
 ARG rocky=9.6.20250531
 FROM aursu/rockylinux:${rocky}-ruby33-puppet
 
+ARG platform=puppet8
+ARG DNF_ENV_FILE=/dev/null
+ARG AGENT_VERSION="8.12.0"
+ARG BOLT_VERSION="4.0.0"
+ARG PDK_VERSION="3.4.0.1"
+
+RUN --mount=type=secret,id=forge_key,required \
+        rpm -ivh https://yum-puppetcore.puppet.com/public/${platform}-release-el-9.noarch.rpm \
+                https://yum.puppet.com/puppet-tools-release-el-9.noarch.rpm \
+        && echo username=forge-key >> /etc/yum.repos.d/${platform}-release.repo \
+        && echo 'password=$API_KEY' >> /etc/yum.repos.d/${platform}-release.repo \
+        && source ${DNF_ENV_FILE} \
+    && microdnf -y install \
+                puppet-agent-${AGENT_VERSION} \
+                puppet-bolt-${BOLT_VERSION} \
+                pdk-${PDK_VERSION}
+
 WORKDIR /opt/puppet
 
 # https://github.com/puppetlabs/puppet/blob/06ad255754a38f22fb3a22c7c4f1e2ce453d01cb/lib/puppet/provider/service/runit.rb#L39

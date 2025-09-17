@@ -10,6 +10,11 @@ These should not affect the functionality of the module.
 
 Converted to PDK compatible
 
+**Fixed bugs:**
+
+Refactor IPv6 address fact definition in resource_mailhost_spec.rb
+Updated Docker assets
+
 ## [v7.0.1](https://github.com/voxpupuli/puppet-nginx/tree/v7.0.1) (2025-06-12)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-nginx/compare/v7.0.0...v7.0.1)

@@ -4,9 +4,15 @@ services:
       context: .
       args:
         rocky: $RL9
+        platform: puppet8
+        DNF_ENV_FILE: /run/secrets/forge_key
   rocky9docs:
     build:
       context: .
       dockerfile: Dockerfile.strings
       args:
         rocky: $RL9
+
+secrets:
+  forge_key:
+    file: secrets/forge-key.sh
