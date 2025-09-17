@@ -243,7 +243,7 @@ describe 'nginx::resource::mailhost' do
             end
           end
           context 'mail proxy parameters' do
-            let(:pre_condition) { ['class { "nginx": nginx_version => "1.20.0", mail => true }'] }
+            let(:pre_condition) { ['class { "nginx": nginx_version => "1.20.0", mail => true,}'] }
             let(:params) do
               {
                 listen_port: 25,
@@ -559,7 +559,7 @@ describe 'nginx::resource::mailhost' do
               title: 'should enable IPv6',
               attr: 'ipv6_enable',
               value: true,
-              match: '  listen                [::]:587 default ipv6only=on;'
+              match: '  listen                [::]:587 ssl default ipv6only=on;'
             },
             {
               title: 'should not enable IPv6',
@@ -571,19 +571,19 @@ describe 'nginx::resource::mailhost' do
               title: 'should set the IPv6 listen IP',
               attr: 'ipv6_listen_ip',
               value: '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
-              match: '  listen                [2001:0db8:85a3:0000:0000:8a2e:0370:7334]:587 default ipv6only=on;'
+              match: '  listen                [2001:0db8:85a3:0000:0000:8a2e:0370:7334]:587 ssl default ipv6only=on;'
             },
             {
               title: 'should set the IPv6 ssl port',
               attr: 'ssl_port',
               value: 45,
-              match: '  listen                [::]:45 default ipv6only=on;'
+              match: '  listen                [::]:45 ssl default ipv6only=on;'
             },
             {
               title: 'should set the IPv6 listen options',
               attr: 'ipv6_listen_options',
               value: 'spdy',
-              match: '  listen                [::]:587 spdy;'
+              match: '  listen                [::]:587 ssl spdy;'
             },
             {
               title: 'should set servername(s)',
@@ -689,25 +689,35 @@ describe 'nginx::resource::mailhost' do
                 facts.merge(nginx_version: '1.16.0')
               end
 
-              let(:pre_condition) { ['class { "nginx": mail => true }'] }
+              let(:pre_condition) { ['class { "nginx": mail => true,}'] }
 
               it 'has `ssl` at end of listen directive' do
                 content = catalogue.resource('concat::fragment', "#{title}-ssl").send(:parameters)[:content]
                 expect(content).to include('listen                *:587 ssl;')
               end
+
+              it 'contains `ssl` in the listen directive for ipv6' do
+                content = catalogue.resource('concat::fragment', "#{title}-ssl").send(:parameters)[:content]
+                expect(content).to include('listen                [::]:587 ssl default ipv6only=on;')
+              end
             end
 
             context 'when version comes from parameter' do
-              let(:pre_condition) { ['class { "nginx": nginx_version => "1.16.0", mail => true }'] }
+              let(:pre_condition) { ['class { "nginx": nginx_version => "1.16.0", mail => true,}'] }
 
               it 'also has `ssl` at end of listen directive' do
                 content = catalogue.resource('concat::fragment', "#{title}-ssl").send(:parameters)[:content]
                 expect(content).to include('listen                *:587 ssl;')
               end
+
+              it 'contains `ssl` in the listen directive for ipv6' do
+                content = catalogue.resource('concat::fragment', "#{title}-ssl").send(:parameters)[:content]
+                expect(content).to include('listen                [::]:587 ssl default ipv6only=on;')
+              end
             end
 
             context 'mail proxy parameters' do
-              let(:pre_condition) { ['class { "nginx": nginx_version => "1.20.0", mail => true }'] }
+              let(:pre_condition) { ['class { "nginx": nginx_version => "1.20.0", mail => true,}'] }
 
               it 'configures mail proxy settings' do
                 content = catalogue.resource('concat::fragment', "#{title}-ssl").send(:parameters)[:content]

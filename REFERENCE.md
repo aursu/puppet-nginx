@@ -43,35 +43,35 @@
 * [`Nginx::CacheUseStale`](#Nginx--CacheUseStale)
 * [`Nginx::ConfigSet`](#Nginx--ConfigSet)
 * [`Nginx::ConnectionProcessing`](#Nginx--ConnectionProcessing)
-* [`Nginx::DebugConnection`](#Nginx--DebugConnection)
+* [`Nginx::DebugConnection`](#Nginx--DebugConnection): Type Alias for Nginx::DebugConnection
 * [`Nginx::ErrorCode`](#Nginx--ErrorCode)
-* [`Nginx::ErrorLogSeverity`](#Nginx--ErrorLogSeverity)
+* [`Nginx::ErrorLogSeverity`](#Nginx--ErrorLogSeverity): Type Alias for Nginx::ErrorLogSeverity
 * [`Nginx::FileCache`](#Nginx--FileCache)
 * [`Nginx::GzipProxied`](#Nginx--GzipProxied): custom type for gzip_proxied
 * [`Nginx::LimitReqZone`](#Nginx--LimitReqZone)
-* [`Nginx::LogFormat`](#Nginx--LogFormat)
+* [`Nginx::LogFormat`](#Nginx--LogFormat): Type Alias for Nginx::LogFormat
 * [`Nginx::LogLevel`](#Nginx--LogLevel): https://nginx.org/en/docs/http/ngx_http_limit_req_module.html#limit_req_log_level
 * [`Nginx::Package_source`](#Nginx--Package_source): Where to download NGINX from  There are three versions of NGINX available: * stable (`nginx` or `nginx-stable`); * mainline (`nginx-mainline`
 * [`Nginx::Rate`](#Nginx--Rate)
 * [`Nginx::RateLimit`](#Nginx--RateLimit)
 * [`Nginx::ReturnFormat`](#Nginx--ReturnFormat)
 * [`Nginx::SSLCache`](#Nginx--SSLCache)
-* [`Nginx::Size`](#Nginx--Size)
+* [`Nginx::Size`](#Nginx--Size): Type Alias for Nginx::Size
 * [`Nginx::StringMappings`](#Nginx--StringMappings): custom type for the `map` variable mapping
 * [`Nginx::Switch`](#Nginx--Switch)
-* [`Nginx::Time`](#Nginx--Time): http://nginx.org/en/docs/syntax.html ms	milliseconds s	seconds m	minutes h	hours d	days w	weeks M	months, 30 days y	years, 365 days A value w
-* [`Nginx::UpstreamCustomParameters`](#Nginx--UpstreamCustomParameters)
-* [`Nginx::UpstreamDefaults`](#Nginx--UpstreamDefaults)
-* [`Nginx::UpstreamLeastTime`](#Nginx--UpstreamLeastTime)
-* [`Nginx::UpstreamLeastTimeHttp`](#Nginx--UpstreamLeastTimeHttp)
-* [`Nginx::UpstreamLeastTimeStream`](#Nginx--UpstreamLeastTimeStream)
-* [`Nginx::UpstreamMember`](#Nginx--UpstreamMember)
-* [`Nginx::UpstreamMemberDefaults`](#Nginx--UpstreamMemberDefaults)
-* [`Nginx::UpstreamMemberServer`](#Nginx--UpstreamMemberServer)
-* [`Nginx::UpstreamMembers`](#Nginx--UpstreamMembers)
-* [`Nginx::UpstreamSticky`](#Nginx--UpstreamSticky)
-* [`Nginx::UpstreamStickyZone`](#Nginx--UpstreamStickyZone)
-* [`Nginx::UpstreamZone`](#Nginx--UpstreamZone)
+* [`Nginx::Time`](#Nginx--Time): http://nginx.org/en/docs/syntax.html ms	milliseconds s	seconds m	minutes h	hours d	days w	weeks M	months, 30 days y	years, 365 days A value w; Type Alias for Nginx::Time
+* [`Nginx::UpstreamCustomParameters`](#Nginx--UpstreamCustomParameters): Type Alias for Nginx::UpstreamCustomParameters
+* [`Nginx::UpstreamDefaults`](#Nginx--UpstreamDefaults): Type Alias for Nginx::UpstreamDefaults
+* [`Nginx::UpstreamLeastTime`](#Nginx--UpstreamLeastTime): Type Alias for Nginx::UpstreamLeastTime
+* [`Nginx::UpstreamLeastTimeHttp`](#Nginx--UpstreamLeastTimeHttp): Type Alias for Nginx::UpstreamLeastTimeHttp
+* [`Nginx::UpstreamLeastTimeStream`](#Nginx--UpstreamLeastTimeStream): Type Alias for Nginx::UpstreamLeastTimeStream
+* [`Nginx::UpstreamMember`](#Nginx--UpstreamMember): Type Alias for Nginx::UpstreamMember
+* [`Nginx::UpstreamMemberDefaults`](#Nginx--UpstreamMemberDefaults): Type Alias for Nginx::UpstreamMemberDefaults
+* [`Nginx::UpstreamMemberServer`](#Nginx--UpstreamMemberServer): Type Alias for Nginx::UpstreamMemberServer
+* [`Nginx::UpstreamMembers`](#Nginx--UpstreamMembers): Type Alias for Nginx::UpstreamMembers
+* [`Nginx::UpstreamSticky`](#Nginx--UpstreamSticky): Type Alias for Nginx::UpstreamSticky
+* [`Nginx::UpstreamStickyZone`](#Nginx--UpstreamStickyZone): Type Alias for Nginx::UpstreamStickyZone
+* [`Nginx::UpstreamZone`](#Nginx--UpstreamZone): Type Alias for Nginx::UpstreamZone
 
 ## Classes
 
@@ -96,6 +96,7 @@ The following parameters are available in the `nginx` class:
 
 * [`include_modules_enabled`](#-nginx--include_modules_enabled)
 * [`passenger_package_name`](#-nginx--passenger_package_name)
+* [`mail_package_name`](#-nginx--mail_package_name)
 * [`nginx_version`](#-nginx--nginx_version)
 * [`debug_connections`](#-nginx--debug_connections)
 * [`ignore_invalid_headers`](#-nginx--ignore_invalid_headers)
@@ -284,7 +285,8 @@ The following parameters are available in the `nginx` class:
 Data type: `Boolean`
 
 When set, nginx will include module configurations files installed in the
-/etc/nginx/modules-enabled directory.
+/etc/nginx/modules-enabled directory. This is also enabled if mail is
+being configured (to allow the module to be loaded).
 
 Default value: `$nginx::params::include_modules_enabled`
 
@@ -293,9 +295,18 @@ Default value: `$nginx::params::include_modules_enabled`
 Data type: `String[1]`
 
 The name of the package to install in order for the passenger module of
-nginx being usable.
+nginx to be usable.
 
 Default value: `$nginx::params::passenger_package_name`
+
+##### <a name="-nginx--mail_package_name"></a>`mail_package_name`
+
+Data type: `Optional[String[1]]`
+
+The name of the package to install in order for the mail module of
+nginx to be usable.
+
+Default value: `$nginx::params::mail_package_name`
 
 ##### <a name="-nginx--nginx_version"></a>`nginx_version`
 
@@ -1118,7 +1129,7 @@ Default value: `undef`
 
 ##### <a name="-nginx--proxy_redirect"></a>`proxy_redirect`
 
-Data type: `Optional[String]`
+Data type: `Optional[Variant[Array[String],String]]`
 
 Behavior for handling redirects from the proxy server
 
@@ -2146,6 +2157,10 @@ The following parameters are available in the `nginx::resource::location` define
 * [`recursive_error_pages`](#-nginx--resource--location--recursive_error_pages)
 * [`gzip_static`](#-nginx--resource--location--gzip_static)
 * [`reset_timedout_connection`](#-nginx--resource--location--reset_timedout_connection)
+* [`format_log`](#-nginx--resource--location--format_log)
+* [`access_log`](#-nginx--resource--location--access_log)
+* [`error_log`](#-nginx--resource--location--error_log)
+* [`log_not_found`](#-nginx--resource--location--log_not_found)
 * [`fastcgi_index`](#-nginx--resource--location--fastcgi_index)
 * [`fastcgi_buffering`](#-nginx--resource--location--fastcgi_buffering)
 * [`uwsgi_connect_timeout`](#-nginx--resource--location--uwsgi_connect_timeout)
@@ -2181,7 +2196,7 @@ Default value: `false`
 
 ##### <a name="-nginx--resource--location--server"></a>`server`
 
-Data type: `Variant[String[1],Array[String[1],1]]`
+Data type: `Variant[String[1], Array[String[1], 1]]`
 
 Defines a server or list of servers that include this location
 
@@ -2858,7 +2873,7 @@ Default value: `undef`
 
 ##### <a name="-nginx--resource--location--priority"></a>`priority`
 
-Data type: `Integer[401,599]`
+Data type: `Integer[401, 599]`
 
 Location priority. User priority 401-499, 501-599. If the priority is
 higher than the default priority (500), the location will be defined after
@@ -2940,6 +2955,45 @@ Data type: `Optional[Nginx::Switch]`
 
 Enables or disables resetting timed out connections and connections closed
 with the non-standard code 444.
+
+Default value: `undef`
+
+##### <a name="-nginx--resource--location--format_log"></a>`format_log`
+
+Data type: `Optional[String[1]]`
+
+Log_format to use with the defined access_log
+
+Default value: `$nginx::http_format_log`
+
+##### <a name="-nginx--resource--location--access_log"></a>`access_log`
+
+Data type: `Optional[Variant[Array[String[1], 1], String[1]]]`
+
+Where to write access log (log format can be set with $format_log). This
+can be either a string or an array; in the latter case, multiple lines will
+be created. Additionally, unlike the earlier behavior, setting it to
+'absent' in the server context will remove this directive entirely from the
+server stanza, rather than setting a default. Can also be disabled for this
+server with the string 'off'.
+
+Default value: `undef`
+
+##### <a name="-nginx--resource--location--error_log"></a>`error_log`
+
+Data type: `Optional[Variant[Array[String[1], 1], String[1]]]`
+
+Where to write error log. May add additional options like error level to
+the end. May set to 'absent', in which case it will be omitted in this
+server stanza (and default to nginx.conf setting)
+
+Default value: `undef`
+
+##### <a name="-nginx--resource--location--log_not_found"></a>`log_not_found`
+
+Data type: `Optional[Enum['on', 'off']]`
+
+Enables or disables the logging of not found errors in error_log
 
 Default value: `undef`
 
@@ -4064,7 +4118,7 @@ Default value: `undef`
 
 ##### <a name="-nginx--resource--server--proxy_redirect"></a>`proxy_redirect`
 
-Data type: `Optional[String]`
+Data type: `Optional[Variant[Array[String],String]]`
 
 Override the default proxy_redirect value of off.
 
@@ -4198,11 +4252,11 @@ Default value: `undef`
 
 ##### <a name="-nginx--resource--server--ssl_verify_client"></a>`ssl_verify_client`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 Enables verification of client certificates.
 
-Default value: `'on'`
+Default value: `undef`
 
 ##### <a name="-nginx--resource--server--ssl_crl"></a>`ssl_crl`
 
@@ -6032,7 +6086,7 @@ Alias of `Enum['select', 'poll', 'kqueue', 'epoll', '/dev/poll', 'eventport']`
 
 ### <a name="Nginx--DebugConnection"></a>`Nginx::DebugConnection`
 
-The Nginx::DebugConnection data type.
+Type Alias for Nginx::DebugConnection
 
 Alias of `Variant[Stdlib::Host, Stdlib::IP::Address, Enum['unix:']]`
 
@@ -6044,7 +6098,7 @@ Alias of `Variant[Integer[400, 599], Pattern[/^[45][0-9]{2}$/]]`
 
 ### <a name="Nginx--ErrorLogSeverity"></a>`Nginx::ErrorLogSeverity`
 
-The Nginx::ErrorLogSeverity data type.
+Type Alias for Nginx::ErrorLogSeverity
 
 Alias of `Enum['debug', 'info', 'notice', 'warn', 'error', 'crit', 'alert', 'emerg']`
 
@@ -6086,7 +6140,7 @@ Struct[{
 
 ### <a name="Nginx--LogFormat"></a>`Nginx::LogFormat`
 
-The Nginx::LogFormat data type.
+Type Alias for Nginx::LogFormat
 
 Alias of
 
@@ -6169,7 +6223,7 @@ Variant[Enum['off', 'none'], Struct[{
 
 ### <a name="Nginx--Size"></a>`Nginx::Size`
 
-The Nginx::Size data type.
+Type Alias for Nginx::Size
 
 Alias of `Variant[Integer[0], Pattern[/\A\d+[k|K|m|M]?\z/]]`
 
@@ -6201,11 +6255,13 @@ M	months, 30 days
 y	years, 365 days
 A value without a suffix means seconds
 
+Type Alias for Nginx::Time
+
 Alias of `Variant[Integer[0], Pattern[/^(?!$)((\d+y *)?(\d+M *)?(\d+w *)?(\d+d *)?(\d+h *)?(\d+m *)?(\d+s *)?(\d+ms)?|\d+)$/]]`
 
 ### <a name="Nginx--UpstreamCustomParameters"></a>`Nginx::UpstreamCustomParameters`
 
-The Nginx::UpstreamCustomParameters data type.
+Type Alias for Nginx::UpstreamCustomParameters
 
 Alias of
 
@@ -6236,117 +6292,117 @@ Hash[String[1], Variant[
 
 ### <a name="Nginx--UpstreamDefaults"></a>`Nginx::UpstreamDefaults`
 
-The Nginx::UpstreamDefaults data type.
+Type Alias for Nginx::UpstreamDefaults
 
 Alias of
 
 ```puppet
 Struct[{
-  context           => Optional[Enum['http', 'stream']],
-  member_defaults   => Optional[Nginx::UpstreamMemberDefaults],
-  hash              => Optional[String],
-  ip_hash           => Optional[Boolean],
-  keepalive         => Optional[Integer[1]],
-  kepalive_requests => Optional[Integer[1]],
-  keepalive_timeout => Optional[Nginx::Time],
-  least_conn        => Optional[Boolean],
-  least_time        => Optional[Nginx::UpstreamLeastTime],
-  ntlm              => Optional[Boolean],
-  queue_max         => Optional[Integer],
-  queue_timeout     => Optional[Nginx::Time],
-  random            => Optional[String],
-  statefile         => Optional[Stdlib::Unixpath],
-  sticky            => Optional[Nginx::UpstreamSticky],
-  zone              => Optional[Nginx::UpstreamZone],
-  cfg_append        => Optional[Hash],
-  cfg_prepend       => Optional[Hash],
+    context           => Optional[Enum['http', 'stream']],
+    member_defaults   => Optional[Nginx::UpstreamMemberDefaults],
+    hash              => Optional[String],
+    ip_hash           => Optional[Boolean],
+    keepalive         => Optional[Integer[1]],
+    kepalive_requests => Optional[Integer[1]],
+    keepalive_timeout => Optional[Nginx::Time],
+    least_conn        => Optional[Boolean],
+    least_time        => Optional[Nginx::UpstreamLeastTime],
+    ntlm              => Optional[Boolean],
+    queue_max         => Optional[Integer],
+    queue_timeout     => Optional[Nginx::Time],
+    random            => Optional[String],
+    statefile         => Optional[Stdlib::Unixpath],
+    sticky            => Optional[Nginx::UpstreamSticky],
+    zone              => Optional[Nginx::UpstreamZone],
+    cfg_append        => Optional[Hash],
+    cfg_prepend       => Optional[Hash],
 }]
 ```
 
 ### <a name="Nginx--UpstreamLeastTime"></a>`Nginx::UpstreamLeastTime`
 
-The Nginx::UpstreamLeastTime data type.
+Type Alias for Nginx::UpstreamLeastTime
 
 Alias of `Variant[Nginx::UpstreamLeastTimeHttp, Nginx::UpstreamLeastTimeStream]`
 
 ### <a name="Nginx--UpstreamLeastTimeHttp"></a>`Nginx::UpstreamLeastTimeHttp`
 
-The Nginx::UpstreamLeastTimeHttp data type.
+Type Alias for Nginx::UpstreamLeastTimeHttp
 
 Alias of `Enum['header', 'header inflight', 'last_byte', 'last_byte inflight']`
 
 ### <a name="Nginx--UpstreamLeastTimeStream"></a>`Nginx::UpstreamLeastTimeStream`
 
-The Nginx::UpstreamLeastTimeStream data type.
+Type Alias for Nginx::UpstreamLeastTimeStream
 
 Alias of `Enum['connect', 'connect inflight', 'first_byte', 'first_byte inflight', 'last_byte', 'last_byte inflight']`
 
 ### <a name="Nginx--UpstreamMember"></a>`Nginx::UpstreamMember`
 
-The Nginx::UpstreamMember data type.
+Type Alias for Nginx::UpstreamMember
 
 Alias of
 
 ```puppet
 Struct[{
-  server         => Optional[Nginx::UpstreamMemberServer],
-  port           => Optional[Stdlib::Port],
-  weight         => Optional[Integer[1]],
-  max_conns      => Optional[Integer[1]],
-  max_fails      => Optional[Integer[0]],
-  fail_timeout   => Optional[Nginx::Time],
-  backup         => Optional[Boolean],
-  resolve        => Optional[Boolean],
-  route          => Optional[String],
-  service        => Optional[String],
-  slow_start     => Optional[Nginx::Time],
-  state          => Optional[Enum['drain','down']],
-  params_prepend => Optional[String],
-  params_append  => Optional[String],
-  comment        => Optional[String],
+    server         => Optional[Nginx::UpstreamMemberServer],
+    port           => Optional[Stdlib::Port],
+    weight         => Optional[Integer[1]],
+    max_conns      => Optional[Integer[1]],
+    max_fails      => Optional[Integer[0]],
+    fail_timeout   => Optional[Nginx::Time],
+    backup         => Optional[Boolean],
+    resolve        => Optional[Boolean],
+    route          => Optional[String],
+    service        => Optional[String],
+    slow_start     => Optional[Nginx::Time],
+    state          => Optional[Enum['drain','down']],
+    params_prepend => Optional[String],
+    params_append  => Optional[String],
+    comment        => Optional[String],
 }]
 ```
 
 ### <a name="Nginx--UpstreamMemberDefaults"></a>`Nginx::UpstreamMemberDefaults`
 
-The Nginx::UpstreamMemberDefaults data type.
+Type Alias for Nginx::UpstreamMemberDefaults
 
 Alias of
 
 ```puppet
 Struct[{
-  server         => Optional[Nginx::UpstreamMemberServer],
-  port           => Optional[Stdlib::Port],
-  weight         => Optional[Integer[1]],
-  max_conns      => Optional[Integer[1]],
-  max_fails      => Optional[Integer[0]],
-  fail_timeout   => Optional[Nginx::Time],
-  backup         => Optional[Boolean],
-  resolve        => Optional[Boolean],
-  route          => Optional[String],
-  service        => Optional[String],
-  slow_start     => Optional[Nginx::Time],
-  state          => Optional[Enum['drain','down']],
-  params_prepend => Optional[String],
-  params_append  => Optional[String],
+    server         => Optional[Nginx::UpstreamMemberServer],
+    port           => Optional[Stdlib::Port],
+    weight         => Optional[Integer[1]],
+    max_conns      => Optional[Integer[1]],
+    max_fails      => Optional[Integer[0]],
+    fail_timeout   => Optional[Nginx::Time],
+    backup         => Optional[Boolean],
+    resolve        => Optional[Boolean],
+    route          => Optional[String],
+    service        => Optional[String],
+    slow_start     => Optional[Nginx::Time],
+    state          => Optional[Enum['drain','down']],
+    params_prepend => Optional[String],
+    params_append  => Optional[String],
 }]
 ```
 
 ### <a name="Nginx--UpstreamMemberServer"></a>`Nginx::UpstreamMemberServer`
 
-The Nginx::UpstreamMemberServer data type.
+Type Alias for Nginx::UpstreamMemberServer
 
 Alias of `Variant[Stdlib::Host, Pattern[/^unix:\/([^\/\0]+\/*)[^:]*$/]]`
 
 ### <a name="Nginx--UpstreamMembers"></a>`Nginx::UpstreamMembers`
 
-The Nginx::UpstreamMembers data type.
+Type Alias for Nginx::UpstreamMembers
 
 Alias of `Hash[String, Nginx::UpstreamMember]`
 
 ### <a name="Nginx--UpstreamSticky"></a>`Nginx::UpstreamSticky`
 
-The Nginx::UpstreamSticky data type.
+Type Alias for Nginx::UpstreamSticky
 
 Alias of
 
@@ -6354,12 +6410,12 @@ Alias of
 Variant[Hash[
     Enum['cookie'],
     Struct[{
-      name     => String,
-      expires  => Optional[Variant[Nginx::Time,Enum['max']]],
-      domain   => Optional[String],
-      httponly => Optional[Boolean],
-      secure   => Optional[Boolean],
-      path     => Optional[String],
+        name     => String,
+        expires  => Optional[Variant[Nginx::Time,Enum['max']]],
+        domain   => Optional[String],
+        httponly => Optional[Boolean],
+        secure   => Optional[Boolean],
+        path     => Optional[String],
     }]
   ], Hash[
     Enum['route'],
@@ -6367,25 +6423,24 @@ Variant[Hash[
   ], Hash[
     Enum['learn'],
     Struct[{
-      create  => String,
-      lookup  => String,
-      zone    => Nginx::UpstreamStickyZone,
-      timeout => Optional[Nginx::Time],
-      header  => Optional[Boolean],
-      sync    => Optional[Boolean],
+        create  => String,
+        lookup  => String,
+        zone    => Nginx::UpstreamStickyZone,
+        timeout => Optional[Nginx::Time],
+        header  => Optional[Boolean],
+        sync    => Optional[Boolean],
     }]
   ]]
 ```
 
 ### <a name="Nginx--UpstreamStickyZone"></a>`Nginx::UpstreamStickyZone`
 
-The Nginx::UpstreamStickyZone data type.
+Type Alias for Nginx::UpstreamStickyZone
 
 Alias of `Pattern[/^[-_\.A-Za-z0-9]*:\d+[k|K|m|M]$/]`
 
 ### <a name="Nginx--UpstreamZone"></a>`Nginx::UpstreamZone`
 
-The Nginx::UpstreamZone data type.
+Type Alias for Nginx::UpstreamZone
 
 Alias of `Pattern[/^[-_\.A-Za-z0-9]* \d+[k|K|m|M]$/]`
-

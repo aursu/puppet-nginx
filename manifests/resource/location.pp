@@ -220,6 +220,21 @@
 # @param reset_timedout_connection
 #   Enables or disables resetting timed out connections and connections closed
 #   with the non-standard code 444.
+# @param format_log
+#   Log_format to use with the defined access_log
+# @param access_log
+#   Where to write access log (log format can be set with $format_log). This
+#   can be either a string or an array; in the latter case, multiple lines will
+#   be created. Additionally, unlike the earlier behavior, setting it to
+#   'absent' in the server context will remove this directive entirely from the
+#   server stanza, rather than setting a default. Can also be disabled for this
+#   server with the string 'off'.
+# @param error_log
+#   Where to write error log. May add additional options like error level to
+#   the end. May set to 'absent', in which case it will be omitted in this
+#   server stanza (and default to nginx.conf setting)
+# @param log_not_found
+#   Enables or disables the logging of not found errors in error_log
 #
 # @example Simple example
 #   nginx::resource::location { 'test2.local-bob':
@@ -277,7 +292,7 @@ define nginx::resource::location (
   Enum['present', 'absent'] $ensure                                = 'present',
   Boolean $internal                                                = false,
   String $location                                                 = $name,
-  Variant[String[1],Array[String[1],1]] $server                    = undef,
+  Variant[String[1], Array[String[1], 1]] $server                  = undef,
   Optional[String] $www_root                                       = undef,
   Optional[String] $default_type                                   = undef, # 'text/plain'
   Optional[Nginx::Switch] $autoindex                               = undef,
@@ -374,7 +389,7 @@ define nginx::resource::location (
   Optional[String] $auth_request                                   = undef,
   Optional[Nginx::Switch] $chunked_transfer_encoding               = undef, # 'on'
   Array $rewrite_rules                                             = [],
-  Integer[401,599] $priority                                       = 500,
+  Integer[401, 599] $priority                                      = 500,
   Boolean $mp4                                                     = false,
   Boolean $flv                                                     = false,
   Optional[String] $expires                                        = undef,
@@ -399,7 +414,7 @@ define nginx::resource::location (
   ] $gzip_static                                                   = undef,
   Optional[Nginx::Switch] $reset_timedout_connection               = undef,
 ) {
-  if ! defined(Class['nginx']) {
+  if !defined(Class['nginx']) {
     fail('You must include the nginx base class before using any defined resources')
   }
 
@@ -422,7 +437,8 @@ define nginx::resource::location (
   # Use proxy, fastcgi or uwsgi template if $proxy is defined, otherwise use directory template.
   # fastcgi_script is deprecated
   if ($fastcgi_script != undef) {
-    warning('The $fastcgi_script parameter is deprecated; please use $fastcgi_param instead to define custom fastcgi_params!')
+    warning(
+    'The $fastcgi_script parameter is deprecated; please use $fastcgi_param instead to define custom fastcgi_params!')
   }
 
   # Only try to manage these files if they're the default one (as you presumably

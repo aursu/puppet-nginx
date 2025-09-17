@@ -10,11 +10,16 @@
 #
 # @param include_modules_enabled
 #   When set, nginx will include module configurations files installed in the
-#   /etc/nginx/modules-enabled directory.
+#   /etc/nginx/modules-enabled directory. This is also enabled if mail is
+#   being configured (to allow the module to be loaded).
 #
 # @param passenger_package_name
 #   The name of the package to install in order for the passenger module of
-#   nginx being usable.
+#   nginx to be usable.
+#
+# @param mail_package_name
+#   The name of the package to install in order for the mail module of
+#   nginx to be usable.
 #
 # @param nginx_version
 #   The version of nginx installed (or being installed).
@@ -515,7 +520,7 @@ class nginx (
   Optional[Nginx::Size] $proxy_headers_hash_bucket_size      = undef,  # 64
   Optional[Enum['1.0', '1.1']] $proxy_http_version           = undef,  # '1.0'
   Optional[Nginx::Time] $proxy_read_timeout                  = undef,  # 60
-  Optional[String] $proxy_redirect                           = undef,  # 'default'
+  Optional[Variant[Array[String], String]] $proxy_redirect   = undef,  # 'default'
   Optional[Nginx::Time] $proxy_send_timeout                  = undef,  # 60
   Array[String] $proxy_set_header                            = [],     # ['Host $proxy_host', 'Connection close']
   Array[String] $proxy_hide_header                           = [],
@@ -584,6 +589,8 @@ class nginx (
   Optional[String] $repo_release                             = undef,
   String $passenger_package_ensure                           = installed,
   String[1] $passenger_package_name                          = $nginx::params::passenger_package_name,
+  # This is optional, to allow it to be set to undef for systems that install it with nginx always
+  Optional[String[1]] $mail_package_name                     = $nginx::params::mail_package_name,
   Optional[Stdlib::HTTPUrl] $repo_source                     = undef,
   ### END Package Configuration ###
 

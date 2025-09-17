@@ -1,3 +1,5 @@
+# @summary Type Alias for Nginx::Time
+#
 # http://nginx.org/en/docs/syntax.html
 # ms	milliseconds
 # s	seconds

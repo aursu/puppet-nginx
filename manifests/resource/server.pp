@@ -336,7 +336,7 @@ define nginx::resource::server (
   Boolean $ssl_listen_option                                                     = true,
   Optional[Variant[String, Boolean, Array[String]]] $ssl_cert                    = undef,
   Optional[String] $ssl_client_cert                                              = undef,
-  String $ssl_verify_client                                                      = 'on',
+  Optional[String] $ssl_verify_client                                            = undef,
   Optional[String] $ssl_dhparam                                                  = undef,
   Optional[String] $ssl_ecdh_curve                                               = undef,
   Boolean $ssl_redirect                                                          = false,
@@ -365,7 +365,7 @@ define nginx::resource::server (
   Nginx::Switch $http2                                                           = $nginx::http2,
   Optional[Stdlib::Absolutepath] $ssl_password_file                              = undef,
   Optional[String] $proxy                                                        = undef,
-  Optional[String] $proxy_redirect                                               = undef,
+  Optional[Variant[Array[String], String]] $proxy_redirect                       = undef,
   Optional[Nginx::Time] $proxy_read_timeout                                      = undef, # 60s
   Optional[Nginx::Time] $proxy_send_timeout                                      = undef, # 60s
   Optional[Nginx::Time] $proxy_connect_timeout                                   = undef, # 60s
