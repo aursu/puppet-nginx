@@ -64,6 +64,12 @@
 #   Determines whether proxied responses with codes greater than or equal to 300
 #   should be passed to a client or be intercepted and redirected to nginx for
 #   processing with the error_page directive
+# @param proxy_next_upstream_tries
+#   Specify the limits the number of possible tries for passing a request to the next server.
+# @param proxy_next_upstream_timeout
+#   Specify the limits the time during which a request can be passed to the next server
+# @param grpc
+#   Sets the gRPC server address (`grpc_pass`)
 # @param fastcgi
 #   location of fastcgi (host:port)
 # @param fastcgi_param
@@ -196,6 +202,14 @@
 #   This directive sets the htpasswd filename for the authentication realm.
 # @param auth_request
 #   This allows you to specify a custom auth endpoint
+# @param client_max_body_size
+#   Sets the maximum allowed size of the client request body.
+# @param client_body_timeout
+#   Defines a timeout for reading client request body.
+# @param client_body_buffer_size
+#   Sets buffer size for reading client request body.
+# @param send_timeout
+#   Sets a timeout for transmitting a response to the client.
 # @param priority
 #   Location priority. User priority 401-499, 501-599. If the priority is
 #   higher than the default priority (500), the location will be defined after
@@ -206,6 +220,18 @@
 # @param flv
 #   Indicates whether or not this loation can be
 #   used for flv streaming. Default: false
+# @param dav_methods
+#   Defines the HTTP methods allowed for WebDAV.
+#   Possible values: 'off' or an array of: 'PUT', 'DELETE', 'MKCOL', 'COPY', 'MOVE'.
+#   Example: ['PUT', 'DELETE', 'MKCOL', 'COPY', 'MOVE']
+# @param dav_access
+#   Sets permissions for newly created files and directories.
+#   Example: 'user:rw group:rw all:r'
+# @param create_full_put_path
+#   Enables creating intermediate directories for PUT requests.
+#   Valid values: 'on' or 'off'
+# @param min_delete_depth
+#   Minimum number of path elements in a request to allow DELETE.
 # @param expires
 #   Setup expires time for locations content
 # @param add_header
@@ -220,6 +246,18 @@
 # @param reset_timedout_connection
 #   Enables or disables resetting timed out connections and connections closed
 #   with the non-standard code 444.
+# @param real_ip_header
+#   Defines the request header field whose value will be used to replace the
+#   client address. See http://nginx.org/en/docs/http/ngx_http_realip_module.html
+# @param real_ip_recursive
+#   If disabled, the original client address that matches one of the trusted
+#   addresses is replaced by the last address sent in the request header field.
+#   If enabled, the original client address that matches one of the trusted
+#   addresses is replaced by the last non-trusted address sent in the request
+#   header field.
+# @param set_real_ip_from
+#   Defines trusted addresses that are known to send correct replacement
+#   addresses.
 # @param format_log
 #   Log_format to use with the defined access_log
 # @param access_log
@@ -292,7 +330,7 @@ define nginx::resource::location (
   Enum['present', 'absent'] $ensure                                = 'present',
   Boolean $internal                                                = false,
   String $location                                                 = $name,
-  Variant[String[1], Array[String[1], 1]] $server                  = undef,
+  Optional[Variant[String[1], Array[String[1], 1]]] $server = undef,
   Optional[String] $www_root                                       = undef,
   Optional[String] $default_type                                   = undef, # 'text/plain'
   Optional[Nginx::Switch] $autoindex                               = undef,
@@ -301,26 +339,24 @@ define nginx::resource::location (
   Optional[Enum['html', 'xml', 'json', 'jsonp']] $autoindex_format = undef,
   Optional[Nginx::Switch] $autoindex_localtime                     = undef,
   Optional[String] $proxy                                          = undef,
+  Optional[Variant[Array[String], String]] $proxy_redirect         = $nginx::proxy_redirect,
   Optional[
     Variant[
       String,
       Array[String]
     ]
-  ] $proxy_redirect                                                = undef,
-  Optional[
-    Variant[
-      String,
-      Array[String]
-    ]
-  ] $proxy_cookie_path                                             = undef, # 'off'
-  Optional[Nginx::Time] $proxy_read_timeout                        = undef,
-  Optional[Nginx::Time] $proxy_connect_timeout                     = undef,
-  Optional[Nginx::Time] $proxy_send_timeout                        = undef,
-  Array[String] $proxy_set_header                                  = [],
-  Array[String] $proxy_hide_header                                 = [],
-  Array[String] $proxy_pass_header                                 = [],
-  Array[String] $proxy_ignore_header                               = [],
+  ] $proxy_cookie_path                                             = undef,  # 'off'
+  Optional[Nginx::Time] $proxy_read_timeout                        = $nginx::proxy_read_timeout,
+  Optional[Nginx::Time] $proxy_connect_timeout                     = $nginx::proxy_connect_timeout,
+  Optional[Nginx::Time] $proxy_send_timeout                        = $nginx::proxy_send_timeout,
+  Array[String] $proxy_set_header                                  = $nginx::proxy_set_header,
+  Array[String] $proxy_hide_header                                 = $nginx::proxy_hide_header,
+  Array[String] $proxy_pass_header                                 = $nginx::proxy_pass_header,
+  Array[String] $proxy_ignore_header                               = $nginx::proxy_ignore_header,
   Optional[String] $proxy_next_upstream                            = undef,
+  Optional[Integer] $proxy_next_upstream_tries                     = undef,
+  Optional[Nginx::Time] $proxy_next_upstream_timeout               = undef,
+  Optional[String] $grpc                                           = undef,
   Optional[Nginx::Switch] $proxy_intercept_errors                  = undef,
   Optional[String] $fastcgi                                        = undef,
   Optional[String] $fastcgi_index                                  = undef,
@@ -372,7 +408,7 @@ define nginx::resource::location (
   Optional[Nginx::Switch] $proxy_cache_lock                        = undef,
   Optional[Nginx::Switch] $proxy_cache_background_update           = undef,
   Optional[Nginx::Switch] $proxy_cache_convert_head                = undef,
-  Optional[Variant[Array, String]] $proxy_cache_valid              = undef,
+  Optional[Variant[Array, String, Hash[String[1], String[1]]]] $proxy_cache_valid = undef,
   Optional[Variant[Array, String]] $proxy_cache_bypass             = undef,
   Optional[Variant[Array, String]] $proxy_no_cache                 = undef,
   Optional[String] $proxy_method                                   = undef,
@@ -388,10 +424,18 @@ define nginx::resource::location (
   Optional[String] $auth_basic_user_file                           = undef,
   Optional[String] $auth_request                                   = undef,
   Optional[Nginx::Switch] $chunked_transfer_encoding               = undef, # 'on'
+  Optional[Nginx::Size] $client_max_body_size                      = undef,
+  Optional[Nginx::Time] $client_body_timeout                       = undef,
+  Optional[Nginx::Size] $client_body_buffer_size                   = undef,
+  Optional[Nginx::Time] $send_timeout                              = undef,
   Array $rewrite_rules                                             = [],
   Integer[401, 599] $priority                                      = 500,
   Boolean $mp4                                                     = false,
   Boolean $flv                                                     = false,
+  Optional[Variant[Enum['off'], Array[Enum['PUT', 'DELETE', 'MKCOL', 'COPY', 'MOVE'], 1]]] $dav_methods = undef,
+  Optional[String[1]] $dav_access = undef,
+  Optional[Enum['on', 'off']] $create_full_put_path = undef,
+  Optional[Integer[0]] $min_delete_depth = undef,
   Optional[String] $expires                                        = undef,
   Optional[String] $return                                         = undef,
   Hash $add_header                                                 = {},
@@ -400,12 +444,12 @@ define nginx::resource::location (
       Array[String],
       Hash[String, String]
   ]] $access_log                                                   = undef,
-  Optional[String] $format_log                                     = undef, # 'combined'
+  Optional[String] $format_log                                     = $nginx::http_format_log,  # 'combined'
   Optional[Variant[String, Array[String]]] $error_log              = undef,
   Nginx::ErrorLogSeverity $error_log_level                         = 'error',
   Optional[Nginx::Switch] $log_not_found                           = undef,
   Optional[Hash] $error_pages                                      = undef,
-  Optional[Nginx::Switch] $recursive_error_pages                   = undef, # 'off'
+  Optional[Nginx::Switch] $recursive_error_pages                   = undef,  # 'off'
   Optional[
     Variant[
       Enum['always'],
@@ -413,6 +457,9 @@ define nginx::resource::location (
     ]
   ] $gzip_static                                                   = undef,
   Optional[Nginx::Switch] $reset_timedout_connection               = undef,
+  Optional[String[1]] $real_ip_header                              = undef,
+  Optional[Nginx::Switch] $real_ip_recursive                       = undef,  # 'off'
+  Optional[Variant[String[1], Array[String[1]]]] $set_real_ip_from = undef,
 ) {
   if !defined(Class['nginx']) {
     fail('You must include the nginx base class before using any defined resources')
@@ -426,6 +473,13 @@ define nginx::resource::location (
     default  => file,
   }
 
+  # location.erb now renders directory.erb only in the `else` branch of the backend dispatch
+  # (upstream's structure), so a location carrying both a document root and a backend would
+  # silently lose the root. Fail at catalogue time instead.
+  if ($www_root and $proxy) {
+    fail("Cannot define both directory and proxy in ${server}:${title}")
+  }
+
   if $limit_zone {
     # $limit_req_list = [{ zone => $limit_zone }] + [$limit_req].flatten
     $limit_req_list = map(flatten($limit_zone)) |$value| {{ zone => $value } } + [$limit_req].flatten
@@ -437,8 +491,7 @@ define nginx::resource::location (
   # Use proxy, fastcgi or uwsgi template if $proxy is defined, otherwise use directory template.
   # fastcgi_script is deprecated
   if ($fastcgi_script != undef) {
-    warning(
-    'The $fastcgi_script parameter is deprecated; please use $fastcgi_param instead to define custom fastcgi_params!')
+    warning('The $fastcgi_script parameter is deprecated; please use $fastcgi_param instead to define custom fastcgi_params!')
   }
 
   # Only try to manage these files if they're the default one (as you presumably

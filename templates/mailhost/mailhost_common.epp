@@ -6,8 +6,7 @@
   Optional[String]  $imap_client_buffer,
   Optional[String]  $pop3_auth,
   Optional[Array]   $pop3_capabilities,
-  Optional[Enum['imap', 'pop3', 'sieve', 'smtp']]
-                    $protocol,
+  Optional[Enum['imap', 'pop3', 'sieve', 'smtp']] $protocol,
   String            $proxy_pass_error_message,
   Nginx::Switch     $proxy_protocol,
   Nginx::Switch     $proxy_smtp_auth,

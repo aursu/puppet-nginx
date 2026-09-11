@@ -1,15 +1,15 @@
 # @summary Manage NGINX package installation on debian based systems
 # @api private
 class nginx::package::debian {
-  $package_name             = $nginx::package_name
-  $package_source           = $nginx::package_source
-  $package_ensure           = $nginx::package_ensure
-  $package_flavor           = $nginx::package_flavor
+  $package_name = $nginx::package_name
+  $package_source = $nginx::package_source
+  $package_ensure = $nginx::package_ensure
+  $package_flavor = $nginx::package_flavor
   $passenger_package_ensure = $nginx::passenger_package_ensure
-  $passenger_package_name   = $nginx::passenger_package_name
-  $manage_repo              = $nginx::manage_repo
-  $release                  = $nginx::repo_release
-  $repo_source              = $nginx::repo_source
+  $passenger_package_name = $nginx::passenger_package_name
+  $manage_repo = $nginx::manage_repo
+  $release = $nginx::repo_release
+  $repo_source = $nginx::repo_source
 
   $distro = downcase($facts['os']['name'])
 
@@ -25,7 +25,7 @@ class nginx::package::debian {
     case $package_source {
       'nginx', 'nginx-stable': {
         $stable_repo_source = $repo_source ? {
-          undef => "https://nginx.org/packages/${distro}",
+          undef   => "https://nginx.org/packages/${distro}",
           default => $repo_source,
         }
         apt::source { 'nginx':
@@ -41,7 +41,7 @@ class nginx::package::debian {
       }
       'nginx-mainline': {
         $mainline_repo_source = $repo_source ? {
-          undef => "https://nginx.org/packages/mainline/${distro}",
+          undef   => "https://nginx.org/packages/mainline/${distro}",
           default => $repo_source,
         }
         apt::source { 'nginx':
@@ -57,7 +57,7 @@ class nginx::package::debian {
       }
       'passenger': {
         $passenger_repo_source = $repo_source ? {
-          undef => 'https://oss-binaries.phusionpassenger.com/apt/passenger',
+          undef   => 'https://oss-binaries.phusionpassenger.com/apt/passenger',
           default => $repo_source,
         }
         apt::source { 'nginx':
@@ -65,7 +65,7 @@ class nginx::package::debian {
           repos        => 'main',
           key          => {
             'name'   => 'phusionpassenger.asc',
-            'source' => 'https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key.txt',
+            'source' => 'https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key-2025.txt',
           },
           architecture => $facts['os']['architecture'],
         }

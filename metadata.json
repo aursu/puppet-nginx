@@ -1,6 +1,6 @@
 {
   "name": "aursu-nginx",
-  "version": "7.0.2",
+  "version": "8.2.1",
   "author": "Vox Pupuli",
   "summary": "Puppet NGINX management module",
   "license": "MIT",
@@ -10,7 +10,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">= 4.1.0 < 10.0.0"
+      "version_requirement": ">= 4.1.0 < 11.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
@@ -22,7 +22,8 @@
       "operatingsystem": "Rocky",
       "operatingsystemrelease": [
         "8",
-        "9"
+        "9",
+        "10"
       ]
     },
     {

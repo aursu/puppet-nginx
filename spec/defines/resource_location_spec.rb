@@ -24,7 +24,7 @@ describe 'nginx::resource::location' do
           let :params do
             {
               www_root: '/var/www/rspec',
-              server: 'server1'
+              server: 'server1',
             }
           end
 
@@ -59,55 +59,79 @@ describe 'nginx::resource::location' do
               title: 'should set the location',
               attr: 'location',
               value: 'my_location',
-              match: '  location my_location {'
+              match: '  location my_location {',
             },
             {
               title: 'should not set internal',
               attr: 'internal',
               value: false,
-              notmatch: %r{internal;}
+              notmatch: %r{internal;},
             },
             {
               title: 'should set internal',
               attr: 'internal',
               value: true,
-              match: '    internal;'
+              match: '    internal;',
             },
             {
               title: 'should not set mp4',
               attr: 'mp4',
               value: false,
-              notmatch: %r{mp4;}
+              notmatch: %r{mp4;},
             },
             {
               title: 'should set mp4',
               attr: 'mp4',
               value: true,
-              match: '    mp4;'
+              match: '    mp4;',
             },
             {
               title: 'should not set flv',
               attr: 'flv',
               value: false,
-              notmatch: %r{flv;}
+              notmatch: %r{flv;},
             },
             {
               title: 'should set flv',
               attr: 'flv',
               value: true,
-              match: '    flv;'
+              match: '    flv;',
+            },
+            {
+              title: 'should set dav_methods',
+              attr: 'dav_methods',
+              value: %w[PUT DELETE MKCOL COPY MOVE],
+              match: '    dav_methods PUT DELETE MKCOL COPY MOVE;',
+            },
+            {
+              title: 'should set dav_access',
+              attr: 'dav_access',
+              value: 'user:rw group:rw all:r',
+              match: '    dav_access user:rw group:rw all:r;',
+            },
+            {
+              title: 'should set create_full_put_path',
+              attr: 'create_full_put_path',
+              value: 'on',
+              match: '    create_full_put_path on;',
+            },
+            {
+              title: 'should set min_delete_depth',
+              attr: 'min_delete_depth',
+              value: 2,
+              match: '    min_delete_depth 2;',
             },
             {
               title: 'should set location_satisfy',
               attr: 'location_satisfy',
               value: 'any',
-              match: '    satisfy any;'
+              match: '    satisfy any;',
             },
             {
               title: 'should set limit_zone',
               attr: 'limit_zone',
               value: 'myzone1',
-              match: '    limit_req zone=myzone1;'
+              match: '    limit_req zone=myzone1;',
             },
             {
               title: 'should set multiple limit_zone',
@@ -116,7 +140,7 @@ describe 'nginx::resource::location' do
               match: [
                 '    limit_req zone=myzone1;',
                 '    limit_req zone=myzone2;',
-              ]
+              ],
             },
             {
               title: 'should set limit_req from Hash',
@@ -170,7 +194,7 @@ describe 'nginx::resource::location' do
               title: 'should set expires',
               attr: 'expires',
               value: '33d',
-              match: '    expires 33d;'
+              match: '    expires 33d;',
             },
             {
               title: 'should set return',
@@ -185,7 +209,7 @@ describe 'nginx::resource::location' do
               match: [
                 '    allow 127.0.0.1;',
                 '    allow 10.0.0.1;',
-              ]
+              ],
             },
             {
               title: 'should set location_allow (nested array)',
@@ -196,7 +220,7 @@ describe 'nginx::resource::location' do
                 '    allow 10.0.0.1;',
                 '    allow 127.0.0.2;',
                 '    allow 10.0.0.2;',
-              ]
+              ],
             },
             {
               title: 'should set location_deny',
@@ -205,14 +229,14 @@ describe 'nginx::resource::location' do
               match: [
                 '    deny 127.0.0.1;',
                 '    deny 10.0.0.1;',
-              ]
+              ],
             },
             {
               title: 'should contain ordered prepended directives',
               attr: 'location_cfg_prepend',
               value: { 'test1' => 'test value 1', 'test2' => ['test value 2a', 'test value 2b'],
                        'test3' => { 'subtest1' => ['"sub test value1a"', '"sub test value1b"'],
-                                    'subtest2' => '"sub test value2"' } },
+                                    'subtest2' => '"sub test value2"', }, },
               match: [
                 '    test1 test value 1;',
                 '    test2 test value 2a;',
@@ -220,14 +244,14 @@ describe 'nginx::resource::location' do
                 '    test3 subtest1 "sub test value1a";',
                 '    test3 subtest1 "sub test value1b";',
                 '    test3 subtest2 "sub test value2";',
-              ]
+              ],
             },
             {
               title: 'should contain custom prepended directives',
               attr: 'location_custom_cfg_prepend',
               value: { 'test1' => 'bar', 'test2' => %w[foobar barbaz],
                        'test3' => { 'subtest1' => ['"sub test value1a"', '"sub test value1b"'],
-                                    'subtest2' => '"sub test value2"' } },
+                                    'subtest2' => '"sub test value2"', }, },
               match: [
                 %r{^ +test1\s+bar},
                 %r{^ +test2\s+foobar},
@@ -235,7 +259,7 @@ describe 'nginx::resource::location' do
                 %r{^ +test3\s+subtest1 "sub test value1a"},
                 %r{^ +test3\s+subtest1 "sub test value1b"},
                 %r{^ +test3\s+subtest2 "sub test value2"},
-              ]
+              ],
             },
             {
               title: 'should contain raw_prepend directives',
@@ -245,7 +269,7 @@ describe 'nginx::resource::location' do
                 '  b;',
                 '}',
               ],
-              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
+              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}},
             },
             {
               title: 'should contain rewrite rules',
@@ -259,67 +283,184 @@ describe 'nginx::resource::location' do
                 %r{rewrite \^\(/download/\.\*\)/media/\(\.\*\)\\\.\.\*\$ \$1/mp3/\$2\.mp3 last},
                 %r{rewrite \^\(/download/\.\*\)/media/\(\.\*\)\\\.\.\*\$ \$1/mp3/\$2\.ra  last},
                 %r{rewrite \^/users/\(\.\*\)\$ /show\?user=\$1\? last},
-              ]
+              ],
             },
             {
               title: 'should not set rewrite_rules',
               attr: 'rewrite_rules',
               value: [],
-              notmatch: %r{rewrite}
+              notmatch: %r{rewrite},
             },
             {
               title: 'should not set absolute_redirect',
               attr: 'absolute_redirect',
               value: :undef,
-              notmatch: %r{absolute_redirect}
+              notmatch: %r{absolute_redirect},
             },
             {
               title: 'should set absolute_redirect off',
               attr: 'absolute_redirect',
               value: 'off',
-              match: '  absolute_redirect off;'
+              match: '  absolute_redirect off;',
             },
             {
               title: 'should set auth_basic',
               attr: 'auth_basic',
               value: 'value',
-              match: '    auth_basic           "value";'
+              match: '    auth_basic           "value";',
             },
             {
               title: 'should set auth_basic_user_file',
               attr: 'auth_basic_user_file',
               value: 'value',
-              match: '    auth_basic_user_file value;'
+              match: '    auth_basic_user_file value;',
             },
             {
               title: 'should set auth_request',
               attr: 'auth_request',
               value: 'value',
-              match: %r{\s+auth_request\s+value;}
+              match: %r{\s+auth_request\s+value;},
+            },
+            {
+              title: 'should not set client_max_body_size by default',
+              attr: 'client_max_body_size',
+              value: :undef,
+              notmatch: %r{client_max_body_size},
+            },
+            {
+              title: 'should set client_max_body_size',
+              attr: 'client_max_body_size',
+              value: '100m',
+              match: %r{\s+client_max_body_size\s+100m;},
+            },
+            {
+              title: 'should set client_max_body_size with bytes',
+              attr: 'client_max_body_size',
+              value: '1048576',
+              match: %r{\s+client_max_body_size\s+1048576;},
+            },
+            {
+              title: 'should not set client_body_timeout by default',
+              attr: 'client_body_timeout',
+              value: :undef,
+              notmatch: %r{client_body_timeout},
+            },
+            {
+              title: 'should set client_body_timeout',
+              attr: 'client_body_timeout',
+              value: '120s',
+              match: %r{\s+client_body_timeout\s+120s;},
+            },
+            {
+              title: 'should set client_body_timeout with minutes',
+              attr: 'client_body_timeout',
+              value: '2m',
+              match: %r{\s+client_body_timeout\s+2m;},
+            },
+            {
+              title: 'should not set client_body_buffer_size by default',
+              attr: 'client_body_buffer_size',
+              value: :undef,
+              notmatch: %r{client_body_buffer_size},
+            },
+            {
+              title: 'should set client_body_buffer_size',
+              attr: 'client_body_buffer_size',
+              value: '256k',
+              match: %r{\s+client_body_buffer_size\s+256k;},
+            },
+            {
+              title: 'should set client_body_buffer_size with megabytes',
+              attr: 'client_body_buffer_size',
+              value: '1m',
+              match: %r{\s+client_body_buffer_size\s+1m;},
+            },
+            {
+              title: 'should not set send_timeout by default',
+              attr: 'send_timeout',
+              value: :undef,
+              notmatch: %r{\bsend_timeout\b},
+            },
+            {
+              title: 'should set send_timeout',
+              attr: 'send_timeout',
+              value: '90s',
+              match: %r{\s+send_timeout\s+90s;},
+            },
+            {
+              title: 'should set send_timeout with minutes',
+              attr: 'send_timeout',
+              value: '5m',
+              match: %r{\s+send_timeout\s+5m;},
             },
             {
               title: 'should set reset_timedout_connection',
               attr: 'reset_timedout_connection',
               value: 'on',
-              match: %r{^\s+reset_timedout_connection\s+on;}
+              match: %r{^\s+reset_timedout_connection\s+on;},
+            },
+            {
+              title: 'should not set set_real_ip_from',
+              attr: 'set_real_ip_from',
+              value: :undef,
+              notmatch: %r{set_real_ip_from},
+            },
+            {
+              title: 'should set set_real_ip_from with single value',
+              attr: 'set_real_ip_from',
+              value: '192.168.1.0/24',
+              match: %r{^\s+set_real_ip_from\s+192\.168\.1\.0/24;},
+            },
+            {
+              title: 'should set set_real_ip_from with multiple values',
+              attr: 'set_real_ip_from',
+              value: ['192.168.1.0/24', '10.0.0.0/8'],
+              match: [
+                %r{^\s+set_real_ip_from\s+192\.168\.1\.0/24;},
+                %r{^\s+set_real_ip_from\s+10\.0\.0\.0/8;},
+              ],
+            },
+            {
+              title: 'should not set real_ip_header',
+              attr: 'real_ip_header',
+              value: :undef,
+              notmatch: %r{real_ip_header},
+            },
+            {
+              title: 'should set real_ip_header',
+              attr: 'real_ip_header',
+              value: 'X-Forwarded-For',
+              match: %r{^\s+real_ip_header\s+X-Forwarded-For;},
+            },
+            {
+              title: 'should not set real_ip_recursive',
+              attr: 'real_ip_recursive',
+              value: :undef,
+              notmatch: %r{real_ip_recursive},
+            },
+            {
+              title: 'should set real_ip_recursive',
+              attr: 'real_ip_recursive',
+              value: 'on',
+              match: %r{^\s+real_ip_recursive\s+on;},
             },
             {
               title: 'access_log undef',
               attr: 'access_log',
               value: :undef,
-              notmatch: %r{\s+access_log\s+.+;}
+              notmatch: %r{\s+access_log\s+.+;},
             },
             {
               title: 'disabling access_log ',
               attr: 'access_log',
               value: 'off',
-              match: %r{\s+access_log\s+off;}
+              match: %r{\s+access_log\s+off;},
             },
             {
               title: 'override access_log ',
               attr: 'access_log',
               value: '/var/log/nginx/specific-location.log',
-              match: %r{\s+access_log\s+/var/log/nginx/specific-location\.log;}
+              match: %r{\s+access_log\s+/var/log/nginx/specific-location\.log;},
             },
             {
               title: 'override access_log with an array',
@@ -331,25 +472,25 @@ describe 'nginx::resource::location' do
               match: [
                 %r{\s+access_log\s+/var/log/nginx/specific-location\.log;},
                 %r{\s+access_log\s+syslog:server=10\.0\.0\.1\s*;},
-              ]
+              ],
             },
             {
               title: 'enabling logging errors not found',
               attr: 'log_not_found',
               value: 'off',
-              match: %r{\s+log_not_found\s+off;}
+              match: %r{\s+log_not_found\s+off;},
             },
             {
               title: 'enabling logging errors not found',
               attr: 'log_not_found',
               value: 'on',
-              match: %r{\s+log_not_found\s+on;}
+              match: %r{\s+log_not_found\s+on;},
             },
             {
               title: 'should set error_log',
               attr: 'error_log',
               value: '/path/to/error.log',
-              match: '    error_log             /path/to/error.log;'
+              match: '    error_log             /path/to/error.log;',
             },
             {
               title: 'should allow multiple error_log directives',
@@ -358,13 +499,13 @@ describe 'nginx::resource::location' do
               match: [
                 '    error_log             /path/to/error.log;',
                 '    error_log             syslog:server=localhost;',
-              ]
+              ],
             },
             {
               title: 'should not include error_log in server when set to absent',
               attr: 'error_log',
               value: 'absent',
-              notmatch: 'error_log'
+              notmatch: 'error_log',
             },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
@@ -399,7 +540,7 @@ describe 'nginx::resource::location' do
               attr: 'location_cfg_append',
               value: { 'test1' => 'test value 1', 'test2' => ['test value 2a', 'test value 2b'],
                        'test3' => { 'subtest1' => ['"sub test value1a"', '"sub test value1b"'],
-                                    'subtest2' => '"sub test value2"' } },
+                                    'subtest2' => '"sub test value2"', }, },
               match: [
                 '    test1 test value 1;',
                 '    test2 test value 2a;',
@@ -407,7 +548,7 @@ describe 'nginx::resource::location' do
                 '    test3 subtest1 "sub test value1a";',
                 '    test3 subtest1 "sub test value1b";',
                 '    test3 subtest2 "sub test value2";',
-              ]
+              ],
             },
             {
               title: 'should contain include directives',
@@ -416,14 +557,14 @@ describe 'nginx::resource::location' do
               match: [
                 %r{^\s+include\s+/file1;},
                 %r{^\s+include\s+/file2;},
-              ]
+              ],
             },
             {
               title: 'should contain custom appended directives',
               attr: 'location_custom_cfg_append',
               value: { 'test1' => 'bar', 'test2' => %w[foobar barbaz],
                        'test3' => { 'subtest1' => ['"sub test value1a"', '"sub test value1b"'],
-                                    'subtest2' => '"sub test value2"' } },
+                                    'subtest2' => '"sub test value2"', }, },
               match: [
                 %r{^ +test1\s+bar},
                 %r{^ +test2\s+foobar},
@@ -431,7 +572,7 @@ describe 'nginx::resource::location' do
                 %r{^ +test3\s+subtest1 "sub test value1a"},
                 %r{^ +test3\s+subtest1 "sub test value1b"},
                 %r{^ +test3\s+subtest2 "sub test value2"},
-              ]
+              ],
             },
             {
               title: 'should contain raw_append directives',
@@ -441,7 +582,7 @@ describe 'nginx::resource::location' do
                 '  b;',
                 '}',
               ],
-              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
+              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}},
             },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
@@ -480,7 +621,7 @@ describe 'nginx::resource::location' do
             {
               location: 'location',
               server: 'server1',
-              location_alias: 'value'
+              location_alias: 'value',
             }
           end
 
@@ -510,7 +651,7 @@ describe 'nginx::resource::location' do
               title: 'should set autoindex',
               attr: 'autoindex',
               value: 'on',
-              match: '    autoindex on;'
+              match: '    autoindex on;',
             },
             {
               title: 'should set autoindex',
@@ -528,25 +669,25 @@ describe 'nginx::resource::location' do
               title: 'should set autoindex_format',
               attr: 'autoindex_format',
               value: 'html',
-              match: '    autoindex_format html;'
+              match: '    autoindex_format html;',
             },
             {
               title: 'should set try_file(s)',
               attr: 'try_files',
               value: %w[name1 name2],
-              match: '    try_files name1 name2;'
+              match: '    try_files name1 name2;',
             },
             {
               title: 'should set index_file(s)',
               attr: 'index_files',
               value: %w[name1 name2],
-              match: '    index     name1 name2;'
+              match: '    index     name1 name2;',
             },
             {
               title: 'should not set index_file(s)',
               attr: 'index_files',
               value: [],
-              notmatch: %r{\s+index\s+}
+              notmatch: %r{\s+index\s+},
             },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
@@ -577,7 +718,7 @@ describe 'nginx::resource::location' do
           let :default_params do
             {
               location: 'location',
-              server: 'server1'
+              server: 'server1',
             }
           end
 
@@ -622,7 +763,7 @@ describe 'nginx::resource::location' do
             {
               location: 'location',
               server: 'server1',
-              gzip_static: 'on'
+              gzip_static: 'on',
             }
           end
 
@@ -637,7 +778,7 @@ describe 'nginx::resource::location' do
             {
               location: 'location',
               www_root: '/var/www/root',
-              server: 'server1'
+              server: 'server1',
             }
           end
 
@@ -646,25 +787,25 @@ describe 'nginx::resource::location' do
               title: 'should set www_root',
               attr: 'www_root',
               value: '/',
-              match: '    root      /;'
+              match: '    root      /;',
             },
             {
               title: 'should set try_file(s)',
               attr: 'try_files',
               value: %w[name1 name2],
-              match: '    try_files name1 name2;'
+              match: '    try_files name1 name2;',
             },
             {
               title: 'should set index_file(s)',
               attr: 'index_files',
               value: %w[name1 name2],
-              match: '    index     name1 name2;'
+              match: '    index     name1 name2;',
             },
             {
               title: 'should not set index_file(s)',
               attr: 'index_files',
               value: [],
-              notmatch: %r{\s+index\s+}
+              notmatch: %r{\s+index\s+},
             },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
@@ -863,7 +1004,7 @@ describe 'nginx::resource::location' do
               attr: 'location_custom_cfg',
               value: { 'test1' => ['test value 1a', 'test value 1b'], 'test2' => 'test value 2', 'allow' => 'test value 3',
                        'test4' => { 'subtest1' => ['"sub test value1a"', '"sub test value1b"'],
-                                    'subtest2' => '"sub test value2"' } },
+                                    'subtest2' => '"sub test value2"', }, },
               match: [
                 '    allow test value 3;',
                 '    test1 test value 1a;',
@@ -872,7 +1013,7 @@ describe 'nginx::resource::location' do
                 '    test4 subtest1 "sub test value1a";',
                 '    test4 subtest1 "sub test value1b";',
                 '    test4 subtest2 "sub test value2";',
-              ]
+              ],
             },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
@@ -900,12 +1041,31 @@ describe 'nginx::resource::location' do
           end
         end
 
+        describe 'server_location_grpc template content' do
+          let :default_params do
+            {
+              location: 'location',
+              grpc: 'grpcs://localhost:9000',
+              server: 'server1',
+            }
+          end
+
+          context "when grpc is 'value'" do
+            let(:params) { default_params.merge(grpc: 'value') }
+
+            it 'set grpc_pass' do
+              is_expected.to contain_concat__fragment("server1-500-#{Digest::MD5.hexdigest(params[:location].to_s)}")
+                .with_content(%r{\s+grpc_pass\s+value;})
+            end
+          end
+        end
+
         describe 'server_location_fastcgi template content' do
           let :default_params do
             {
               location: 'location',
               fastcgi: 'localhost:9000',
-              server: 'server1'
+              server: 'server1',
             }
           end
 
@@ -914,94 +1074,31 @@ describe 'nginx::resource::location' do
               title: 'should set www_root',
               attr: 'www_root',
               value: '/',
-              match: %r{\s+root\s+/;}
+              match: %r{\s+root\s+/;},
             },
             {
               title: 'should set fastcgi_split_path',
               attr: 'fastcgi_split_path',
               value: 'value',
-              match: %r{\s+fastcgi_split_path_info\s+value;}
+              match: %r{\s+fastcgi_split_path_info\s+value;},
             },
             {
               title: 'should set try_file(s)',
               attr: 'try_files',
               value: %w[name1 name2],
-              match: %r{\s+try_files\s+name1 name2;}
+              match: %r{\s+try_files\s+name1 name2;},
             },
             {
               title: 'should set fastcgi_params',
               attr: 'fastcgi_params',
               value: 'value',
-              match: %r{\s+include\s+value;}
+              match: %r{\s+include\s+value;},
             },
             {
               title: 'should set fastcgi_pass',
               attr: 'fastcgi',
               value: 'value',
-              match: %r{\s+fastcgi_pass\s+value;}
-            },
-            {
-              title: 'should set fastcgi_read_timeout',
-              attr: 'fastcgi_read_timeout',
-              value: '300s',
-              match: %r{\s+fastcgi_read_timeout\s+300s;}
-            },
-            {
-              title: 'should set fastcgi_connect_timeout',
-              attr: 'fastcgi_connect_timeout',
-              value: '300s',
-              match: %r{\s+fastcgi_connect_timeout\s+300s;}
-            },
-            {
-              title: 'should set fastcgi_send_timeout',
-              attr: 'fastcgi_send_timeout',
-              value: '300s',
-              match: %r{\s+fastcgi_send_timeout\s+300s;}
-            },
-            {
-              title: 'should set fastcgi_buffering',
-              attr: 'fastcgi_buffering',
-              value: 'on',
-              match: %r{\s+fastcgi_buffering\s+on;}
-            },
-            {
-              title: 'should set fastcgi_buffering when true',
-              attr: 'fastcgi_buffering',
-              value: true,
-              match: %r{\s+fastcgi_buffering\s+on;}
-            },
-            {
-              title: 'should set fastcgi_request_buffering',
-              attr: 'fastcgi_request_buffering',
-              value: 'on',
-              match: %r{\s+fastcgi_request_buffering\s+on;}
-            },
-            {
-              title: 'should set fastcgi_request_buffering when true',
-              attr: 'fastcgi_request_buffering',
-              value: true,
-              match: %r{\s+fastcgi_request_buffering\s+on;}
-            },
-            {
-              title: 'should set fastcgi_intercept_errors',
-              attr: 'fastcgi_intercept_errors',
-              value: 'on',
-              match: %r{\s+fastcgi_intercept_errors\s+on;}
-            },
-            {
-              title: 'should set fastcgi_intercept_errors when true',
-              attr: 'fastcgi_intercept_errors',
-              value: false,
-              match: %r{\s+fastcgi_intercept_errors\s+off;}
-            },
-            {
-              title: 'should pass FastCGI headers',
-              attr: 'fastcgi_pass_header',
-              value: ['X-TestHeader1 value1', 'X-TestHeader2 value2'],
-              match: [
-                %r{^\s+fastcgi_pass_header\s+X-TestHeader1 value1;},
-                %r{^\s+fastcgi_pass_header\s+X-TestHeader2 value2;},
-              ]
+              match: %r{\s+fastcgi_pass\s+value;},
             },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
@@ -1089,7 +1186,7 @@ describe 'nginx::resource::location' do
             {
               location: 'location',
               uwsgi: 'unix:/home/project/uwsgi.socket',
-              server: 'server1'
+              server: 'server1',
             }
           end
 
@@ -1098,73 +1195,31 @@ describe 'nginx::resource::location' do
               title: 'should set www_root',
               attr: 'www_root',
               value: '/',
-              match: %r{\s+root\s+/;}
+              match: %r{\s+root\s+/;},
             },
             {
               title: 'should set try_file(s)',
               attr: 'try_files',
               value: %w[name1 name2],
-              match: %r{\s+try_files\s+name1 name2;}
+              match: %r{\s+try_files\s+name1 name2;},
             },
             {
               title: 'should set uwsgi_params',
               attr: 'uwsgi_params',
               value: 'value',
-              match: %r{\s+include\s+value;}
+              match: %r{\s+include\s+value;},
             },
             {
               title: 'should set uwsgi_pass',
               attr: 'uwsgi',
               value: 'value',
-              match: %r{\s+uwsgi_pass\s+value;}
+              match: %r{\s+uwsgi_pass\s+value;},
             },
             {
               title: 'should set uwsgi_read_timeout',
               attr: 'uwsgi_read_timeout',
               value: '300s',
-              match: %r{\s+uwsgi_read_timeout\s+300s;}
-            },
-            {
-              title: 'should set uwsgi_connect_timeout',
-              attr: 'uwsgi_connect_timeout',
-              value: '300s',
-              match: %r{\s+uwsgi_connect_timeout\s+300s;}
-            },
-            {
-              title: 'should set uwsgi_send_timeout',
-              attr: 'uwsgi_send_timeout',
-              value: '300s',
-              match: %r{\s+uwsgi_send_timeout\s+300s;}
-            },
-            {
-              title: 'should set uwsgi_buffering',
-              attr: 'uwsgi_buffering',
-              value: 'on',
-              match: %r{\s+uwsgi_buffering\s+on;}
-            },
-            {
-              title: 'should set uwsgi_buffering when true',
-              attr: 'uwsgi_buffering',
-              value: true,
-              match: %r{\s+uwsgi_buffering\s+on;}
-            },
-            {
-              title: 'should set uwsgi_request_buffering',
-              attr: 'uwsgi_request_buffering',
-              value: 'on',
-              match: %r{\s+uwsgi_request_buffering\s+on;}
-            },
-            {
-              title: 'should set uwsgi_request_buffering when true',
-              attr: 'uwsgi_request_buffering',
-              value: true,
-              match: %r{\s+uwsgi_request_buffering\s+on;}
-            },
-            {
-              title: 'should set chunked_transfer_encoding',
-              attr: 'chunked_transfer_encoding',
-              value: true,
-              match: %r{\s+chunked_transfer_encoding\s+on;}
+              match: %r{\s+uwsgi_read_timeout\s+300s;},
             },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
@@ -1225,7 +1280,7 @@ describe 'nginx::resource::location' do
               title: 'should set proxy_redirect',
               attr: 'proxy_redirect',
               value: 'value',
-              match: %r{^\s+proxy_redirect\s+value;}
+              match: %r{^\s+proxy_redirect\s+value;},
             },
             {
               title: 'should set proxy_redirect array',
@@ -1240,7 +1295,7 @@ describe 'nginx::resource::location' do
               title: 'should not set proxy_redirect',
               attr: 'proxy_redirect',
               value: :undef,
-              notmatch: %r{proxy_redirect\b}
+              notmatch: %r{proxy_redirect\b},
             },
             {
               title: 'should set proxy_redirect when array of strings',
@@ -1264,13 +1319,13 @@ describe 'nginx::resource::location' do
               title: 'should set proxy_cache',
               attr: 'proxy_cache',
               value: 'value',
-              match: %r{^\s+proxy_cache\s+value;}
+              match: %r{^\s+proxy_cache\s+value;},
             },
             {
               title: 'should set proxy_cache_valid when string',
               attr: 'proxy_cache_valid',
               value: 'value',
-              match: %r{^\s+proxy_cache_valid\s+value;}
+              match: %r{^\s+proxy_cache_valid\s+value;},
             },
             {
               title: 'should set proxy_cache_valid when array of strings',
@@ -1279,25 +1334,35 @@ describe 'nginx::resource::location' do
               match: [
                 %r{^\s+proxy_cache_valid\s+value1;},
                 %r{^\s+proxy_cache_valid\s+value2;},
-              ]
+              ],
+            },
+            {
+              title: 'should set proxy_cache_valid when hash',
+              attr: 'proxy_cache_valid',
+              value: { '200' => '10m', '301 302' => '1m', '404' => '5s' },
+              match: [
+                %r{^\s+proxy_cache_valid\s+200 10m;},
+                %r{^\s+proxy_cache_valid\s+301 302 1m;},
+                %r{^\s+proxy_cache_valid\s+404 5s;},
+              ],
             },
             {
               title: 'should set proxy_cache_key',
               attr: 'proxy_cache_key',
               value: 'value',
-              match: %r{^\s+proxy_cache_key\s+value;}
+              match: %r{^\s+proxy_cache_key\s+value;},
             },
             {
               title: 'should set proxy_cache_use_stale',
               attr: 'proxy_cache_use_stale',
               value: 'value',
-              match: %r{^\s+proxy_cache_use_stale\s+value;}
+              match: %r{^\s+proxy_cache_use_stale\s+value;},
             },
             {
               title: 'should set proxy_cache_bypass with a string',
               attr: 'proxy_cache_bypass',
               value: '$pragma',
-              match: %r{^\s+proxy_cache_bypass\s+\$pragma;}
+              match: %r{^\s+proxy_cache_bypass\s+\$pragma;},
             },
             {
               title: 'should set proxy_cache_bypass with an array',
@@ -1309,7 +1374,7 @@ describe 'nginx::resource::location' do
               match: [
                 %r{^\s+proxy_cache_bypass\s+\$pragma;},
                 %r{^\s+proxy_cache_bypass\s+\$cookie;},
-              ]
+              ],
             },
             {
               title: 'should set proxy_no_cache with a string',
@@ -1321,61 +1386,55 @@ describe 'nginx::resource::location' do
               title: 'should set proxy_cache_lock with a string',
               attr: 'proxy_cache_lock',
               value: 'on',
-              match: %r{^\s+proxy_cache_lock\s+on;}
+              match: %r{^\s+proxy_cache_lock\s+on;},
             },
             {
               title: 'should set proxy_cache_lock with a string',
               attr: 'proxy_cache_lock',
               value: 'off',
-              match: %r{^\s+proxy_cache_lock\s+off;}
+              match: %r{^\s+proxy_cache_lock\s+off;},
             },
             {
               title: 'should set proxy_cache_background_update with a string',
               attr: 'proxy_cache_background_update',
               value: 'on',
-              match: %r{^\s+proxy_cache_background_update\s+on;}
+              match: %r{^\s+proxy_cache_background_update\s+on;},
             },
             {
               title: 'should set proxy_cache_background_update with a string',
               attr: 'proxy_cache_background_update',
               value: 'off',
-              match: %r{^\s+proxy_cache_background_update\s+off;}
+              match: %r{^\s+proxy_cache_background_update\s+off;},
             },
             {
               title: 'should set proxy_cache_convert_head with a string',
               attr: 'proxy_cache_convert_head',
               value: 'on',
-              match: %r{^\s+proxy_cache_convert_head\s+on;}
+              match: %r{^\s+proxy_cache_convert_head\s+on;},
             },
             {
               title: 'should set proxy_cache_convert_head with a string',
               attr: 'proxy_cache_convert_head',
               value: 'off',
-              match: %r{^\s+proxy_cache_convert_head\s+off;}
+              match: %r{^\s+proxy_cache_convert_head\s+off;},
             },
             {
               title: 'should set proxy_pass',
               attr: 'proxy',
               value: 'value',
-              match: %r{^\s+proxy_pass\s+value;}
+              match: %r{^\s+proxy_pass\s+value;},
             },
             {
               title: 'should set proxy_read_timeout',
               attr: 'proxy_read_timeout',
-              value: '60s',
-              match: %r{\s+proxy_read_timeout\s+60s;}
+              value: '20m',
+              match: %r{\s+proxy_read_timeout\s+20m;},
             },
             {
               title: 'should set proxy_connect_timeout',
               attr: 'proxy_connect_timeout',
-              value: '60s',
-              match: %r{\s+proxy_connect_timeout\s+60s;}
-            },
-            {
-              title: 'should set proxy_send_timeout',
-              attr: 'proxy_send_timeout',
-              value: '60s',
-              match: %r{\s+proxy_send_timeout\s+60s;}
+              value: 10,
+              match: %r{\s+proxy_connect_timeout\s+10;},
             },
             {
               title: 'should set proxy headers',
@@ -1384,7 +1443,7 @@ describe 'nginx::resource::location' do
               match: [
                 %r{^\s+proxy_set_header\s+X-TestHeader1 value1;},
                 %r{^\s+proxy_set_header\s+X-TestHeader2 value2;},
-              ]
+              ],
             },
             {
               title: 'should hide proxy headers',
@@ -1393,7 +1452,7 @@ describe 'nginx::resource::location' do
               match: [
                 %r{^\s+proxy_hide_header\s+X-TestHeader1 value1;},
                 %r{^\s+proxy_hide_header\s+X-TestHeader2 value2;},
-              ]
+              ],
             },
             {
               title: 'should pass proxy headers',
@@ -1402,61 +1461,49 @@ describe 'nginx::resource::location' do
               match: [
                 %r{^\s+proxy_pass_header\s+X-TestHeader1 value1;},
                 %r{^\s+proxy_pass_header\s+X-TestHeader2 value2;},
-              ]
+              ],
             },
             {
               title: 'should set proxy_http_version',
               attr: 'proxy_http_version',
               value: 'value',
-              match: %r{\s+proxy_http_version\s+value;}
+              match: %r{\s+proxy_http_version\s+value;},
             },
             {
               title: 'should set proxy_method',
               attr: 'proxy_method',
               value: 'value',
-              match: %r{\s+proxy_method\s+value;}
+              match: %r{\s+proxy_method\s+value;},
             },
             {
               title: 'should set proxy_set_body',
               attr: 'proxy_set_body',
               value: 'value',
-              match: %r{\s+proxy_set_body\s+value;}
+              match: %r{\s+proxy_set_body\s+value;},
             },
             {
               title: 'should set proxy_buffering',
               attr: 'proxy_buffering',
               value: 'on',
-              match: %r{\s+proxy_buffering\s+on;}
+              match: %r{\s+proxy_buffering\s+on;},
             },
             {
               title: 'should set proxy_request_buffering',
               attr: 'proxy_request_buffering',
               value: 'on',
-              match: %r{\s+proxy_request_buffering\s+on;}
+              match: %r{\s+proxy_request_buffering\s+on;},
             },
             {
               title: 'should set proxy_max_temp_file_size',
               attr: 'proxy_max_temp_file_size',
               value: '1024m',
-              match: %r{\s+proxy_max_temp_file_size\s+1024m;}
+              match: %r{\s+proxy_max_temp_file_size\s+1024m;},
             },
             {
               title: 'should set proxy_busy_buffers_size',
               attr: 'proxy_busy_buffers_size',
               value: '16k',
-              match: %r{\s+proxy_busy_buffers_size\s+16k;}
-            },
-            {
-              title: 'should set proxy_intercept_errors',
-              attr: 'proxy_intercept_errors',
-              value: true,
-              match: %r{\s+proxy_intercept_errors\s+on;}
-            },
-            {
-              title: 'should set the trusted CA certificates file for proxied HTTPS server',
-              attr: 'proxy_ssl_trusted_certificate',
-              value: '/tmp/trusted_certificate',
-              match: %r{\s+proxy_ssl_trusted_certificate\s+/tmp/trusted_certificate;}
+              match: %r{\s+proxy_busy_buffers_size\s+16k;},
             },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
@@ -1490,7 +1537,7 @@ describe 'nginx::resource::location' do
                 proxy: 'proxy_value',
                 server: 'server1',
                 proxy_cache: 'true',
-                proxy_cache_valid: '10m'
+                proxy_cache_valid: '10m',
               }
             end
 
@@ -1520,7 +1567,7 @@ describe 'nginx::resource::location' do
                 location: 'location',
                 fastcgi: 'localhost:9000',
                 fastcgi_params: '/etc/nginx/mycustomparams',
-                server: 'server1'
+                server: 'server1',
               }
             end
 
@@ -1538,7 +1585,7 @@ describe 'nginx::resource::location' do
                 location: 'location',
                 fastcgi: 'localhost:9000',
                 fastcgi_params: nil,
-                server: 'server1'
+                server: 'server1',
               }
             end
 
@@ -1561,7 +1608,7 @@ describe 'nginx::resource::location' do
               {
                 uwsgi: 'uwsgi_upstream',
                 uwsgi_params: '/etc/nginx/bogusparams',
-                server: 'server1'
+                server: 'server1',
               }
             end
 
@@ -1592,13 +1639,25 @@ describe 'nginx::resource::location' do
             it { is_expected.not_to contain_concat__fragment("server1-800-#{Digest::MD5.hexdigest('rspec-test')}-ssl") }
           end
 
+          context 'www_root and proxy are set' do
+            let :params do
+              {
+                server: 'server1',
+                www_root: '/',
+                proxy: 'http://localhost:8000/uri/',
+              }
+            end
+
+            it { expect { is_expected.to contain_class('nginx::resource::location') }.to raise_error(Puppet::Error, %r{Cannot define both directory and proxy in server1:rspec-test}) }
+          end
+
           context 'when server name is sanitized' do
             let(:title) { 'www.rspec-location.com' }
             let :params do
               {
                 server: 'www rspec-server com',
                 www_root: '/',
-                ssl: true
+                ssl: true,
               }
             end
 
@@ -1618,7 +1677,7 @@ describe 'nginx::resource::location' do
               {
                 server: 'server1',
                 www_root: '/',
-                ensure: 'absent'
+                ensure: 'absent',
               }
             end
 
@@ -1631,7 +1690,7 @@ describe 'nginx::resource::location' do
                 ssl: true,
                 server: 'server1',
                 www_root: '/',
-                ensure: 'absent'
+                ensure: 'absent',
               }
             end
 

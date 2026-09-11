@@ -46,9 +46,33 @@
 # @param autoindex_localtime
 #   Specifies whether times in the directory listing should be output in the
 #   local time zone or UTC.
+# @param dav_methods
+#   Defines the HTTP methods allowed for WebDAV.
+#   Possible values: 'off' or an array of: 'PUT', 'DELETE', 'MKCOL', 'COPY', 'MOVE'.
+#   Example: ['PUT', 'DELETE', 'MKCOL', 'COPY', 'MOVE']
+# @param dav_access
+#   Sets permissions for newly created files and directories.
+#   Example: 'user:rw group:rw all:r'
+# @param create_full_put_path
+#   Enables creating intermediate directories for PUT requests.
+#   Valid values: 'on' or 'off'
+# @param min_delete_depth
+#   Minimum number of path elements in a request to allow DELETE.
 # @param reset_timedout_connection
 #   Enables or disables resetting timed out connections and connections closed
 #   with the non-standard code 444.
+# @param real_ip_header
+#   Defines the request header field whose value will be used to replace the
+#   client address. See http://nginx.org/en/docs/http/ngx_http_realip_module.html
+# @param real_ip_recursive
+#   If disabled, the original client address that matches one of the trusted
+#   addresses is replaced by the last address sent in the request header field.
+#   If enabled, the original client address that matches one of the trusted
+#   addresses is replaced by the last non-trusted address sent in the request
+#   header field.
+# @param set_real_ip_from
+#   Defines trusted addresses that are known to send correct replacement
+#   addresses.
 # @param proxy
 #   Proxy server(s) for the root location to connect to. Accepts a single
 #   value, can be used in conjunction with nginx::resource::upstream
@@ -70,6 +94,14 @@
 # @param proxy_ssl_trusted_certificate
 #   Specifies a file with trusted CA certificates in the PEM format used to
 #   verify the certificate of the proxied HTTPS server.
+# @param proxy_next_upstream
+#   Specify cases a request should be passed to the next server in the upstream.
+# @param proxy_next_upstream_tries
+#   Specify the limits the number of possible tries for passing a request to the next server.
+# @param proxy_next_upstream_timeout
+#   Specify the limits the time during which a request can be passed to the next server
+# @param grpc
+#   Sets the gRPC server address (`grpc_pass`)
 # @param resolver
 #   Configures name servers used to resolve names of upstream servers into addresses.
 # @param fastcgi
@@ -82,6 +114,8 @@
 #   optional FastCGI index page
 # @param fastcgi_script
 #   optional SCRIPT_FILE parameter
+# @param uwsgi_param
+#   Set additional custom uwsgi parameters (uwsgi_param in nginx) in the default vhost.
 # @param uwsgi_read_timeout
 #   optional value for uwsgi_read_timeout
 # @param ssl
@@ -152,6 +186,10 @@
 #     for only SSL enabled server block
 # @param ssl_password_file
 #   File containing the password for the SSL Key file.
+# @param ssl_reject_handshake
+#   If enabled, SSL handshakes in the server block will be rejected.
+# @param ssl_early_data
+#   Enables or disables TLS 1.3 early data.
 # @param spdy
 #   Toggles SPDY protocol.
 # @param http2
@@ -277,6 +315,11 @@
 #   Equivalent to log_by_lua, except that the file specified by
 #   <path-to-lua-script-file> contains the Lua code, or, as from the v0.5.0rc32
 #   release, the Lua/LuaJIT bytecode to be executed.
+# @param use_default_location
+#   When true, this module creates a default location block for
+#   '/' that sets the root directive. Set to false if you want to define your
+#   own root location, or if you prefer to set 'root' in the server block
+#   rather than in a location block.
 # @param gzip_types
 #   Defines gzip_types, nginx default is text/html
 # @param gzip_static
@@ -329,7 +372,7 @@ define nginx::resource::server (
   Boolean $ipv6_enable                                                           = false,
   Variant[Array, String] $ipv6_listen_ip                                         = '::',
   Stdlib::Port $ipv6_listen_port                                                 = $listen_port,
-  Optional[String] $ipv6_listen_options                                          = undef,
+  Optional[String[0]] $ipv6_listen_options                                       = $listen_options,
   Hash $add_header                                                               = {},
   Hash $ssl_add_header                                                           = {},
   Boolean $ssl                                                                   = false,
@@ -361,22 +404,27 @@ define nginx::resource::server (
   Optional[String] $ssl_session_ticket_key                                       = undef,
   Optional[String] $ssl_trusted_cert                                             = undef,
   Optional[Integer] $ssl_verify_depth                                            = undef,
-  Nginx::Switch $spdy                                                            = $nginx::spdy,
-  Nginx::Switch $http2                                                           = $nginx::http2,
+  Optional[Nginx::Switch] $spdy                                                  = $nginx::spdy,
+  Optional[Nginx::Switch] $http2                                                 = $nginx::http2,
   Optional[Stdlib::Absolutepath] $ssl_password_file                              = undef,
+  Optional[Nginx::Switch] $ssl_reject_handshake                                  = undef,  # 'off'
+  Optional[Nginx::Switch] $ssl_early_data                                        = undef,  # 'off'
   Optional[String] $proxy                                                        = undef,
   Optional[Variant[Array[String], String]] $proxy_redirect                       = undef,
-  Optional[Nginx::Time] $proxy_read_timeout                                      = undef, # 60s
-  Optional[Nginx::Time] $proxy_send_timeout                                      = undef, # 60s
-  Optional[Nginx::Time] $proxy_connect_timeout                                   = undef, # 60s
-  Array[String] $proxy_set_header                                                = [],
-  Array[String] $proxy_hide_header                                               = [],
-  Array[String] $proxy_pass_header                                               = [],
-  Array[String] $proxy_ignore_header                                             = [],
+  Optional[Nginx::Time] $proxy_read_timeout                                      = $nginx::proxy_read_timeout,  # 60s
+  Optional[Nginx::Time] $proxy_send_timeout                                      = $nginx::proxy_send_timeout,  # 60s
+  Optional[Nginx::Time] $proxy_connect_timeout                                   = $nginx::proxy_connect_timeout,  # 60s
+  Array[String] $proxy_set_header                                                = $nginx::proxy_set_header,
+  Array[String] $proxy_hide_header                                               = $nginx::proxy_hide_header,
+  Array[String] $proxy_pass_header                                               = $nginx::proxy_pass_header,
+  Array[String] $proxy_ignore_header                                             = $nginx::proxy_ignore_header,
+  Optional[String[1]] $proxy_next_upstream                                       = undef,
+  Optional[Integer] $proxy_next_upstream_tries                                   = undef,
+  Optional[Nginx::Time] $proxy_next_upstream_timeout                             = undef,
   Optional[String] $proxy_cache                                                  = undef,
   Optional[String] $proxy_cache_key                                              = undef,
   Optional[String] $proxy_cache_use_stale                                        = undef,
-  Optional[Variant[Array[String], String]] $proxy_cache_valid                    = undef,
+  Optional[Variant[Array[String], String, Hash[String[1], String[1]]]] $proxy_cache_valid = undef,
   Optional[Nginx::Switch] $proxy_cache_lock                                      = undef,
   Optional[Nginx::Switch] $proxy_cache_background_update                         = undef,
   Optional[Nginx::Switch] $proxy_cache_convert_head                              = undef,
@@ -399,6 +447,7 @@ define nginx::resource::server (
   ] $proxy_cookie_domain                                                         = undef,
   Optional[Nginx::Switch] $proxy_pass_request_headers                            = undef,
   Optional[Stdlib::Absolutepath] $proxy_ssl_trusted_certificate                  = undef,
+  Optional[String] $grpc                                                         = undef,
   Array $resolver                                                                = [],
   Optional[String] $fastcgi                                                      = undef,
   Optional[String] $fastcgi_index                                                = undef,
@@ -406,6 +455,7 @@ define nginx::resource::server (
   String $fastcgi_params                                                         = "${nginx::conf_dir}/fastcgi.conf",
   Optional[String] $fastcgi_script                                               = undef,
   Optional[String] $uwsgi                                                        = undef,
+  Optional[Hash] $uwsgi_param = undef,
   String $uwsgi_params                                                           = "${nginx::config::conf_dir}/uwsgi_params",
   Optional[String] $uwsgi_read_timeout                                           = undef,
   Array[String] $index_files                                                     = [],
@@ -416,7 +466,14 @@ define nginx::resource::server (
   Optional[Nginx::Switch] $autoindex_exact_size                                  = undef,
   Optional[Enum['html', 'xml', 'json', 'jsonp']] $autoindex_format               = undef,
   Optional[Nginx::Switch] $autoindex_localtime                                   = undef,
+  Optional[Variant[Enum['off'], Array[Enum['PUT', 'DELETE', 'MKCOL', 'COPY', 'MOVE'], 1]]] $dav_methods = undef,
+  Optional[String[1]] $dav_access                                                = undef,
+  Optional[Enum['on', 'off']] $create_full_put_path                                  = undef,
+  Optional[Integer[0]] $min_delete_depth                                         = undef,
   Optional[Nginx::Switch] $reset_timedout_connection                             = undef,
+  Optional[String[1]] $real_ip_header                                            = undef,
+  Optional[Nginx::Switch] $real_ip_recursive                                     = undef,  # 'off'
+  Optional[Variant[String[1], Array[String[1]]]] $set_real_ip_from               = undef,
   Array[String] $server_name                                                     = [$name],
   Optional[String] $www_root                                                     = undef,
   Boolean $rewrite_www_to_non_www                                                = false,
@@ -485,9 +542,6 @@ define nginx::resource::server (
   Optional[Nginx::Switch] $recursive_error_pages                                 = undef, # 'off'
   Hash $locations                                                                = {},
   Hash $locations_defaults                                                       = {},
-  Optional[Array[String]] $set_real_ip_from                                      = undef,
-  Optional[String] $real_ip_header                                               = undef,
-  Optional[Nginx::Switch] $real_ip_recursive                                     = undef,
   Optional[Nginx::ReturnFormat] $return                                          = undef,
   Boolean $server_proxy_settings                                                 = false,
   Variant[
@@ -608,12 +662,17 @@ define nginx::resource::server (
       proxy_request_buffering       => $proxy_request_buffering,
       proxy_busy_buffers_size       => $proxy_busy_buffers_size,
       proxy_max_temp_file_size      => $proxy_max_temp_file_size,
+      proxy_next_upstream           => $proxy_next_upstream,
+      proxy_next_upstream_tries     => $proxy_next_upstream_tries,
+      proxy_next_upstream_timeout   => $proxy_next_upstream_timeout,
+      grpc                          => $grpc,
       fastcgi                       => $fastcgi,
       fastcgi_index                 => $fastcgi_index,
       fastcgi_param                 => $fastcgi_param,
       fastcgi_params                => $fastcgi_params,
       fastcgi_script                => $fastcgi_script,
       uwsgi                         => $uwsgi,
+      uwsgi_param                   => $uwsgi_param,
       uwsgi_params                  => $uwsgi_params,
       uwsgi_read_timeout            => $uwsgi_read_timeout,
       try_files                     => $try_files,
@@ -622,6 +681,10 @@ define nginx::resource::server (
       autoindex_exact_size          => $autoindex_exact_size,
       autoindex_format              => $autoindex_format,
       autoindex_localtime           => $autoindex_localtime,
+      dav_methods                   => $dav_methods,
+      dav_access                    => $dav_access,
+      create_full_put_path          => $create_full_put_path,
+      min_delete_depth              => $min_delete_depth,
       index_files                   => $index_files,
       location_custom_cfg           => $location_custom_cfg,
       location_cfg_prepend          => $location_cfg_prepend,
@@ -728,7 +791,8 @@ define nginx::resource::server (
 
   create_resources('nginx::resource::map', $string_mappings)
   create_resources('nginx::resource::geo', $geo_mappings)
-  create_resources('nginx::resource::location', $locations, {
+  create_resources('nginx::resource::location', $locations,
+    {
       ensure   => $ensure,
       server   => $name_sanitized,
       ssl      => $ssl,

@@ -137,10 +137,10 @@ define nginx::resource::mailhost (
   Boolean $ipv6_enable                           = false,
   Variant[Array[String], String] $ipv6_listen_ip = '::',
   Stdlib::Port $ipv6_listen_port                 = $listen_port,
-  String $ipv6_listen_options                    = 'default ipv6only=on',
+  Optional[String[0]] $ipv6_listen_options = $listen_options,
   Boolean $ssl                                   = false,
   Optional[String] $ssl_cert                     = undef,
-  String $ssl_ciphers                            = $nginx::ssl_ciphers,
+  Optional[String] $ssl_ciphers = $nginx::ssl_ciphers,
   Optional[String] $ssl_client_cert              = undef,
   Optional[String] $ssl_crl                      = undef,
   Optional[String] $ssl_dhparam                  = $nginx::ssl_dhparam,
@@ -148,8 +148,8 @@ define nginx::resource::mailhost (
   Optional[String] $ssl_key                      = undef,
   Optional[String] $ssl_password_file            = undef,
   Optional[Stdlib::Port] $ssl_port               = undef,
-  Nginx::Switch $ssl_prefer_server_ciphers       = $nginx::ssl_prefer_server_ciphers,
-  String $ssl_protocols                          = $nginx::ssl_protocols,
+  Optional[Nginx::Switch] $ssl_prefer_server_ciphers = $nginx::ssl_prefer_server_ciphers,
+  Optional[String] $ssl_protocols                = $nginx::ssl_protocols,
   Optional[String] $ssl_session_cache            = undef,
   Optional[String] $ssl_session_ticket_key       = undef,
   Optional[String] $ssl_session_tickets          = undef,
@@ -174,16 +174,20 @@ define nginx::resource::mailhost (
   Array $server_name                             = [$name],
   Variant[Array[String], String] $raw_prepend    = [],
   Variant[Array[String], String] $raw_append     = [],
-  Hash[String, Variant[
+  Hash[String,
+    Variant[
       String,
       Array[String],
       Hash[String, Variant[String, Array[String]]],
-  ]] $mailhost_cfg_prepend                       = {},
-  Hash[String, Variant[
+    ]
+  ] $mailhost_cfg_prepend = {},
+  Hash[String,
+    Variant[
       String,
       Array[String],
       Hash[String, Variant[String, Array[String]]],
-  ]] $mailhost_cfg_append                        = {},
+    ]
+  ] $mailhost_cfg_append = {},
 ) {
   if ! defined(Class['nginx']) {
     fail('You must include the nginx base class before using any defined resources')
@@ -234,16 +238,21 @@ define nginx::resource::mailhost (
   $config_file = "${config_dir}/${name}.conf"
 
   # Pre-render some common parts
-  $mailhost_prepend = epp('nginx/prepend_append.epp', {
+  $mailhost_prepend = epp('nginx/prepend_append.epp',
+    {
       cfg_xpend => $mailhost_cfg_prepend,
       raw_xpend => Array($raw_prepend, true),
-  })
-  $mailhost_append = epp('nginx/prepend_append.epp', {
+    },
+  )
+  $mailhost_append = epp('nginx/prepend_append.epp',
+    {
       cfg_xpend => $mailhost_cfg_append,
       raw_xpend => Array($raw_append, true),
-  })
+    },
+  )
 
-  $mailhost_ssl_settings = epp('nginx/mailhost/mailhost_ssl_settings.epp', {
+  $mailhost_ssl_settings = epp('nginx/mailhost/mailhost_ssl_settings.epp',
+    {
       ssl_cert                  => $ssl_cert,
       ssl_ciphers               => $ssl_ciphers,
       ssl_client_cert           => $ssl_client_cert,
@@ -260,9 +269,11 @@ define nginx::resource::mailhost (
       ssl_session_timeout       => $ssl_session_timeout,
       ssl_trusted_cert          => $ssl_trusted_cert,
       ssl_verify_depth          => $ssl_verify_depth,
-  })
+    },
+  )
 
-  $mailhost_common = epp('nginx/mailhost/mailhost_common.epp', {
+  $mailhost_common = epp('nginx/mailhost/mailhost_common.epp',
+    {
       auth_http                => $auth_http,
       auth_http_header         => $auth_http_header,
       imap_auth                => $imap_auth,
@@ -279,7 +290,8 @@ define nginx::resource::mailhost (
       smtp_capabilities        => $smtp_capabilities,
       xclient                  => $xclient,
       nginx_version            => $nginx::nginx_version,
-  })
+    },
+  )
 
   concat { $config_file:
     ensure  => $ensure,
@@ -295,7 +307,8 @@ define nginx::resource::mailhost (
     concat::fragment { "${name}-header":
       target  => $config_file,
       order   => '001',
-      content => epp('nginx/mailhost/mailhost.epp', {
+      content => epp('nginx/mailhost/mailhost.epp',
+        {
           ipv6_listen_ip        => $_ipv6_listen_ip,
           ipv6_listen_options   => $ipv6_listen_options,
           ipv6_listen_port      => $ipv6_listen_port,
@@ -308,7 +321,8 @@ define nginx::resource::mailhost (
           mailhost_ssl_settings => $mailhost_ssl_settings,
           nginx_version         => $nginx::nginx_version,
           starttls              => $starttls,
-      }),
+        },
+      ),
     }
   }
 
@@ -317,7 +331,8 @@ define nginx::resource::mailhost (
     concat::fragment { "${name}-ssl":
       target  => $config_file,
       order   => '700',
-      content => epp('nginx/mailhost/mailhost_ssl.epp', {
+      content => epp('nginx/mailhost/mailhost_ssl.epp',
+        {
           ipv6_listen_ip        => $_ipv6_listen_ip,
           ipv6_listen_options   => $ipv6_listen_options,
           ipv6_listen_port      => $ipv6_listen_port,
@@ -329,7 +344,8 @@ define nginx::resource::mailhost (
           mailhost_ssl_settings => $mailhost_ssl_settings,
           nginx_version         => $nginx::nginx_version,
           ssl_port              => $ssl_port,
-      }),
+        },
+      ),
     }
   }
 }

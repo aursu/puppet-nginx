@@ -230,6 +230,8 @@
 #   Timeout for making a connection to a proxy server
 # @param proxy_headers_hash_bucket_size
 #   Size of the hash buckets for proxy headers
+# @param proxy_headers_hash_max_size
+#   Maximum size of the hash table holding proxied-response header names
 # @param proxy_http_version
 #   HTTP version used for communications with the proxy server
 # @param proxy_read_timeout
@@ -250,6 +252,20 @@
 #   Maximum size for temporary files used by the proxy
 # @param proxy_busy_buffers_size
 #   Size of the buffers used when the proxy is busy
+# @param grpc
+#   Sets the gRPC server address (`grpc_pass`)
+# @param real_ip_header
+#   Defines the request header field whose value will be used to replace the
+#   client address. See http://nginx.org/en/docs/http/ngx_http_realip_module.html
+# @param real_ip_recursive
+#   If disabled, the original client address that matches one of the trusted
+#   addresses is replaced by the last address sent in the request header field.
+#   If enabled, the original client address that matches one of the trusted
+#   addresses is replaced by the last non-trusted address sent in the request
+#   header field.
+# @param set_real_ip_from
+#   Defines trusted addresses that are known to send correct replacement
+#   addresses.
 # @param sendfile
 #   Whether to use the sendfile mechanism for file transmission
 # @param server_tokens
@@ -338,6 +354,12 @@
 #   Maximum depth for chain verification in SSL
 # @param ssl_password_file
 #   Path to the file containing the SSL password
+# @param ssl_reject_handshake
+#   Reject TLS handshakes for server names this vhost does not serve, rather
+#   than answering with the default certificate
+# @param ssl_early_data
+#   Enables TLS 1.3 early data. Note that a request sent in early data is
+#   subject to replay attacks
 # @param package_ensure
 #   State of the package (installed, latest, etc.)
 # @param package_name
@@ -403,6 +425,10 @@
 # @param purge_passenger_repo
 #   Whether to purge the Passenger repository configuration
 #
+# @param variables_hash_bucket_size
+#   Size of the hash buckets holding the names of nginx variables
+# @param variables_hash_max_size
+#   Maximum size of the hash table holding the names of nginx variables
 class nginx (
   ### START Nginx Configuration ###
   Optional[Variant[Stdlib::Absolutepath, Tuple[Stdlib::Absolutepath, Integer, 1, 4]]]
@@ -518,10 +544,12 @@ class nginx (
   $proxy_cache_path                                          = undef,  # undef
   Optional[Nginx::Time] $proxy_connect_timeout               = undef,  # 60s
   Optional[Nginx::Size] $proxy_headers_hash_bucket_size      = undef,  # 64
+  Optional[Nginx::Size] $proxy_headers_hash_max_size         = undef,  # 512
   Optional[Enum['1.0', '1.1']] $proxy_http_version           = undef,  # '1.0'
   Optional[Nginx::Time] $proxy_read_timeout                  = undef,  # 60
   Optional[Variant[Array[String], String]] $proxy_redirect   = undef,  # 'default'
   Optional[Nginx::Time] $proxy_send_timeout                  = undef,  # 60
+  Optional[String] $grpc                                     = undef,
   Array[String] $proxy_set_header                            = [],     # ['Host $proxy_host', 'Connection close']
   Array[String] $proxy_hide_header                           = [],
   Array[String] $proxy_pass_header                           = [],
@@ -529,23 +557,26 @@ class nginx (
   Optional[Nginx::Size] $proxy_max_temp_file_size            = undef,
   Optional[Nginx::Size] $proxy_busy_buffers_size             = undef,
   Optional[Nginx::Switch] $sendfile                          = undef,  # 'off'
+  Optional[String[1]] $real_ip_header                        = undef,
+  Optional[Nginx::Switch] $real_ip_recursive                 = undef,  # 'off'
+  Optional[Variant[String[1], Array[String[1]]]] $set_real_ip_from = undef,
   Optional[Nginx::Switch] $server_tokens                     = undef,  # 'on',
-  Nginx::Switch $spdy                                        = false,
-  Nginx::Switch $http2                                       = false,
-  Nginx::Switch $ssl_stapling                                = false,
+  Optional[Nginx::Switch] $spdy                              = undef,  # 'off'
+  Optional[Nginx::Switch] $http2                             = undef,  # 'off'
+  Optional[Nginx::Switch] $ssl_stapling                      = undef,  # 'off'
   Optional[Nginx::Switch] $ssl_stapling_verify               = undef, # 'off',
   Stdlib::Absolutepath $snippets_dir                         = $nginx::params::snippets_dir,
   Boolean $manage_snippets_dir                               = false,
   Optional[Nginx::Size] $types_hash_bucket_size              = undef,  # 64
   Optional[Nginx::Size] $types_hash_max_size                 = undef,  # 1024
-  Integer $worker_connections                                = 1024,   # 512
-  Nginx::Switch $ssl_prefer_server_ciphers                   = true,
+  Optional[Integer] $worker_connections                      = undef,  # 512
+  Nginx::Switch $ssl_prefer_server_ciphers                   = false,
   Variant[Enum['auto'], Integer] $worker_processes           = 'auto', # 1
   Optional[Integer] $worker_rlimit_nofile                    = undef,  # undef
   Optional[Nginx::Switch] $pcre_jit                          = undef,
-  # keep TLSv1.1 for legacy compatibility
-  String $ssl_protocols                                      = 'TLSv1.1 TLSv1.2 TLSv1.3',
-  String $ssl_ciphers                                        = 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA256:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256', # lint:ignore:140chars
+  # Mozilla SSL Configuration Generator - intermediate configuration
+  String $ssl_protocols                                      = 'TLSv1.2 TLSv1.3',
+  String $ssl_ciphers                                        = 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305', # lint:ignore:140chars
   Optional[Stdlib::Unixpath] $ssl_dhparam                    = undef,
   Optional[Nginx::FileCache] $open_file_cache                = undef,  # 'off'
   Nginx::Time $open_file_cache_valid                         = 60,
@@ -563,7 +594,7 @@ class nginx (
   Optional[Nginx::Switch] $ignore_invalid_headers            = undef, # 'on'
   Optional[Nginx::Buffers] $fastcgi_buffers                  = undef, # '8 4k|8 8k'
   Optional[Nginx::Size] $fastcgi_buffer_size                 = undef, # '4k|8k'
-  Optional[String] $ssl_ecdh_curve                           = undef, # 'auto'
+  Optional[String] $ssl_ecdh_curve                           = 'X25519:prime256v1:secp384r1',
   Optional[String] $ssl_session_cache                        = undef, # 'none'
   Optional[Nginx::Time] $ssl_session_timeout                 = undef, # 5m
   Optional[Nginx::Switch] $ssl_session_tickets               = undef, # 'on'
@@ -575,7 +606,11 @@ class nginx (
   Optional[Stdlib::Absolutepath] $ssl_trusted_certificate    = undef,
   Optional[Integer] $ssl_verify_depth                        = undef, # 1
   Optional[Stdlib::Absolutepath] $ssl_password_file          = undef,
+  Optional[Nginx::Switch] $ssl_reject_handshake              = undef,  # 'off'
+  Optional[Nginx::Switch] $ssl_early_data                    = undef,  # 'off'
   Optional[Nginx::Switch] $reset_timedout_connection         = undef,
+  Optional[Integer] $variables_hash_bucket_size              = undef,  # 64
+  Optional[Integer] $variables_hash_max_size                 = undef,  # 1024
 
   ### START Package Configuration ###
   String $package_ensure                                     = installed,

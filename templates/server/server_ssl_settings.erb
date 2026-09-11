@@ -14,7 +14,9 @@ end
   ssl on;
 <% end -%>
 <% if scope.call_function('versioncmp', [scope['nginx::nginx_version'], '1.25.1']) >= 0 -%>
+<%- unless @http2.nil? -%>
   http2 <%= bool2config(@http2) %>;
+<%- end -%>
 <% end -%>
 <% if @ssl_cert_real -%>
 <% @ssl_cert_real.each do | cert | -%>
@@ -95,5 +97,11 @@ end
   <%- end -%>
   <%- if @ssl_password_file -%>
   ssl_password_file         <%= @ssl_password_file %>;
+  <%- end -%>
+  <%- if @ssl_reject_handshake -%>
+  ssl_reject_handshake      <%= bool2config(@ssl_reject_handshake) %>;
+  <%- end -%>
+  <%- if @ssl_early_data -%>
+  ssl_early_data            <%= bool2config(@ssl_early_data) %>;
   <%- end -%>
 <% end -%>

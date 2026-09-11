@@ -88,7 +88,7 @@ class nginx::package::redhat (
           gpgcheck        => '0',
           repo_gpgcheck   => '1',
           priority        => '1',
-          gpgkey          => 'https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key.txt',
+          gpgkey          => 'https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key-2025.txt',
           before          => Package['nginx'],
           notify          => Exec['yum-clean-b114182'],
           module_hotfixes => '1',

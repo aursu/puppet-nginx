@@ -93,6 +93,7 @@ class nginx::config {
   $proxy_cache_path               = $nginx::proxy_cache_path
   $proxy_connect_timeout          = $nginx::proxy_connect_timeout
   $proxy_headers_hash_bucket_size = $nginx::proxy_headers_hash_bucket_size
+  $proxy_headers_hash_max_size    = $nginx::proxy_headers_hash_max_size
   $proxy_http_version             = $nginx::proxy_http_version
   $proxy_max_temp_file_size       = $nginx::proxy_max_temp_file_size
   $proxy_read_timeout             = $nginx::proxy_read_timeout
@@ -102,6 +103,9 @@ class nginx::config {
   $proxy_hide_header              = $nginx::proxy_hide_header
   $proxy_pass_header              = $nginx::proxy_pass_header
   $proxy_ignore_header            = $nginx::proxy_ignore_header
+  $real_ip_header                 = $nginx::real_ip_header
+  $real_ip_recursive              = $nginx::real_ip_recursive
+  $set_real_ip_from               = $nginx::set_real_ip_from
   $sendfile                       = $nginx::sendfile
   $server_tokens                  = $nginx::server_tokens
   $spdy                           = $nginx::spdy
@@ -124,6 +128,8 @@ class nginx::config {
   $ssl_prefer_server_ciphers      = $nginx::ssl_prefer_server_ciphers
   $ssl_protocols                  = $nginx::ssl_protocols
   $ssl_verify_depth               = $nginx::ssl_verify_depth
+  $ssl_reject_handshake           = $nginx::ssl_reject_handshake
+  $ssl_early_data                 = $nginx::ssl_early_data
   $types_hash_bucket_size         = $nginx::types_hash_bucket_size
   $types_hash_max_size            = $nginx::types_hash_max_size
   $worker_connections             = $nginx::worker_connections
@@ -148,6 +154,8 @@ class nginx::config {
   $fastcgi_buffers                = $nginx::fastcgi_buffers
   $fastcgi_buffer_size            = $nginx::fastcgi_buffer_size
   $include_modules_enabled        = $nginx::include_modules_enabled
+  $variables_hash_bucket_size     = $nginx::variables_hash_bucket_size
+  $variables_hash_max_size        = $nginx::variables_hash_max_size
 
   # Non-configurable settings
   $conf_template                  = 'nginx/conf.d/nginx.conf.erb'

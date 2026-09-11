@@ -55,26 +55,26 @@
 #   }
 #
 define nginx::resource::upstream::member (
-  String[1]                               $upstream,
-  Enum['present', 'absent']               $ensure           = 'present',
-  Enum['http', 'stream']                  $context          = 'http',
-  Optional[Nginx::UpstreamMemberServer]   $server           = $name,
-  Stdlib::Port                            $port             = 80,
-  Optional[Integer[1]]                    $weight           = undef,
-  Optional[Integer[1]]                    $max_conns        = undef,
-  Optional[Integer[0]]                    $max_fails        = undef,
-  Optional[Nginx::Time]                   $fail_timeout     = undef,
-  Boolean                                 $backup           = false,
-  Boolean                                 $resolve          = false,
-  Optional[String[1]]                     $route            = undef,
-  Optional[String[1]]                     $service          = undef,
-  Optional[Nginx::Time]                   $slow_start       = undef,
-  Optional[Enum['drain','down']]          $state            = undef,
-  Optional[String[1]]                     $params_prepend   = undef,
-  Optional[String[1]]                     $params_append    = undef,
-  Optional[String[1]]                     $comment          = undef,
+  String[1] $upstream,
+  Enum['present', 'absent'] $ensure = 'present',
+  Enum['http', 'stream'] $context = 'http',
+  Nginx::UpstreamMemberServer $server = $name,
+  Stdlib::Port $port = 80,
+  Optional[Integer[1]] $weight = undef,
+  Optional[Integer[1]] $max_conns = undef,
+  Optional[Integer[0]] $max_fails = undef,
+  Optional[Nginx::Time] $fail_timeout = undef,
+  Boolean $backup = false,
+  Boolean $resolve = false,
+  Optional[String[1]] $route = undef,
+  Optional[String[1]] $service = undef,
+  Optional[Nginx::Time] $slow_start = undef,
+  Optional[Enum['drain', 'down']] $state = undef,
+  Optional[String[1]] $params_prepend = undef,
+  Optional[String[1]] $params_append = undef,
+  Optional[String[1]] $comment = undef,
 ) {
-  if ! defined(Class['nginx']) {
+  if !defined(Class['nginx']) {
     fail('You must include the nginx base class before using any defined resources')
   }
 
@@ -92,7 +92,8 @@ define nginx::resource::upstream::member (
   concat::fragment { "${upstream}_upstream_member_${name}":
     target  => "${conf_dir}/${upstream}-upstream.conf",
     order   => 40,
-    content => epp('nginx/upstream/upstream_member.epp', {
+    content => epp('nginx/upstream/upstream_member.epp',
+      {
         server         => $_server,
         backup         => $backup,
         comment        => $comment,
@@ -107,6 +108,7 @@ define nginx::resource::upstream::member (
         slow_start     => $slow_start,
         state          => $state,
         weight         => $weight,
-    }),
+      },
+    ),
   }
 }

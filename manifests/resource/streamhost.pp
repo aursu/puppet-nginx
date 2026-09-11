@@ -18,8 +18,7 @@
 # @param ipv6_listen_port
 #   Default IPv6 Port for NGINX to listen with this streamhost on.
 # @param ipv6_listen_options
-#   Extra options for listen directive like 'default' to
-#   catchall.
+#   Extra options for listen directive like 'default' to catchall.
 # @param proxy
 #   Proxy server(s) for the root location to connect to. Accepts a single
 #   value, can be used in conjunction with nginx::resource::upstream
@@ -56,12 +55,10 @@ define nginx::resource::streamhost (
   Boolean $ipv6_enable                         = false,
   Variant[Array, String] $ipv6_listen_ip       = '::',
   Integer $ipv6_listen_port                    = $listen_port,
-  String $ipv6_listen_options                  = 'default ipv6only=on',
+  Optional[String[0]] $ipv6_listen_options = $listen_options,
   $proxy                                       = undef,
-  Optional[Nginx::Time]
-  $proxy_read_timeout                          = $nginx::proxy_read_timeout,
-  Optional[Nginx::Time]
-  $proxy_connect_timeout                       = $nginx::proxy_connect_timeout,
+  Optional[Nginx::Time] $proxy_read_timeout    = $nginx::proxy_read_timeout,
+  Optional[Nginx::Time] $proxy_connect_timeout = $nginx::proxy_connect_timeout,
   Array $resolver                              = [],
   Variant[Array[String], String] $raw_prepend  = [],
   Variant[Array[String], String] $raw_append   = [],

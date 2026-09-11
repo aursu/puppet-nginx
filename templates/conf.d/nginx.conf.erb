@@ -24,7 +24,9 @@ daemon <%= bool2config(@daemon) %>;
 <% if @super_user -%>
 user <%= @daemon_user %><% if @daemon_group -%> <%= @daemon_group %><% end -%>;
 <% end -%>
+<% if @worker_processes -%>
 worker_processes <%= @worker_processes %>;
+<% end -%>
 <% if @worker_rlimit_nofile -%>
 worker_rlimit_nofile <%= @worker_rlimit_nofile %>;
 <% end -%>
@@ -50,11 +52,13 @@ include /etc/nginx/modules-enabled/*.conf;
 events {
 <% unless @accept_mutex.nil? -%>
   accept_mutex <%= bool2config(@accept_mutex) %>;
-  <%- if @accept_mutex_delay -%>
-  accept_mutex_delay <%= @accept_mutex_delay %>;
-  <%- end -%>
 <% end -%>
+<%- if @accept_mutex_delay -%>
+  accept_mutex_delay <%= @accept_mutex_delay %>;
+<%- end -%>
+<%- if @worker_connections -%>
   worker_connections <%= @worker_connections -%>;
+<%- end -%>
 <% unless @multi_accept.nil? -%>
   multi_accept <%= bool2config(@multi_accept) %>;
 <% end -%>
@@ -134,9 +138,9 @@ http {
 <% end -%>
 <% unless @sendfile.nil? -%>
   sendfile <%= bool2config(@sendfile) %>;
-<%- unless @http_tcp_nopush.nil? -%>
+<% end -%>
+<% unless @http_tcp_nopush.nil? -%>
   tcp_nopush <%= bool2config(@http_tcp_nopush) %>;
-<%- end -%>
 <% end -%>
 <% unless @server_tokens.nil? -%>
   server_tokens <%= bool2config(@server_tokens) %>;
@@ -157,6 +161,18 @@ http {
 <% end -%>
 <% if @map_hash_max_size -%>
   map_hash_max_size <%= @map_hash_max_size %>;
+<% end -%>
+
+<% if @set_real_ip_from -%>
+  <%- Array(@set_real_ip_from).each do |addr| -%>
+  set_real_ip_from <%= addr %>;
+  <%- end -%>
+<% end -%>
+<% if @real_ip_header -%>
+  real_ip_header <%= @real_ip_header %>;
+<% end -%>
+<% unless @real_ip_recursive.nil? -%>
+  real_ip_recursive <%= bool2config(@real_ip_recursive) %>;
 <% end -%>
 <% if @ssl_dhparam -%>
   ssl_dhparam               <%= @ssl_dhparam %>;
@@ -211,6 +227,12 @@ ssl_prefer_server_ciphers <%= bool2config(@ssl_prefer_server_ciphers) %>;
 <% end -%>
 <% if @ssl_password_file -%>
   ssl_password_file         <%= @ssl_password_file %>;
+<% end -%>
+<% if @ssl_reject_handshake -%>
+  ssl_reject_handshake      <%= bool2config(@ssl_reject_handshake) %>;
+<% end -%>
+<% if @ssl_early_data -%>
+  ssl_early_data            <%= bool2config(@ssl_early_data) %>;
 <% end -%>
 <% if @http_cfg_append -%>
 <%- field_width = @http_cfg_append.inject(0) { |l,(k,v)| k.size > l ? k.size : l } -%>

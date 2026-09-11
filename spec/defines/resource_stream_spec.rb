@@ -14,7 +14,7 @@ describe 'nginx::resource::streamhost' do
 
       let :default_params do
         {
-          ipv6_enable: true
+          ipv6_enable: true,
         }
       end
 
@@ -58,55 +58,55 @@ describe 'nginx::resource::streamhost' do
               title: 'should set the IPv4 listen IP',
               attr: 'listen_ip',
               value: '127.0.0.1',
-              match: %r{\s+listen\s+127.0.0.1:80;}
+              match: %r{\s+listen\s+127.0.0.1:80;},
             },
             {
               title: 'should set the IPv4 listen port',
               attr: 'listen_port',
               value: 45,
-              match: %r{\s+listen\s+\*:45;}
+              match: %r{\s+listen\s+\*:45;},
             },
             {
               title: 'should set the IPv4 listen options',
               attr: 'listen_options',
               value: 'spdy default',
-              match: %r{\s+listen\s+\*:80 spdy default;}
+              match: %r{\s+listen\s+\*:80 spdy default;},
             },
             {
               title: 'should enable IPv6',
               attr: 'ipv6_enable',
               value: true,
-              match: %r{\s+listen\s+\[::\]:80 default ipv6only=on;}
+              match: %r{\s+listen\s+\[::\]:80;},
             },
             {
               title: 'should not enable IPv6',
               attr: 'ipv6_enable',
               value: false,
-              notmatch: %r{\slisten \[::\]:80 default ipv6only=on;}
+              notmatch: %r{\slisten \[::\]:80;},
             },
             {
               title: 'should set the IPv6 listen IP',
               attr: 'ipv6_listen_ip',
               value: '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
-              match: %r{\s+listen\s+\[2001:0db8:85a3:0000:0000:8a2e:0370:7334\]:80 default ipv6only=on;}
+              match: %r{\s+listen\s+\[2001:0db8:85a3:0000:0000:8a2e:0370:7334\]:80;},
             },
             {
               title: 'should set the IPv6 listen port',
               attr: 'ipv6_listen_port',
               value: 45,
-              match: %r{\s+listen\s+\[::\]:45 default ipv6only=on;}
+              match: %r{\s+listen\s+\[::\]:45;},
             },
             {
               title: 'should set the IPv6 listen options',
               attr: 'ipv6_listen_options',
               value: 'spdy',
-              match: %r{\s+listen\s+\[::\]:80 spdy;}
+              match: %r{\s+listen\s+\[::\]:80 spdy;},
             },
             {
               title: 'should set resolver(s)',
               attr: 'resolver',
               value: ['203.0.113.1', '203.0.113.2'],
-              match: %r{\s+resolver\s+203.0.113.1 203.0.113.2;}
+              match: %r{\s+resolver\s+203.0.113.1 203.0.113.2;},
             },
             {
               title: 'should contain raw_prepend directives',
@@ -116,7 +116,7 @@ describe 'nginx::resource::streamhost' do
                 '  b;',
                 '}',
               ],
-              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
+              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}},
             },
             {
               title: 'should contain raw_append directives',
@@ -126,7 +126,7 @@ describe 'nginx::resource::streamhost' do
                 '  b;',
                 '}',
               ],
-              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
+              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}},
             },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
@@ -146,6 +146,32 @@ describe 'nginx::resource::streamhost' do
                 Array(param[:notmatch]).each do |item|
                   is_expected.to contain_concat__fragment("#{title}-header").without_content(item)
                 end
+              end
+            end
+          end
+
+          describe 'ipv6_listen_options inheritance from listen_options' do
+            context 'when listen_options is set but ipv6_listen_options is not' do
+              let(:params) { default_params.merge(listen_options: 'reuseport') }
+
+              it 'inherits listen_options' do
+                is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{\s+listen\s+\[::\]:80 reuseport;})
+              end
+            end
+
+            context 'when both listen_options and ipv6_listen_options are set' do
+              let(:params) { default_params.merge(listen_options: 'reuseport', ipv6_listen_options: 'default') }
+
+              it 'uses explicit ipv6_listen_options' do
+                is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{\s+listen\s+\[::\]:80 default;})
+              end
+            end
+
+            context 'when neither listen_options nor ipv6_listen_options is set' do
+              let(:params) { default_params }
+
+              it 'adds nothing' do
+                is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{\s+listen\s+\[::\]:80;})
               end
             end
           end

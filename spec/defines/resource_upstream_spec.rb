@@ -16,19 +16,19 @@ describe 'nginx::resource::upstream' do
         {
           http: {
             context: 'http',
-            members: { 'member-http' => {} }
+            members: { 'member-http' => {} },
           },
           stream: {
             context: 'stream',
-            members: { 'member-stream' => {} }
-          }
+            members: { 'member-stream' => {} },
+          },
         }
       end
 
       let :conf_d_pathes do
         {
           http: '/etc/nginx/conf.d',
-          stream: '/etc/nginx/conf.stream.d'
+          stream: '/etc/nginx/conf.stream.d',
         }
       end
 
@@ -163,85 +163,85 @@ describe 'nginx::resource::upstream' do
             [
               {
                 value: { hash: '$remote_addr consistent' },
-                match: 'hash $remote_addr consistent'
+                match: 'hash $remote_addr consistent',
               },
               {
                 value: { keepalive: 20 },
-                match: 'keepalive 20'
+                match: 'keepalive 20',
               },
               {
                 value: { keepalive_requests: 20 },
-                match: 'keepalive_requests 20'
+                match: 'keepalive_requests 20',
               },
               {
                 value: { keepalive_timeout: '20s' },
-                match: 'keepalive_timeout 20s'
+                match: 'keepalive_timeout 20s',
               },
               {
                 value: { least_conn: true },
-                match: 'least_conn'
+                match: 'least_conn',
               },
               {
                 value: { least_conn: false },
-                match: false
+                match: false,
               },
               {
                 value: { least_time: 'last_byte inflight' },
-                match: 'least_time last_byte inflight'
+                match: 'least_time last_byte inflight',
               },
               {
                 value: { least_time: 'header inflight' },
                 match: 'least_time header inflight',
-                fails: { stream: 'The parameter "least_time" does not match the datatype "Nginx::UpstreamLeastTimeStream"' }
+                fails: { stream: 'The parameter "least_time" does not match the datatype "Nginx::UpstreamLeastTimeStream"' },
               },
               {
                 value: { least_time: 'first_byte inflight' },
                 match: 'least_time first_byte inflight',
-                fails: { http: 'The parameter "least_time" does not match the datatype "Nginx::UpstreamLeastTimeHttp"' }
+                fails: { http: 'The parameter "least_time" does not match the datatype "Nginx::UpstreamLeastTimeHttp"' },
               },
               {
                 value: { ntlm: true },
-                match: 'ntlm'
+                match: 'ntlm',
               },
               {
                 value: { ntlm: false },
-                match: false
+                match: false,
               },
               {
                 value: { queue_max: 20 },
-                match: 'queue 20'
+                match: 'queue 20',
               },
               {
                 value: { queue_max: 20, queue_timeout: '20s' },
-                match: 'queue 20 timeout=20s'
+                match: 'queue 20 timeout=20s',
               },
               {
                 value: { random: 'two least_conn' },
-                match: 'random two least_conn'
+                match: 'random two least_conn',
               },
               {
                 value: { statefile: '/var/lib/nginx/state/servers.conf' },
-                match: 'state /var/lib/nginx/state/servers.conf'
+                match: 'state /var/lib/nginx/state/servers.conf',
               },
               {
                 value: { sticky: { cookie: { name: 'srv_id', expires: '1h', domain: '.example.com', httponly: true, secure: true, path: '/' } } },
-                match: 'sticky cookie name=srv_id expires=1h domain=.example.com httponly secure path=/'
+                match: 'sticky cookie name=srv_id expires=1h domain=.example.com httponly secure path=/',
               },
               {
                 value: { sticky: { route: '$route_cookie $route_uri' } },
-                match: 'sticky route $route_cookie $route_uri'
+                match: 'sticky route $route_cookie $route_uri',
               },
               {
                 value: { sticky: { learn: { create: '$upstream_cookie_examplecookie', lookup: '$cookie_examplecookie', zone: 'client_sessions:1m' } } },
-                match: 'sticky learn create=$upstream_cookie_examplecookie lookup=$cookie_examplecookie zone=client_sessions:1m'
+                match: 'sticky learn create=$upstream_cookie_examplecookie lookup=$cookie_examplecookie zone=client_sessions:1m',
               },
               {
                 value: { zone: 'frontend 1M' },
-                match: 'zone frontend 1M'
+                match: 'zone frontend 1M',
               },
               {
                 value: { zone: 'backend 64k' },
-                match: 'zone backend 64k'
+                match: 'zone backend 64k',
               },
             ].each do |upstream_parameter|
               context "when #{upstream_parameter[:value].keys[0]} is set to #{upstream_parameter[:value]} in #{upstreamcontext} upstream" do
@@ -295,93 +295,93 @@ describe 'nginx::resource::upstream' do
             [
               {
                 value: { unix: { server: 'unix:/tmp/backend3' } },
-                match: 'unix:/tmp/backend3;'
+                match: 'unix:/tmp/backend3;',
               },
               {
                 value: { member1: {} },
-                match: 'member1:80;'
+                match: 'member1:80;',
               },
               {
                 value: { member1: { server: '127.0.0.1' } },
-                match: '127.0.0.1:80;'
+                match: '127.0.0.1:80;',
               },
               {
                 value: { member1: { server: '127.0.0.1', port: 8080 } },
-                match: '127.0.0.1:8080;'
+                match: '127.0.0.1:8080;',
               },
               {
                 value: { member1: { server: '2001:db8::1' } },
-                match: '[2001:db8::1]:80;'
+                match: '[2001:db8::1]:80;',
               },
               {
                 value: { member1: { server: '2001:db8::1', port: 8080 } },
-                match: '[2001:db8::1]:8080;'
+                match: '[2001:db8::1]:8080;',
               },
               {
                 value: { member1: { weight: 20 } },
-                match: 'member1:80 weight=20;'
+                match: 'member1:80 weight=20;',
               },
               {
                 value: { member1: { max_conns: 20 } },
-                match: 'member1:80 max_conns=20;'
+                match: 'member1:80 max_conns=20;',
               },
               {
                 value: { member1: { max_fails: 20 } },
-                match: 'member1:80 max_fails=20;'
+                match: 'member1:80 max_fails=20;',
               },
               {
                 value: { member1: { fail_timeout: '20s' } },
-                match: 'member1:80 fail_timeout=20s;'
+                match: 'member1:80 fail_timeout=20s;',
               },
               {
                 value: { member1: { backup: true } },
-                match: 'member1:80 backup;'
+                match: 'member1:80 backup;',
               },
               {
                 value: { member1: { backup: false } },
-                match: 'member1:80;'
+                match: 'member1:80;',
               },
               {
                 value: { member1: { resolve: true } },
-                match: 'member1:80 resolve;'
+                match: 'member1:80 resolve;',
               },
               {
                 value: { member1: { resolve: false } },
-                match: 'member1:80;'
+                match: 'member1:80;',
               },
               {
                 value: { member1: { route: 'a' } },
                 match: 'member1:80 route=a;',
-                fails: { stream: 'The parameter "route" is not available for upstreams with context "stream"' }
+                fails: { stream: 'The parameter "route" is not available for upstreams with context "stream"' },
               },
               {
                 value: { member1: { service: 'member1.backend' } },
-                match: 'member1:80 service=member1.backend;'
+                match: 'member1:80 service=member1.backend;',
               },
               {
                 value: { member1: { slow_start: '20s' } },
-                match: 'member1:80 slow_start=20s;'
+                match: 'member1:80 slow_start=20s;',
               },
               {
                 value: { member1: { state: 'drain' } },
                 match: 'member1:80 drain;',
-                fails: { stream: 'The state "drain" is not available for upstreams with context "stream"' }
+                fails: { stream: 'The state "drain" is not available for upstreams with context "stream"' },
               },
               {
                 value: { member1: { state: 'down' } },
-                match: 'member1:80 down;'
+                match: 'member1:80 down;',
               },
               {
                 value: { member1: { params_prepend: 'member=1', weight: 20 } },
-                match: 'member1:80 member=1 weight=20;'
+                match: 'member1:80 member=1 weight=20;',
               },
               {
                 value: { member1: { params_append: 'member=1', weight: 20 } },
-                match: 'member1:80 weight=20 member=1;'
+                match: 'member1:80 weight=20 member=1;',
               },
               {
                 value: { member1: { comment: 'member1' } },
-                match: 'member1:80; # member1'
+                match: 'member1:80; # member1',
               },
             ].each do |upstream_member_parameter|
               context "when members is set to #{upstream_member_parameter[:value]}" do
@@ -433,10 +433,10 @@ describe 'nginx::resource::upstream' do
                   'k5' => { 'k51' => %w[v51 v52] },
                   'k1' => 'v2',
                   'k4' => { 'k41' => 'v41' },
-                  'k3' => %w[v31 v32]
+                  'k3' => %w[v31 v32],
                 },
                 match: "  k2 v2;\n  k5 k51 v51;\n  k5 k51 v52;\n  k1 v2;\n  k4 k41 v41;\n  k3 v31;\n  k3 v32;\n",
-                fragment: 'header'
+                fragment: 'header',
               },
               {
                 parameter: 'cfg_append',
@@ -445,10 +445,10 @@ describe 'nginx::resource::upstream' do
                   'k5' => { 'k51' => %w[v51 v52] },
                   'k1' => 'v2',
                   'k4' => { 'k41' => 'v41' },
-                  'k3' => %w[v31 v32]
+                  'k3' => %w[v31 v32],
                 },
                 match: "  k2 v2;\n  k5 k51 v51;\n  k5 k51 v52;\n  k1 v2;\n  k4 k41 v41;\n  k3 v31;\n  k3 v32;\n",
-                fragment: 'footer'
+                fragment: 'footer',
               },
             ].each do |upstream_cfg_extension|
               context "when #{upstream_cfg_extension[:parameter]} is set to #{upstream_cfg_extension[:values]} in #{upstreamcontext} upstream" do

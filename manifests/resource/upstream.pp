@@ -161,10 +161,12 @@ define nginx::resource::upstream (
   concat::fragment { "${name}_upstream_header":
     target  => "${conf_dir}/${name}-upstream.conf",
     order   => '10',
-    content => epp('nginx/upstream/upstream_header.epp', {
+    content => epp('nginx/upstream/upstream_header.epp',
+      {
         cfg_prepend => $cfg_prepend,
         name        => $name,
-    }),
+      },
+    ),
   }
 
   if ! empty($members) {
@@ -194,7 +196,8 @@ define nginx::resource::upstream (
   concat::fragment { "${name}_upstream_footer":
     target  => "${conf_dir}/${name}-upstream.conf",
     order   => '90',
-    content => epp('nginx/upstream/upstream_footer.epp', {
+    content => epp('nginx/upstream/upstream_footer.epp',
+      {
         cfg_append         => $cfg_append,
         hash               => $hash,
         ip_hash            => $ip_hash,
@@ -210,6 +213,7 @@ define nginx::resource::upstream (
         statefile          => $statefile,
         sticky             => $sticky,
         zone               => $zone,
-    }),
+      },
+    ),
   }
 }

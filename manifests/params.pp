@@ -199,23 +199,23 @@ class nginx::params {
   ### END Operating System Configuration
 
   ### Referenced Variables
-  $conf_dir                = $_module_parameters['conf_dir']
-  $snippets_dir            = "${conf_dir}/snippets"
-  $log_dir                 = $_module_parameters['log_dir']
-  $log_user                = $_module_parameters['log_user']
-  $log_group               = $_module_parameters['log_group']
-  $log_mode                = $_module_parameters['log_mode']
-  $pid                     = $_module_parameters['pid']
+  $conf_dir = $_module_parameters['conf_dir']
+  $snippets_dir = "${conf_dir}/snippets"
+  $log_dir = $_module_parameters['log_dir']
+  $log_user = $_module_parameters['log_user']
+  $log_group = $_module_parameters['log_group']
+  $log_mode = $_module_parameters['log_mode']
+  $pid = $_module_parameters['pid']
   $include_modules_enabled = $_module_parameters['include_modules_enabled']
 
-  $daemon_user             = $_module_parameters['daemon_user']
-  $global_group            = $_module_parameters['root_group']
-  $manage_repo             = $_module_parameters['manage_repo']
-  $mime_types              = $_module_parameters['mime_types']
-  $root_group              = $_module_parameters['root_group']
-  $package_name            = $_module_parameters['package_name']
-  $passenger_package_name  = $_module_parameters['passenger_package_name']
-  $mail_package_name       = $_module_parameters['mail_package_name']
-  $sites_available_group   = $_module_parameters['root_group']
+  $daemon_user = $_module_parameters['daemon_user']
+  $global_group = $_module_parameters['root_group']
+  $manage_repo = $_module_parameters['manage_repo']
+  $mime_types = $_module_parameters['mime_types']
+  $root_group = $_module_parameters['root_group']
+  $package_name = $_module_parameters['package_name']
+  $passenger_package_name = $_module_parameters['passenger_package_name']
+  $mail_package_name = $_module_parameters['mail_package_name']
+  $sites_available_group = $_module_parameters['root_group']
   ### END Referenced Variables
 }

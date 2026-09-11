@@ -1,6 +1,6 @@
 <%- |
   Array[String]             $ipv6_listen_ip,
-  String                    $ipv6_listen_options,
+  Optional[String[1]] $ipv6_listen_options,
   Stdlib::Port              $ipv6_listen_port,
   Array[String]             $listen_ip,
   Optional[String]          $listen_options,
@@ -19,7 +19,7 @@ server {
   listen                <%= $ip %>:<%= $listen_port %><% if $listen_options { %> <%= $listen_options %><% } %>;
 <%- } -%>
 <%- $ipv6_listen_ip.each |$ipv6| { -%>
-  listen                [<%= $ipv6 %>]:<%= $ipv6_listen_port %> <% if $ipv6_listen_options { %><%= $ipv6_listen_options %><% } %>;
+  listen                [<%= $ipv6 %>]:<%= $ipv6_listen_port %><% if $ipv6_listen_options { %> <%= $ipv6_listen_options %><% } %>;
 <%- } -%>
 <%= $mailhost_common -%>
 

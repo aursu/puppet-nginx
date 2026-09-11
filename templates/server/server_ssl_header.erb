@@ -29,7 +29,7 @@ server {
   return       301 https://<%= s.gsub(/^www\./, '') %>$request_uri;
 <%- elsif @rewrite_non_www_to_www %>
   server_name  <%= s.gsub(/^www\./, '') %>;
-  return       301 https://www.<%= s %>$request_uri;
+  return       301 https://www.<%= s.gsub(/^www\./, '') %>$request_uri;
 <%- end -%>
 <% if @access_log.is_a?(Array) -%>
   <%- @access_log.each do |log_item| -%>
@@ -82,7 +82,7 @@ server {
 <%-   if @rewrite_www_to_non_www -%>
   server_name  <%= @server_name.join("  ").gsub(/(^| )(www\.)?(?=[a-z0-9])/, '') %>;
 <%-   elsif @rewrite_non_www_to_www -%>
-  server_name  <%= @server_name.join("  ").gsub(/(^| )(?=[a-z0-9])/, 'www.') %>;
+  server_name  <%= @server_name.join("  ").gsub(/(^| )(?!www\.)(?=[a-z0-9])/, 'www.') %>;
 <%-   else %>
   server_name  <%= @server_name.join(" ") %>;
 <%-   end -%>
@@ -142,6 +142,17 @@ server {
 <% end -%>
 <% if defined? @autoindex_localtime -%>
   autoindex_localtime <%= @autoindex_localtime %>;
+<% end -%>
+<% if @set_real_ip_from -%>
+  <%- Array(@set_real_ip_from).each do |addr| -%>
+  set_real_ip_from      <%= addr %>;
+  <%- end -%>
+<% end -%>
+<% if @real_ip_header -%>
+  real_ip_header        <%= @real_ip_header %>;
+<% end -%>
+<% if @real_ip_recursive -%>
+  real_ip_recursive     <%= bool2config(@real_ip_recursive) %>;
 <% end -%>
 <% if @absolute_redirect -%>
   absolute_redirect <%= @absolute_redirect %>;

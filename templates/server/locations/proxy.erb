@@ -10,6 +10,9 @@ def bool2config(b)
     end
 end
 -%>
+<% if @proxy -%>
+    proxy_pass            <%= @proxy %>;
+<% end -%>
 <% if @proxy_read_timeout -%>
     proxy_read_timeout <%= @proxy_read_timeout %>;
 <% end -%>
@@ -80,9 +83,15 @@ end
     proxy_cache <%= @proxy_cache %>;
 <% end -%>
 <% if @proxy_cache_valid -%>
+<% if @proxy_cache_valid.is_a?(Hash) -%>
+    <%- @proxy_cache_valid.sort_by { |k, _v| k }.each do |key, value| -%>
+    proxy_cache_valid     <%= key %> <%= value %>;
+    <%- end -%>
+<% else -%>
     <%- Array(@proxy_cache_valid).each do |line| -%>
     proxy_cache_valid <%= line %>;
     <%- end -%>
+<% end -%>
 <% end -%>
 <% if @proxy_cache_use_stale -%>
     proxy_cache_use_stale <%= @proxy_cache_use_stale %>;
@@ -132,4 +141,10 @@ end
 <% end -%>
 <% if @proxy_ssl_trusted_certificate -%>
     proxy_ssl_trusted_certificate <%= @proxy_ssl_trusted_certificate %>;
+<% if @proxy_next_upstream_tries -%>
+    proxy_next_upstream_tries      <%= @proxy_next_upstream_tries %>;
+<% end -%>
+<% if @proxy_next_upstream_timeout -%>
+    proxy_next_upstream_timeout      <%= @proxy_next_upstream_timeout %>;
+<% end -%>
 <% end -%>

@@ -72,19 +72,19 @@ describe 'nginx::resource::map' do
               title: 'should set hostnames',
               attr: 'hostnames',
               value: true,
-              match: '  hostnames;'
+              match: '  hostnames;',
             },
             {
               title: 'should not contain includes',
               attr: 'include_files',
               value: [],
-              notmatch: '  include ;'
+              notmatch: '  include ;',
             },
             {
               title: 'should contain includes',
               attr: 'include_files',
               value: ['/etc/includes/includes.map'],
-              match: '  include /etc/includes/includes.map;'
+              match: '  include /etc/includes/includes.map;',
             },
             {
               title: 'should contain multiple includes',
@@ -98,13 +98,13 @@ describe 'nginx::resource::map' do
                 '  include /etc/includes/A.map;',
                 '  include /etc/includes/B.map;',
                 '  include /etc/includes/C.map;',
-              ]
+              ],
             },
             {
               title: 'should set default',
               attr: 'default',
               value: 'pool_a',
-              match: ['  default pool_a;']
+              match: ['  default pool_a;'],
             },
             {
               title: 'should contain ordered mappings when supplied as a hash',
@@ -112,13 +112,13 @@ describe 'nginx::resource::map' do
               value: {
                 'foo' => 'pool_b',
                 'bar' => 'pool_c',
-                'baz' => 'pool_d'
+                'baz' => 'pool_d',
               },
               match: [
                 '  foo pool_b;',
                 '  bar pool_c;',
                 '  baz pool_d;',
-              ]
+              ],
             },
             {
               title: 'should contain mappings in input order when supplied as an array of hashes',
@@ -132,7 +132,7 @@ describe 'nginx::resource::map' do
                 '  foo pool_b;',
                 '  bar pool_c;',
                 '  baz pool_d;',
-              ]
+              ],
             },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do

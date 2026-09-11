@@ -84,6 +84,15 @@ describe 'nginx::resource::server' do
         describe 'server_header template content' do
           [
             {
+              title: 'should contain access and error logs directives inside the www rewrite',
+              attr: 'rewrite_www_to_non_www',
+              value: true,
+              match: %r{\s+return\s+301\s+http://rspec\.example\.com\$request_uri;\n
+              \s+access_log\s+/var/log/nginx/www.rspec.example.com.access.log;\n
+              \s+error_log\s+/var/log/nginx/www.rspec.example.com.error.log;\n}x,
+              extra: { access_log: true, error_log: true },
+            },
+            {
               title: 'should not contain www to non-www rewrite',
               attr: 'rewrite_www_to_non_www',
               value: false,
@@ -91,7 +100,7 @@ describe 'nginx::resource::server' do
               ^
               \s+server_name\s+www\.rspec\.example\.com;\n
               \s+return\s+301\s+http://rspec\.example\.com\$request_uri;
-              }x
+              }x,
             },
             {
               title: 'should contain www to non-www rewrite',
@@ -101,13 +110,13 @@ describe 'nginx::resource::server' do
               ^
               \s+server_name\s+www\.rspec\.example\.com;\n
               \s+return\s+301\s+http://rspec\.example\.com\$request_uri;
-              }x
+              }x,
             },
             {
               title: 'should set the IPv4 listen IP',
               attr: 'listen_ip',
               value: '127.0.0.1',
-              match: %r{\s+listen\s+127.0.0.1:80;}
+              match: %r{\s+listen\s+127.0.0.1:80;},
             },
             {
               title: 'should set the IPv4 listen IP to *',
@@ -131,61 +140,61 @@ describe 'nginx::resource::server' do
               title: 'should enable IPv6',
               attr: 'ipv6_enable',
               value: true,
-              match: %r{\s+listen\s+\[::\]:80;}
+              match: %r{\s+listen\s+\[::\]:80;},
             },
             {
               title: 'should not enable IPv6',
               attr: 'ipv6_enable',
               value: false,
-              notmatch: %r{\slisten \[::\]:80;}
+              notmatch: %r{\slisten \[::\]:80;},
             },
             {
               title: 'should set the IPv6 listen IP',
               attr: 'ipv6_listen_ip',
               value: '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
-              match: %r{\s+listen\s+\[2001:0db8:85a3:0000:0000:8a2e:0370:7334\]:80;}
+              match: %r{\s+listen\s+\[2001:0db8:85a3:0000:0000:8a2e:0370:7334\]:80;},
             },
             {
               title: 'should set the IPv6 listen port',
               attr: 'ipv6_listen_port',
               value: 45,
-              match: %r{\s+listen\s+\[::\]:45;}
+              match: %r{\s+listen\s+\[::\]:45;},
             },
             {
               title: 'should set the IPv6 listen options',
               attr: 'ipv6_listen_options',
               value: 'spdy',
-              match: %r{\s+listen\s+\[::\]:80 spdy;}
+              match: %r{\s+listen\s+\[::\]:80 spdy;},
             },
             {
               title: 'should enable listening on unix socket',
               attr: 'listen_unix_socket_enable',
               value: true,
-              match: %r{\s+listen\s+unix:/var/run/nginx\.sock;}
+              match: %r{\s+listen\s+unix:/var/run/nginx\.sock;},
             },
             {
               title: 'should not enable listening on unix socket',
               attr: 'listen_unix_socket_enable',
               value: false,
-              notmatch: %r{\s+listen\s+unix:/var/run/nginx\.sock;}
+              notmatch: %r{\s+listen\s+unix:/var/run/nginx\.sock;},
             },
             {
               title: 'should set the listen unix socket',
               attr: 'listen_unix_socket',
               value: '/var/run/puppet_nginx.sock',
-              match: %r{\s+listen\s+unix:/var/run/puppet_nginx\.sock;}
+              match: %r{\s+listen\s+unix:/var/run/puppet_nginx\.sock;},
             },
             {
               title: 'should set the listen unix socket options',
               attr: 'listen_unix_socket_options',
               value: 'spdy',
-              match: %r{\s+listen\s+unix:/var/run/nginx\.sock spdy;}
+              match: %r{\s+listen\s+unix:/var/run/nginx\.sock spdy;},
             },
             {
               title: 'should set servername(s)',
               attr: 'server_name',
               value: ['www.foo.com', 'foo.com'],
-              match: %r{\s+server_name\s+www.foo.com foo.com;}
+              match: %r{\s+server_name\s+www.foo.com foo.com;},
             },
             {
               title: 'should set server_name to value _',
@@ -209,43 +218,43 @@ describe 'nginx::resource::server' do
               title: 'should rewrite www servername to non-www',
               attr: 'rewrite_www_to_non_www',
               value: true,
-              match: %r{\s+server_name\s+rspec.example.com;}
+              match: %r{\s+server_name\s+rspec.example.com;},
             },
             {
               title: 'should not rewrite www servername to non-www',
               attr: 'rewrite_www_to_non_www',
               value: false,
-              match: %r{\s+server_name\s+www.rspec.example.com;}
+              match: %r{\s+server_name\s+www.rspec.example.com;},
             },
             {
               title: 'should not set absolute_redirect',
               attr: 'absolute_redirect',
               value: :undef,
-              notmatch: %r{absolute_redirect}
+              notmatch: %r{absolute_redirect},
             },
             {
               title: 'should set absolute_redirect off',
               attr: 'absolute_redirect',
               value: 'off',
-              match: '  absolute_redirect off;'
+              match: '  absolute_redirect off;',
             },
             {
               title: 'should set auth_basic',
               attr: 'auth_basic',
               value: 'value',
-              match: %r{\s+auth_basic\s+"value";}
+              match: %r{\s+auth_basic\s+"value";},
             },
             {
               title: 'should set auth_basic_user_file',
               attr: 'auth_basic_user_file',
               value: 'value',
-              match: %r{\s+auth_basic_user_file\s+value;}
+              match: %r{\s+auth_basic_user_file\s+value;},
             },
             {
               title: 'should set auth_request',
               attr: 'auth_request',
               value: 'value',
-              match: %r{\s+auth_request\s+value;}
+              match: %r{\s+auth_request\s+value;},
             },
             {
               title: 'should set the client_body_timeout',
@@ -263,19 +272,19 @@ describe 'nginx::resource::server' do
               title: 'should set the gzip_types',
               attr: 'gzip_types',
               value: 'value',
-              match: %r{^\s+gzip_types\s+value;}
+              match: %r{^\s+gzip_types\s+value;},
             },
             {
               title: 'should not set the gzip_static',
               attr: 'gzip_static',
               value: :undef,
-              notmatch: 'gzip_static'
+              notmatch: 'gzip_static',
             },
             {
               title: 'should set the gzip_static',
               attr: 'gzip_static',
               value: 'on',
-              match: %r{^\s+gzip_static\s+on;}
+              match: %r{^\s+gzip_static\s+on;},
             },
             {
               title: 'should contain raw_prepend directives',
@@ -285,7 +294,7 @@ describe 'nginx::resource::server' do
                 '  b;',
                 '}',
               ],
-              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
+              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}},
             },
             {
               title: 'should contain ordered prepended directives',
@@ -296,37 +305,37 @@ describe 'nginx::resource::server' do
                 '  test1 test value 1a;',
                 '  test1 test value 1b;',
                 '  test2 test value 2;',
-              ]
+              ],
             },
             {
               title: 'should set root',
               attr: 'use_default_location',
               value: false,
-              match: '  root /;'
+              match: '  root /;',
             },
             {
               title: 'should not set root',
               attr: 'use_default_location',
               value: true,
-              notmatch: %r{  root /;}
+              notmatch: %r{  root /;},
             },
             {
               title: 'should force https (SSL) redirect',
               attr: 'ssl_redirect',
               value: true,
-              match: %r{  return 301 https://\$host\$request_uri;}
+              match: %r{  return 301 https://\$host\$request_uri;},
             },
             {
               title: 'should not force https (SSL) redirect',
               attr: 'ssl_redirect',
               value: false,
-              notmatch: %r{\s*return\s+301}
+              notmatch: %r{\s*return\s+301},
             },
             {
               title: 'should set access_log',
               attr: 'access_log',
               value: '/path/to/access.log',
-              match: '  access_log            /path/to/access.log;'
+              match: '  access_log            /path/to/access.log;',
             },
             {
               title: 'should set access_log with format',
@@ -347,13 +356,13 @@ describe 'nginx::resource::server' do
               match: [
                 '  access_log            /path/to/log/1;',
                 '  access_log            syslog:server=localhost;',
-              ]
+              ],
             },
             {
               title: 'off should set access_log off',
               attr: 'access_log',
               value: 'off',
-              match: '  access_log            off;'
+              match: '  access_log            off;',
             },
             {
               title: 'false should set access_log off',
@@ -365,19 +374,26 @@ describe 'nginx::resource::server' do
               title: 'should set access_log to syslog',
               attr: 'access_log',
               value: 'syslog:server=localhost',
-              match: '  access_log            syslog:server=localhost;'
+              match: '  access_log            syslog:server=localhost;',
+            },
+            {
+              title: 'should set format_log custom_format',
+              attr: 'format_log',
+              value: 'custom',
+              match: '  access_log            /var/log/nginx/www.rspec.example.com.access.log custom;',
+              extra: { access_log: true, error_log: true },
             },
             {
               title: 'should not include access_log in server when set to absent',
               attr: 'access_log',
               value: 'absent',
-              notmatch: 'access_log'
+              notmatch: 'access_log',
             },
             {
               title: 'should set error_log',
               attr: 'error_log',
               value: '/path/to/error.log',
-              match: '  error_log             /path/to/error.log;'
+              match: '  error_log             /path/to/error.log;',
             },
             {
               title: 'should allow multiple error_log directives',
@@ -386,13 +402,27 @@ describe 'nginx::resource::server' do
               match: [
                 '  error_log             /path/to/error.log;',
                 '  error_log             syslog:server=localhost;',
-              ]
+              ],
+            },
+            {
+              title: 'should set error_log severity level',
+              attr: 'error_log_severity',
+              value: 'warn',
+              match: '  error_log             /var/log/nginx/www.rspec.example.com.error.log warn;',
+              extra: { access_log: true, error_log: true },
+            },
+            {
+              title: 'should not set error_log severity level',
+              attr: 'error_log_severity',
+              value: :undef,
+              match: '  error_log             /var/log/nginx/www.rspec.example.com.error.log;',
+              extra: { access_log: true, error_log: true },
             },
             {
               title: 'should not include error_log in server when set to absent',
               attr: 'error_log',
               value: 'absent',
-              notmatch: 'error_log'
+              notmatch: 'error_log',
             },
             {
               title: 'should not include error_log in server when set to false',
@@ -404,25 +434,25 @@ describe 'nginx::resource::server' do
               title: 'should set error_pages',
               attr: 'error_pages',
               value: { '503' => '/foo.html' },
-              match: '  error_page  503 /foo.html;'
+              match: '  error_page  503 /foo.html;',
             },
             {
               title: 'should set index_file(s)',
               attr: 'index_files',
               value: %w[name1 name2],
-              match: %r{\s*index\s+name1\s+name2;}
+              match: %r{\s*index\s+name1\s+name2;},
             },
             {
               title: 'should not set index_file(s)',
               attr: 'index_files',
               value: [],
-              notmatch: %r{\s+index\s+}
+              notmatch: %r{\s+index\s+},
             },
             {
               title: 'should set autoindex',
               attr: 'autoindex',
               value: 'on',
-              match: '  autoindex on;'
+              match: '  autoindex on;',
             },
             {
               title: 'should set charset',
@@ -508,83 +538,62 @@ describe 'nginx::resource::server' do
               title: 'should set autoindex_exact_size',
               attr: 'autoindex_exact_size',
               value: 'on',
-              match: '  autoindex_exact_size on;'
+              match: '  autoindex_exact_size on;',
             },
             {
               title: 'should set reset_timedout_connection',
               attr: 'reset_timedout_connection',
               value: 'on',
-              match: %r{^\s+reset_timedout_connection\s+on;}
+              match: %r{^\s+reset_timedout_connection\s+on;},
             },
             {
-              title: 'should set client_body_buffer_size',
-              attr: 'client_body_buffer_size',
-              value: '16k',
-              match: %r{^\s*client_body_buffer_size 16k;$}
+              title: 'should not set set_real_ip_from',
+              attr: 'set_real_ip_from',
+              value: :undef,
+              notmatch: %r{set_real_ip_from},
             },
             {
-              title: 'should set keepalive_timeout',
-              attr: 'keepalive_timeout',
-              value: '123',
-              match: %r{^\s*keepalive_timeout 123;$}
+              title: 'should set set_real_ip_from with single value',
+              attr: 'set_real_ip_from',
+              value: '192.168.1.0/24',
+              match: %r{^\s+set_real_ip_from\s+192\.168\.1\.0/24;},
             },
             {
-              title: 'should set keepalive_requests',
-              attr: 'keepalive_requests',
-              value: 345,
-              match: %r{^\s*keepalive_requests 345;$}
-            },
-            {
-              title: 'should set limit_req from Hash',
-              attr: 'limit_req',
-              value: { zone: 'one', burst: 5, nodelay: true },
-              match: '    limit_req zone=one burst=5 nodelay;'
-            },
-            {
-              title: 'should set limit_req from Hash with delay',
-              attr: 'limit_req',
-              value: { zone: 'ip', burst: 12, delay: 8 },
-              match: '    limit_req zone=ip burst=12 delay=8;'
-            },
-            {
-              title: 'should set limit_req burst only',
-              attr: 'limit_req',
-              value: { zone: 'mylimit', burst: 20 },
-              match: '    limit_req zone=mylimit burst=20;'
-            },
-            {
-              title: 'should set limit_req from Array',
-              attr: 'limit_req',
-              value: [
-                { zone: 'perip', burst: 5, nodelay: true },
-                { zone: 'perserver', burst: 10 },
-              ],
+              title: 'should set set_real_ip_from with multiple values',
+              attr: 'set_real_ip_from',
+              value: ['192.168.1.0/24', '10.0.0.0/8'],
               match: [
-                '    limit_req zone=perip burst=5 nodelay;',
-                '    limit_req zone=perserver burst=10;',
-              ]
+                %r{^\s+set_real_ip_from\s+192\.168\.1\.0/24;},
+                %r{^\s+set_real_ip_from\s+10\.0\.0\.0/8;},
+              ],
             },
             {
-              title: 'should set limit_req_log_level',
-              attr: 'limit_req_log_level',
-              value: 'notice',
-              match: '    limit_req_log_level notice;'
+              title: 'should not set real_ip_header',
+              attr: 'real_ip_header',
+              value: :undef,
+              notmatch: %r{real_ip_header},
             },
             {
-              title: 'should set limit_req_status',
-              attr: 'limit_req_status',
-              value: '503',
-              match: '    limit_req_status 503;'
+              title: 'should set real_ip_header',
+              attr: 'real_ip_header',
+              value: 'X-Forwarded-For',
+              match: %r{^\s+real_ip_header\s+X-Forwarded-For;},
             },
             {
-              title: 'should set limit_req_status as integer',
-              attr: 'limit_req_status',
-              value: 500,
-              match: '    limit_req_status 500;'
+              title: 'should not set real_ip_recursive',
+              attr: 'real_ip_recursive',
+              value: :undef,
+              notmatch: %r{real_ip_recursive},
+            },
+            {
+              title: 'should set real_ip_recursive',
+              attr: 'real_ip_recursive',
+              value: 'on',
+              match: %r{^\s+real_ip_recursive\s+on;},
             },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
-              let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
+              let(:params) { default_params.merge(param[:attr].to_sym => param[:value]).merge(param[:extra] || {}) }
 
               it { is_expected.to contain_concat__fragment("#{title}-header") }
 
@@ -609,6 +618,15 @@ describe 'nginx::resource::server' do
 
             [
               {
+                title: 'should contain access and error logs directives inside the non-www rewrite',
+                attr: 'rewrite_non_www_to_www',
+                value: true,
+                match: %r{\s+return\s+301\s+http://www.rspec\.example\.com\$request_uri;\n
+                \s+access_log\s+/var/log/nginx/rspec.example.com.access.log;\n
+                \s+error_log\s+/var/log/nginx/rspec.example.com.error.log;\n}x,
+                extra: { access_log: true, error_log: true },
+              },
+              {
                 title: 'should not contain non-www to www rewrite',
                 attr: 'rewrite_non_www_to_www',
                 value: false,
@@ -616,7 +634,7 @@ describe 'nginx::resource::server' do
                 ^
                 \s+server_name\s+rspec\.example\.com;\n
                 \s+return\s+301\s+http://www\.rspec\.example\.com\$request_uri;
-                }x
+                }x,
               },
               {
                 title: 'should contain non-www to www rewrite',
@@ -626,23 +644,23 @@ describe 'nginx::resource::server' do
                 ^
                 \s+server_name\s+rspec\.example\.com;\n
                 \s+return\s+301\s+http://www\.rspec\.example\.com\$request_uri;
-                }x
+                }x,
               },
               {
                 title: 'should rewrite non-www servername to www',
                 attr: 'rewrite_non_www_to_www',
                 value: true,
-                match: %r{\s+server_name\s+www.rspec.example.com;}
+                match: %r{\s+server_name\s+www.rspec.example.com;},
               },
               {
                 title: 'should not rewrite non-www servername to www',
                 attr: 'rewrite_non_www_to_www',
                 value: false,
-                notmatch: %r{\s+server_name\s+www.rspec.example.com;}
+                notmatch: %r{\s+server_name\s+www.rspec.example.com;},
               },
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
-                let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
+                let(:params) { default_params.merge(param[:attr].to_sym => param[:value]).merge(param[:extra] || {}) }
 
                 it { is_expected.to contain_concat__fragment("#{title}-header") }
 
@@ -663,10 +681,97 @@ describe 'nginx::resource::server' do
             end
           end
 
+          context 'with a www domain title over http' do
+            let(:title) { 'www.rspec.example.com' }
+
+            [
+              {
+                title: 'should contain access and error logs directives inside the non-www rewrite',
+                attr: 'rewrite_non_www_to_www',
+                value: true,
+                match: %r{\s+return\s+301\s+http://www.rspec\.example\.com\$request_uri;\n
+                \s+access_log\s+/var/log/nginx/www.rspec.example.com.access.log;\n
+                \s+error_log\s+/var/log/nginx/www.rspec.example.com.error.log;\n}x,
+                extra: { access_log: true, error_log: true },
+              },
+              {
+                title: 'should contain non-www to www rewrite',
+                attr: 'rewrite_non_www_to_www',
+                value: true,
+                match: %r{
+                ^
+                \s+server_name\s+www\.rspec\.example\.com;\n
+                \s+return\s+301\s+http://www\.rspec\.example\.com\$request_uri;
+                }x,
+              },
+              {
+                title: 'should rewrite non-www servername to www',
+                attr: 'rewrite_non_www_to_www',
+                value: true,
+                match: %r{\s+server_name\s+www.rspec.example.com;},
+              },
+            ].each do |param|
+              context "when #{param[:attr]} is #{param[:value]}" do
+                let(:params) { default_params.merge(param[:attr].to_sym => param[:value]).merge(param[:extra] || {}) }
+
+                it { is_expected.to contain_concat__fragment("#{title}-header") }
+
+                it param[:title] do
+                  matches = Array(param[:match])
+
+                  if matches.all? { |m| m.is_a? Regexp }
+                    matches.each { |item| is_expected.to contain_concat__fragment("#{title}-header").with_content(item) }
+                  else
+                    lines = catalogue.resource('concat::fragment', "#{title}-header").send(:parameters)[:content].split("\n")
+                    expect(lines & Array(param[:match])).to eq(Array(param[:match]))
+                  end
+                  Array(param[:notmatch]).each do |item|
+                    is_expected.to contain_concat__fragment("#{title}-header").without_content(item)
+                  end
+                end
+              end
+            end
+          end
+
+          describe 'ipv6_listen_options inheritance from listen_options' do
+            context 'when listen_options is set but ipv6_listen_options is not' do
+              let(:params) { default_params.merge(listen_options: 'reuseport') }
+
+              it 'inherits listen_options' do
+                is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{\s+listen\s+\[::\]:80 reuseport;})
+              end
+            end
+
+            context 'when both listen_options and ipv6_listen_options are set' do
+              let(:params) { default_params.merge(listen_options: 'reuseport', ipv6_listen_options: 'default') }
+
+              it 'uses explicit ipv6_listen_options' do
+                is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{\s+listen\s+\[::\]:80 default;})
+              end
+            end
+
+            context 'when neither listen_options nor ipv6_listen_options is set' do
+              let(:params) { default_params }
+
+              it 'adds nothing' do
+                is_expected.to contain_concat__fragment("#{title}-header").with_content(%r{\s+listen\s+\[::\]:80;})
+              end
+            end
+          end
+
           context 'with a naked domain title over https' do
             let(:title) { 'rspec.example.com' }
 
             [
+              {
+                title: 'should contain access and error logs directives inside the non-www rewrite',
+                attr: 'rewrite_non_www_to_www',
+                value: true,
+                match: %r{\s+return\s+301\s+https://www.rspec\.example\.com\$request_uri;\n
+                \s+access_log\s+/var/log/nginx/ssl-rspec.example.com.access.log;\n
+                \s+error_log\s+/var/log/nginx/ssl-rspec.example.com.error.log;\n}x,
+                extra: { access_log: true, error_log: true },
+              },
               {
                 title: 'should not contain non-www to www rewrite',
                 attr: 'rewrite_non_www_to_www',
@@ -675,7 +780,7 @@ describe 'nginx::resource::server' do
                 ^
                 \s+server_name\s+rspec\.example\.com;\n
                 \s+return\s+301\s+https://www\.rspec\.example\.com\$request_uri;
-                }x
+                }x,
               },
               {
                 title: 'should contain non-www to www rewrite',
@@ -685,23 +790,29 @@ describe 'nginx::resource::server' do
                 ^
                 \s+server_name\s+rspec\.example\.com;\n
                 \s+return\s+301\s+https://www\.rspec\.example\.com\$request_uri;
-                }x
+                }x,
               },
               {
                 title: 'should rewrite non-www servername to www',
                 attr: 'rewrite_non_www_to_www',
                 value: true,
-                match: %r{\s+server_name\s+www.rspec.example.com;}
+                match: %r{\s+server_name\s+www.rspec.example.com;},
               },
               {
                 title: 'should not rewrite non-www servername to www',
                 attr: 'rewrite_non_www_to_www',
                 value: false,
-                notmatch: %r{\s+server_name\s+www.rspec.example.com;}
+                notmatch: %r{\s+server_name\s+www.rspec.example.com;},
               },
             ].each do |param|
               context "when #{param[:attr]} is #{param[:value]}" do
-                let(:params) { default_params.merge(param[:attr].to_sym => param[:value], ssl: true, ssl_cert: '/tmp/dummy.crt', ssl_key: '/tmp/dummy.key', listen_port: 443) }
+                let :params do
+                  default_params.merge(param[:attr].to_sym => param[:value],
+                                       :ssl         => true,
+                                       :ssl_cert    => '/tmp/dummy.crt',
+                                       :ssl_key     => '/tmp/dummy.key',
+                                       :listen_port => 443).merge(param[:extra] || {})
+                end
 
                 it { is_expected.to contain_concat__fragment("#{title}-ssl-header") }
 
@@ -733,7 +844,7 @@ describe 'nginx::resource::server' do
               ^
               \s+server_name\s+www\.rspec\.example\.com;\n
               \s+return\s+301\s+https://rspec\.example\.com\$request_uri;
-              }x
+              }x,
             },
             {
               title: 'should contain include directives',
@@ -742,7 +853,7 @@ describe 'nginx::resource::server' do
               match: [
                 %r{^\s+include\s+/file1;},
                 %r{^\s+include\s+/file2;},
-              ]
+              ],
             },
             {
               title: 'should contain ordered appended directives',
@@ -753,7 +864,7 @@ describe 'nginx::resource::server' do
                 '  test1 test value 1;',
                 '  test2 test value 2a;',
                 '  test2 test value 2b;',
-              ]
+              ],
             },
             {
               title: 'should contain raw_append directives',
@@ -763,11 +874,11 @@ describe 'nginx::resource::server' do
                 '  b;',
                 '}',
               ],
-              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
+              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}},
             },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
-              let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
+              let(:params) { default_params.merge(param[:attr].to_sym => param[:value]).merge(param[:extra] || {}) }
 
               it { is_expected.to contain_concat__fragment("#{title}-footer") }
 
@@ -798,11 +909,11 @@ describe 'nginx::resource::server' do
               ^
               \s+server_name\s+rspec\.example\.com;\n
               \s+return\s+301\s+https://www\.rspec\.example\.com\$request_uri;
-              }x
+              }x,
             },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
-              let(:params) { default_params.merge(param[:attr].to_sym => param[:value]) }
+              let(:params) { default_params.merge(param[:attr].to_sym => param[:value]).merge(param[:extra] || {}) }
 
               it { is_expected.to contain_concat__fragment("#{title}-footer") }
 
@@ -870,7 +981,7 @@ describe 'nginx::resource::server' do
             context 'with fact nginx_version=1.25.1' do
               let(:facts) { facts.merge(nginx_version: '1.25.1') }
 
-              it { is_expected.to contain_concat__fragment("#{title}-ssl-header").with_content(%r{^\s+http2\s+off;}) }
+              it { is_expected.not_to contain_concat__fragment("#{title}-ssl-header").with_content(%r{^\s+http2\s+}) }
             end
 
             context 'with ssl cert and key definitions' do
@@ -895,7 +1006,7 @@ describe 'nginx::resource::server' do
               ^
               \s+server_name\s+www\.rspec\.example\.com;\n
               \s+return\s+301\s+https://rspec\.example\.com\$request_uri;
-              }x
+              }x,
             },
             {
               title: 'should contain www to non-www rewrite',
@@ -905,13 +1016,13 @@ describe 'nginx::resource::server' do
               ^
               \s+server_name\s+www\.rspec\.example\.com;\n
               \s+return\s+301\s+https://rspec\.example\.com\$request_uri;
-              }x
+              }x,
             },
             {
               title: 'should set the IPv4 listen IP',
               attr: 'listen_ip',
               value: '127.0.0.1',
-              match: %r{\s+listen\s+127.0.0.1:443 ssl;}
+              match: %r{\s+listen\s+127.0.0.1:443 ssl;},
             },
             {
               title: 'should set the IPv4 SSL listen port',
@@ -953,37 +1064,37 @@ describe 'nginx::resource::server' do
               title: 'should enable IPv6',
               attr: 'ipv6_enable',
               value: true,
-              match: %r{\s+listen\s+\[::\]:443 ssl;}
+              match: %r{\s+listen\s+\[::\]:443 ssl;},
             },
             {
               title: 'should disable IPv6',
               attr: 'ipv6_enable',
               value: false,
-              notmatch: %r{  listen \[::\]:443 ssl;}
+              notmatch: %r{  listen \[::\]:443 ssl;},
             },
             {
               title: 'should set the IPv6 listen IP',
               attr: 'ipv6_listen_ip',
               value: '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
-              match: %r{\s+listen\s+\[2001:0db8:85a3:0000:0000:8a2e:0370:7334\]:443 ssl;}
+              match: %r{\s+listen\s+\[2001:0db8:85a3:0000:0000:8a2e:0370:7334\]:443 ssl;},
             },
             {
               title: 'should set the IPv6 listen port',
               attr: 'ssl_port',
               value: 45,
-              match: %r{\s+listen\s+\[::\]:45 ssl;}
+              match: %r{\s+listen\s+\[::\]:45 ssl;},
             },
             {
               title: 'should set the IPv6 listen options',
               attr: 'ipv6_listen_options',
               value: 'spdy default',
-              match: %r{\s+listen\s+\[::\]:443 ssl spdy default;}
+              match: %r{\s+listen\s+\[::\]:443 ssl spdy default;},
             },
             {
               title: 'should set servername(s)',
               attr: 'server_name',
               value: ['www.foo.com', 'foo.com'],
-              match: %r{\s+server_name\s+www.foo.com foo.com;}
+              match: %r{\s+server_name\s+www.foo.com foo.com;},
             },
             {
               title: 'should not set server_name',
@@ -995,37 +1106,37 @@ describe 'nginx::resource::server' do
               title: 'should rewrite www servername to non-www',
               attr: 'rewrite_www_to_non_www',
               value: true,
-              match: %r{\s+server_name\s+rspec.example.com;}
+              match: %r{\s+server_name\s+rspec.example.com;},
             },
             {
               title: 'should not rewrite www servername to non-www',
               attr: 'rewrite_www_to_non_www',
               value: false,
-              match: %r{\s+server_name\s+www.rspec.example.com;}
+              match: %r{\s+server_name\s+www.rspec.example.com;},
             },
             {
               title: 'should set the SSL buffer size',
               attr: 'ssl_buffer_size',
               value: '4k',
-              match: '  ssl_buffer_size           4k;'
+              match: '  ssl_buffer_size           4k;',
             },
             {
               title: 'should set the SSL client certificate file',
               attr: 'ssl_client_cert',
               value: '/tmp/client_certificate',
-              match: %r{\s+ssl_client_certificate\s+/tmp/client_certificate;}
+              match: %r{\s+ssl_client_certificate\s+/tmp/client_certificate;},
             },
             {
               title: 'should set the SSL CRL file',
               attr: 'ssl_crl',
               value: '/tmp/crl',
-              match: %r{\s+ssl_crl\s+/tmp/crl;}
+              match: %r{\s+ssl_crl\s+/tmp/crl;},
             },
             {
               title: 'should set the SSL DH parameters file',
               attr: 'ssl_dhparam',
               value: '/tmp/dhparam',
-              match: %r{\s+ssl_dhparam\s+/tmp/dhparam;}
+              match: %r{\s+ssl_dhparam\s+/tmp/dhparam;},
             },
             {
               title: 'should set ssl_session_tickets',
@@ -1037,91 +1148,115 @@ describe 'nginx::resource::server' do
               title: 'should set ssl_ecdh_curve',
               attr: 'ssl_ecdh_curve',
               value: 'secp521r1',
-              match: %r{\s+ssl_ecdh_curve\s+secp521r1;}
+              match: %r{\s+ssl_ecdh_curve\s+secp521r1;},
             },
             {
               title: 'should set the SSL stapling file',
               attr: 'ssl_stapling_file',
               value: '/tmp/stapling_file',
-              match: %r{\s+ssl_stapling_file\s+/tmp/stapling_file;}
+              match: %r{\s+ssl_stapling_file\s+/tmp/stapling_file;},
             },
             {
               title: 'should set the SSL trusted certificate file',
               attr: 'ssl_trusted_cert',
               value: '/tmp/trusted_certificate',
-              match: %r{\s+ssl_trusted_certificate\s+/tmp/trusted_certificate;}
+              match: %r{\s+ssl_trusted_certificate\s+/tmp/trusted_certificate;},
             },
             {
               title: 'should set ssl_verify_depth',
               attr: 'ssl_verify_depth',
               value: 2,
-              match: %r{^\s+ssl_verify_depth\s+2;}
+              match: %r{^\s+ssl_verify_depth\s+2;},
+            },
+            {
+              title: 'should set ssl_reject_handshake on',
+              attr: 'ssl_reject_handshake',
+              value: 'on',
+              match: %r{\s+ssl_reject_handshake\s+on;},
+            },
+            {
+              title: 'should set ssl_reject_handshake off',
+              attr: 'ssl_reject_handshake',
+              value: 'off',
+              match: %r{\s+ssl_reject_handshake\s+off;},
+            },
+            {
+              title: 'should set ssl_early_data on',
+              attr: 'ssl_early_data',
+              value: 'on',
+              match: %r{\s+ssl_early_data\s+on;},
+            },
+            {
+              title: 'should set ssl_early_data off',
+              attr: 'ssl_early_data',
+              value: 'off',
+              match: %r{\s+ssl_early_data\s+off;},
             },
             {
               title: 'should set the SSL cache',
               attr: 'ssl_cache',
               value: 'shared:SSL:1m',
-              match: %r{\s+ssl_session_cache\s+shared:SSL:1m;}
+              match: %r{\s+ssl_session_cache\s+shared:SSL:1m;},
             },
             {
               title: 'should set the SSL timeout',
               attr: 'ssl_session_timeout',
               value: '30m',
-              match: '  ssl_session_timeout       30m;'
+              match: '  ssl_session_timeout       30m;',
             },
             {
               title: 'should set the SSL protocols',
               attr: 'ssl_protocols',
               value: 'TLSv1',
-              match: %r{\s+ssl_protocols\s+TLSv1;}
+              match: %r{\s+ssl_protocols\s+TLSv1;},
             },
             {
               title: 'should set the SSL ciphers',
               attr: 'ssl_ciphers',
               value: 'HIGH',
-              match: %r{\s+ssl_ciphers\s+HIGH;}
+              match: %r{\s+ssl_ciphers\s+HIGH;},
             },
             {
               title: 'should set ssl_prefer_server_ciphers on',
               attr: 'ssl_prefer_server_ciphers',
               value: 'on',
-              match: %r{\s+ssl_prefer_server_ciphers\s+on;}
+              match: %r{\s+ssl_prefer_server_ciphers\s+on;},
             },
             {
               title: 'should set ssl_prefer_server_ciphers off',
               attr: 'ssl_prefer_server_ciphers',
               value: 'off',
-              match: %r{\s+ssl_prefer_server_ciphers\s+off;}
+              match: %r{\s+ssl_prefer_server_ciphers\s+off;},
             },
             {
               title: 'should not set absolute_redirect',
               attr: 'absolute_redirect',
               value: :undef,
-              notmatch: %r{absolute_redirect}
+              notmatch: %r{absolute_redirect},
             },
             {
               title: 'should set absolute_redirect off',
               attr: 'absolute_redirect',
               value: 'off',
-              match: '  absolute_redirect off;'
+              match: '  absolute_redirect off;',
             },
             {
               title: 'should set auth_basic',
               attr: 'auth_basic',
               value: 'value',
-              match: %r{\s+auth_basic\s+"value";}
+              match: %r{\s+auth_basic\s+"value";},
             },
             {
               title: 'should set auth_basic_user_file',
               attr: 'auth_basic_user_file',
               value: 'value',
-              match: %r{\s+auth_basic_user_file\s+"value";}
+              match: %r{\s+auth_basic_user_file\s+"value";},
             },
             {
               title: 'should set auth_request',
               attr: 'auth_request',
               value: 'value',
-              match: %r{\s+auth_request\s+value;}
+              match: %r{\s+auth_request\s+value;},
             },
             {
               title: 'should set the client_body_timeout',
@@ -1139,13 +1274,13 @@ describe 'nginx::resource::server' do
               title: 'should set the gzip_types',
               attr: 'gzip_types',
               value: 'value',
-              match: %r{^\s+gzip_types\s+value;}
+              match: %r{^\s+gzip_types\s+value;},
             },
             {
               title: 'should set access_log',
               attr: 'access_log',
               value: '/path/to/access.log',
-              match: '  access_log            /path/to/access.log;'
+              match: '  access_log            /path/to/access.log;',
             },
             {
               title: 'should set multiple access_log directives',
@@ -1154,31 +1289,38 @@ describe 'nginx::resource::server' do
               match: [
                 '  access_log            /path/to/log/1;',
                 '  access_log            syslog:server=localhost;',
-              ]
+              ],
             },
             {
               title: 'should set access_log off',
               attr: 'access_log',
               value: 'off',
-              match: '  access_log            off;'
+              match: '  access_log            off;',
             },
             {
               title: 'should not include access_log in server when set to absent',
               attr: 'access_log',
               value: 'absent',
-              notmatch: 'access_log'
+              notmatch: 'access_log',
             },
             {
               title: 'should set access_log to syslog',
               attr: 'access_log',
               value: 'syslog:server=localhost',
-              match: '  access_log            syslog:server=localhost;'
+              match: '  access_log            syslog:server=localhost;',
+            },
+            {
+              title: 'should set format_log custom_format',
+              attr: 'format_log',
+              value: 'custom',
+              match: '  access_log            /var/log/nginx/ssl-www.rspec.example.com.access.log custom;',
+              extra: { access_log: true, error_log: true },
             },
             {
               title: 'should set error_log',
               attr: 'error_log',
               value: '/path/to/error.log',
-              match: '  error_log             /path/to/error.log;'
+              match: '  error_log             /path/to/error.log;',
             },
             {
               title: 'should allow multiple error_log directives',
@@ -1187,19 +1329,33 @@ describe 'nginx::resource::server' do
               match: [
                 '  error_log             /path/to/error.log;',
                 '  error_log             syslog:server=localhost;',
-              ]
+              ],
+            },
+            {
+              title: 'should set error_log severity level',
+              attr: 'error_log_severity',
+              value: 'warn',
+              match: '  error_log             /var/log/nginx/ssl-www.rspec.example.com.error.log warn;',
+              extra: { access_log: true, error_log: true },
+            },
+            {
+              title: 'should not set error_log severity level',
+              attr: 'error_log_severity',
+              value: :undef,
+              match: '  error_log             /var/log/nginx/ssl-www.rspec.example.com.error.log;',
+              extra: { access_log: true, error_log: true },
             },
             {
               title: 'should not include error_log in server when set to absent',
               attr: 'error_log',
               value: 'absent',
-              notmatch: 'error_log'
+              notmatch: 'error_log',
             },
             {
               title: 'should set error_pages',
               attr: 'error_pages',
               value: { '503' => '/foo.html' },
-              match: '  error_page  503 /foo.html;'
+              match: '  error_page  503 /foo.html;',
             },
             {
               title: 'should contain raw_prepend directives',
@@ -1209,7 +1365,7 @@ describe 'nginx::resource::server' do
                 '  b;',
                 '}',
               ],
-              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
+              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}},
             },
             {
               title: 'should contain ordered prepend directives',
@@ -1220,7 +1376,7 @@ describe 'nginx::resource::server' do
                 '  test1 test value 1;',
                 '  test2 test value 2a;',
                 '  test2 test value 2b;',
-              ]
+              ],
             },
             {
               title: 'should contain ordered ssl prepend directives',
@@ -1231,37 +1387,37 @@ describe 'nginx::resource::server' do
                 '  test1 test value 1;',
                 '  test2 test value 2a;',
                 '  test2 test value 2b;',
-              ]
+              ],
             },
             {
               title: 'should set root',
               attr: 'use_default_location',
               value: false,
-              match: '  root /;'
+              match: '  root /;',
             },
             {
               title: 'should not set root',
               attr: 'use_default_location',
               value: true,
-              notmatch: %r{  root /;}
+              notmatch: %r{  root /;},
             },
             {
               title: 'should set index_file(s)',
               attr: 'index_files',
               value: %w[name1 name2],
-              match: %r{\s*index\s+name1\s+name2;}
+              match: %r{\s*index\s+name1\s+name2;},
             },
             {
               title: 'should not set index_file(s)',
               attr: 'index_files',
               value: [],
-              notmatch: %r{\s+index\s+}
+              notmatch: %r{\s+index\s+},
             },
             {
               title: 'should set autoindex',
               attr: 'autoindex',
               value: 'on',
-              match: '  autoindex on;'
+              match: '  autoindex on;',
             },
             {
               title: 'should set charset',
@@ -1323,73 +1479,52 @@ describe 'nginx::resource::server' do
               title: 'should set autoindex_exact_size',
               attr: 'autoindex_exact_size',
               value: 'on',
-              match: '  autoindex_exact_size on;'
+              match: '  autoindex_exact_size on;',
             },
             {
-              title: 'should set client_body_buffer_size',
-              attr: 'client_body_buffer_size',
-              value: '16k',
-              match: %r{^\s*client_body_buffer_size 16k;$}
+              title: 'should not set set_real_ip_from',
+              attr: 'set_real_ip_from',
+              value: :undef,
+              notmatch: %r{set_real_ip_from},
             },
             {
-              title: 'should set keepalive_timeout',
-              attr: 'keepalive_timeout',
-              value: '123',
-              match: %r{^\s*keepalive_timeout 123;$}
+              title: 'should set set_real_ip_from with single value',
+              attr: 'set_real_ip_from',
+              value: '192.168.1.0/24',
+              match: %r{^\s+set_real_ip_from\s+192\.168\.1\.0/24;},
             },
             {
-              title: 'should set keepalive_requests',
-              attr: 'keepalive_requests',
-              value: 345,
-              match: %r{^\s*keepalive_requests 345;$}
-            },
-            {
-              title: 'should set limit_req from Hash',
-              attr: 'limit_req',
-              value: { zone: 'one', burst: 5, nodelay: true },
-              match: '    limit_req zone=one burst=5 nodelay;'
-            },
-            {
-              title: 'should set limit_req from Hash with delay',
-              attr: 'limit_req',
-              value: { zone: 'ip', burst: 12, delay: 8 },
-              match: '    limit_req zone=ip burst=12 delay=8;'
-            },
-            {
-              title: 'should set limit_req burst only',
-              attr: 'limit_req',
-              value: { zone: 'mylimit', burst: 20 },
-              match: '    limit_req zone=mylimit burst=20;'
-            },
-            {
-              title: 'should set limit_req from Array',
-              attr: 'limit_req',
-              value: [
-                { zone: 'perip', burst: 5, nodelay: true },
-                { zone: 'perserver', burst: 10 },
-              ],
+              title: 'should set set_real_ip_from with multiple values',
+              attr: 'set_real_ip_from',
+              value: ['192.168.1.0/24', '10.0.0.0/8'],
               match: [
-                '    limit_req zone=perip burst=5 nodelay;',
-                '    limit_req zone=perserver burst=10;',
-              ]
+                %r{^\s+set_real_ip_from\s+192\.168\.1\.0/24;},
+                %r{^\s+set_real_ip_from\s+10\.0\.0\.0/8;},
+              ],
             },
             {
-              title: 'should set limit_req_log_level',
-              attr: 'limit_req_log_level',
-              value: 'notice',
-              match: '    limit_req_log_level notice;'
+              title: 'should not set real_ip_header',
+              attr: 'real_ip_header',
+              value: :undef,
+              notmatch: %r{real_ip_header},
             },
             {
-              title: 'should set limit_req_status',
-              attr: 'limit_req_status',
-              value: '503',
-              match: '    limit_req_status 503;'
+              title: 'should set real_ip_header',
+              attr: 'real_ip_header',
+              value: 'X-Forwarded-For',
+              match: %r{^\s+real_ip_header\s+X-Forwarded-For;},
             },
             {
-              title: 'should set limit_req_status as integer',
-              attr: 'limit_req_status',
-              value: 500,
-              match: '    limit_req_status 500;'
+              title: 'should not set real_ip_recursive',
+              attr: 'real_ip_recursive',
+              value: :undef,
+              notmatch: %r{real_ip_recursive},
+            },
+            {
+              title: 'should set real_ip_recursive',
+              attr: 'real_ip_recursive',
+              value: 'on',
+              match: %r{^\s+real_ip_recursive\s+on;},
             },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
@@ -1397,7 +1532,7 @@ describe 'nginx::resource::server' do
                 default_params.merge(param[:attr].to_sym => param[:value],
                                      :ssl => true,
                                      :ssl_key => 'dummy.key',
-                                     :ssl_cert => 'dummy.crt')
+                                     :ssl_cert => 'dummy.crt').merge(param[:extra] || {})
               end
 
               it { is_expected.to contain_concat__fragment("#{title}-ssl-header") }
@@ -1417,6 +1552,103 @@ describe 'nginx::resource::server' do
               end
             end
           end
+
+          context 'with a www domain title over https' do
+            let(:title) { 'www.rspec.example.com' }
+
+            [
+              {
+                title: 'should contain non-www to https www rewrite',
+                attr: 'rewrite_non_www_to_www',
+                value: true,
+                match: %r{
+                ^
+                \s+server_name\s+www\.rspec\.example\.com;\n
+                \s+return\s+301\s+https://www\.rspec\.example\.com\$request_uri;
+                }x,
+              },
+              {
+                title: 'should rewrite non-www servername to www',
+                attr: 'rewrite_non_www_to_www',
+                value: true,
+                match: %r{\s+server_name\s+www.rspec.example.com;},
+              },
+            ].each do |param|
+              context "when #{param[:attr]} is #{param[:value]}" do
+                let :params do
+                  default_params.merge(
+                    param[:attr].to_sym => param[:value],
+                    :ssl                => true,
+                    :ssl_key            => 'dummy.key',
+                    :ssl_cert           => 'dummy.crt',
+                    :ssl_redirect       => true,
+                  ).merge(param[:extra] || {})
+                end
+
+                it { is_expected.to contain_concat__fragment("#{title}-header") }
+
+                it param[:title] do
+                  matches = Array(param[:match])
+
+                  if matches.all? { |m| m.is_a? Regexp }
+                    matches.each { |item| is_expected.to contain_concat__fragment("#{title}-header").with_content(item) }
+                  else
+                    lines = catalogue.resource('concat::fragment', "#{title}-header").send(:parameters)[:content].split("\n")
+                    expect(lines & Array(param[:match])).to eq(Array(param[:match]))
+                  end
+                  Array(param[:notmatch]).each do |item|
+                    is_expected.to contain_concat__fragment("#{title}-header").without_content(item)
+                  end
+                end
+              end
+            end
+
+            [
+              {
+                title: 'should contain non-www to http www rewrite',
+                attr: 'rewrite_non_www_to_www',
+                value: true,
+                match: %r{
+                ^
+                \s+server_name\s+www\.rspec\.example\.com;\n
+                \s+return\s+301\s+http://www\.rspec\.example\.com\$request_uri;
+                }x,
+              },
+              {
+                title: 'should rewrite non-www servername to www',
+                attr: 'rewrite_non_www_to_www',
+                value: true,
+                match: %r{\s+server_name\s+www.rspec.example.com;},
+              },
+            ].each do |param|
+              context "when #{param[:attr]} is #{param[:value]}" do
+                let :params do
+                  default_params.merge(
+                    param[:attr].to_sym => param[:value],
+                    :ssl                => true,
+                    :ssl_key            => 'dummy.key',
+                    :ssl_cert           => 'dummy.crt',
+                  ).merge(param[:extra] || {})
+                end
+
+                it { is_expected.to contain_concat__fragment("#{title}-header") }
+
+                it param[:title] do
+                  matches = Array(param[:match])
+
+                  if matches.all? { |m| m.is_a? Regexp }
+                    matches.each { |item| is_expected.to contain_concat__fragment("#{title}-header").with_content(item) }
+                  else
+                    lines = catalogue.resource('concat::fragment', "#{title}-header").send(:parameters)[:content].split("\n")
+                    expect(lines & Array(param[:match])).to eq(Array(param[:match]))
+                  end
+                  Array(param[:notmatch]).each do |item|
+                    is_expected.to contain_concat__fragment("#{title}-header").without_content(item)
+                  end
+                end
+              end
+            end
+          end
         end
 
         describe 'server_ssl_footer template content' do
@@ -1429,7 +1661,7 @@ describe 'nginx::resource::server' do
               ^
               \s+server_name\s+www\.rspec\.example\.com;\n
               \s+return\s+301\s+https://rspec\.example\.com\$request_uri;
-              }x
+              }x,
             },
             {
               title: 'should contain include directives',
@@ -1438,7 +1670,7 @@ describe 'nginx::resource::server' do
               match: [
                 %r{^\s+include\s+/file1;},
                 %r{^\s+include\s+/file2;},
-              ]
+              ],
             },
             {
               title: 'should contain ordered appended directives',
@@ -1448,7 +1680,7 @@ describe 'nginx::resource::server' do
                 '  allow test value 3;',
                 '  test1 test value 1;',
                 '  test2 test value 2;',
-              ]
+              ],
             },
             {
               title: 'should contain raw_append directives',
@@ -1458,7 +1690,7 @@ describe 'nginx::resource::server' do
                 '  b;',
                 '}',
               ],
-              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}}
+              match: %r{^\s+if \(a\) \{\n\s++b;\n\s+\}},
             },
             {
               title: 'should contain ordered ssl appended directives',
@@ -1469,7 +1701,7 @@ describe 'nginx::resource::server' do
                 '  test1 test value 1;',
                 '  test2 test value 2a;',
                 '  test2 test value 2b;',
-              ]
+              ],
             },
           ].each do |param|
             context "when #{param[:attr]} is #{param[:value]}" do
@@ -1477,7 +1709,7 @@ describe 'nginx::resource::server' do
                 default_params.merge(param[:attr].to_sym => param[:value],
                                      :ssl => true,
                                      :ssl_key => 'dummy.key',
-                                     :ssl_cert => 'dummy.crt')
+                                     :ssl_cert => 'dummy.crt').merge(param[:extra] || {})
               end
 
               it { is_expected.to contain_concat__fragment("#{title}-ssl-footer") }
@@ -1513,7 +1745,7 @@ describe 'nginx::resource::server' do
                 ssl_key: 'key',
                 server_name: %w[www.foo.com bar.foo.com foo.com],
                 use_default_location: false,
-                rewrite_www_to_non_www: true
+                rewrite_www_to_non_www: true,
               }
             end
 
@@ -1528,7 +1760,7 @@ describe 'nginx::resource::server' do
               {
                 server_name: %w[www.foo.com bar.foo.com foo.com],
                 use_default_location: false,
-                rewrite_www_to_non_www: true
+                rewrite_www_to_non_www: true,
               }
             end
 
@@ -1600,7 +1832,7 @@ describe 'nginx::resource::server' do
               {
                 ssl_redirect: true,
                 ssl_redirect_port: 9787,
-                ssl_port: 9783
+                ssl_port: 9783,
               }
             end
 
@@ -1639,7 +1871,7 @@ describe 'nginx::resource::server' do
             let(:params) do
               {
                 ssl_redirect: true,
-                ssl: false
+                ssl: false,
               }
             end
 
@@ -1734,6 +1966,14 @@ describe 'nginx::resource::server' do
             it { is_expected.to contain_nginx__resource__location("#{title}-default").with_location_cfg_append('key' => 'value') }
           end
 
+          context 'when grpc => "127.0.0.1:9000"' do
+            let :params do
+              default_params.merge(use_default_location: true, grpc: '127.0.0.1:9000')
+            end
+
+            it { is_expected.to contain_nginx__resource__location("#{title}-default").with_grpc('127.0.0.1:9000') }
+          end
+
           context 'when fastcgi => "localhost:9000"' do
             let :params do
               super().merge(fastcgi: 'localhost:9000')
@@ -1794,6 +2034,51 @@ describe 'nginx::resource::server' do
             end
 
             it { is_expected.not_to contain_file('/etc/nginx/bogusparams') }
+          end
+
+          context 'when uwsgi_param has custom params' do
+            let :params do
+              default_params.merge(
+                use_default_location: true,
+                uwsgi_param: {
+                  'X-Custom-Param': 'Someting',
+                },
+              )
+            end
+
+            it { is_expected.to contain_nginx__resource__location("#{title}-default").with_uwsgi_param('X-Custom-Param' => 'Someting') }
+          end
+
+          context 'when dav_methods => ["PUT", "DELETE", "MKCOL", "COPY", "MOVE"]' do
+            let :params do
+              default_params.merge(use_default_location: true, dav_methods: %w[PUT DELETE MKCOL COPY MOVE])
+            end
+
+            it { is_expected.to contain_nginx__resource__location("#{title}-default").with_dav_methods(%w[PUT DELETE MKCOL COPY MOVE]) }
+          end
+
+          context 'when dav_access => "user:rw group:rw all:r"' do
+            let :params do
+              default_params.merge(use_default_location: true, dav_access: 'user:rw group:rw all:r')
+            end
+
+            it { is_expected.to contain_nginx__resource__location("#{title}-default").with_dav_access('user:rw group:rw all:r') }
+          end
+
+          context 'when create_full_put_path => "on"' do
+            let :params do
+              default_params.merge(use_default_location: true, create_full_put_path: 'on')
+            end
+
+            it { is_expected.to contain_nginx__resource__location("#{title}-default").with_create_full_put_path('on') }
+          end
+
+          context 'when min_delete_depth => 2' do
+            let :params do
+              default_params.merge(use_default_location: true, min_delete_depth: 2)
+            end
+
+            it { is_expected.to contain_nginx__resource__location("#{title}-default").with_min_delete_depth(2) }
           end
 
           context 'when listen_port == ssl_port but ssl = false' do
@@ -2117,9 +2402,9 @@ describe 'nginx::resource::server' do
                   'one' => {
                     'location_custom_cfg' => {},
                     'location' => '/one',
-                    'expires' => '@12h34m'
-                  }
-                }
+                    'expires' => '@12h34m',
+                  },
+                },
               }
             end
 
@@ -2136,14 +2421,14 @@ describe 'nginx::resource::server' do
                   'one' => {
                     'location_custom_cfg' => {},
                     'location' => '/one',
-                    'expires' => '@12h34m'
+                    'expires' => '@12h34m',
                   },
                   'two' => {
                     'location_custom_cfg' => {},
                     'location' => '= /two',
-                    'expires' => '@23h45m'
-                  }
-                }
+                    'expires' => '@23h45m',
+                  },
+                },
               }
             end
 
@@ -2161,18 +2446,18 @@ describe 'nginx::resource::server' do
                 www_root: '/toplevel',
                 locations_defaults: {
                   'www_root' => '/overwrite',
-                  'expires' => '@12h34m'
+                  'expires' => '@12h34m',
                 },
                 locations: {
                   'one' => {
                     'location_custom_cfg' => {},
-                    'location' => '/one'
+                    'location' => '/one',
                   },
                   'two' => {
                     'location_custom_cfg' => {},
-                    'location' => '= /two'
-                  }
-                }
+                    'location' => '= /two',
+                  },
+                },
               }
             end
 

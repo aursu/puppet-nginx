@@ -14,11 +14,11 @@
 define nginx::resource::snippet (
   String[1] $raw_content,
   Enum['absent', 'present'] $ensure = 'present',
-  String $owner                     = $nginx::global_owner,
-  String $group                     = $nginx::global_group,
-  Stdlib::Filemode $mode            = $nginx::global_mode,
+  String $owner = $nginx::global_owner,
+  String $group = $nginx::global_group,
+  Stdlib::Filemode $mode = $nginx::global_mode,
 ) {
-  if ! defined(Class['nginx']) {
+  if !defined(Class['nginx']) {
     fail('You must include the nginx base class before using any defined resources')
   }
 
